@@ -25,7 +25,7 @@ export default function GuestLayout({children}: {children: React.ReactNode}) {
             }}
           >
             <Typography
-              variant="h6"
+              variant="h3"
               component="div"
               sx={{
                 fontFamily: '"Archivo Black", "Helvetica Neue", Helvetica, Arial, sans-serif',

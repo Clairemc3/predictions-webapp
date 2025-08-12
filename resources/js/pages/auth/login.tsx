@@ -18,6 +18,7 @@ import {
 } from '@mui/icons-material';
 import { useForm } from '@inertiajs/react';
 import GuestLayout from '../../layouts/guest-layout';
+import TextLink from '../../components/TextLink';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -132,15 +133,26 @@ const Login = () => {
                 {processing ? 'Signing In...' : 'Sign In'}
               </Button>
 
+            <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography
+              variant="body2"
+            >
+              <TextLink
+                href="/forgot-password"
+              >
+                Forgot your password?
+              </TextLink>
+            </Typography>
+          </Box>
+
               <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="body2" color="text.secondary">
+                <Typography display="inline" variant="body2" color="text.secondary">
                   Don't have an account?{' '}
-                  <Button
-                    variant="text"
-                    sx={{ textTransform: 'none', p: 0, minWidth: 'auto' }}
-                  >
-                    <a href="/register">Register</a>
-                  </Button>
+                  </Typography>
+                  <Typography display="inline" variant='body1'>
+                    <TextLink href="/register" color="primary">
+                        Register
+                    </TextLink>
                 </Typography>
               </Box>
             </Box>
