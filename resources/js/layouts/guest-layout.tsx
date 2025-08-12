@@ -39,11 +39,22 @@ export default function GuestLayout({children}: {children: React.ReactNode}) {
         </AppBar>
 
         <Container
-        className="mt-3"
-        fixed={true}
+          className="mt-3"
+          fixed={true}
           maxWidth="lg" 
         >
-          {children}
+          <Box
+            sx={{
+              minHeight: 'calc(100vh - 64px)', // Subtract AppBar height
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              pt: 6, // Reduced top padding
+              pb: 3,
+            }}
+          >
+            {children}
+          </Box>
         </Container>
       </Box>
     </ThemeProvider>
