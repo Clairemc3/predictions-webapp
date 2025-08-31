@@ -12,9 +12,7 @@ import {
 } from '@mui/material';
 import {
   Visibility,
-  VisibilityOff,
-  Email,
-  Lock,
+  VisibilityOff
 } from '@mui/icons-material';
 import { useForm } from '@inertiajs/react';
 import GuestLayout from '../../layouts/guest-layout';
@@ -39,41 +37,31 @@ const Login = () => {
 
   return (
     <GuestLayout>
-      <Box
-        sx={{
-          minHeight: 'calc(100vh - 64px)', // Subtract AppBar height
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          pt: 6, // Reduced top padding
-          pb: 3,
-        }}
-      >
-        <Card sx={{ width: '100%', maxWidth: 400 }}>
-          <CardContent sx={{ p: 4 }}>
-            <Box sx={{ mb: 3, textAlign: 'center' }}>
-              <Typography variant="h4" color="primary" gutterBottom>
-                Sign in to your account
-              </Typography>
-            </Box>
+      <Card sx={{ width: '100%', maxWidth: 450 }}>
+        <CardContent sx={{ p: 4 }}>
+          <Box sx={{ mb: 3, textAlign: 'center' }}>
+            <Typography variant="h4" color="primary" gutterBottom>
+              Sign in to your account
+            </Typography>
+          </Box>
 
-            {(errors as any).email && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {(errors as any).email}
-              </Alert>
-            )}
+          {(errors as any).email && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {(errors as any).email}
+            </Alert>
+          )}
 
-            <Box 
-                component="form" 
-                onSubmit={handleSubmit} 
-                sx={{ 
-             width: '100%',
-            maxWidth: '500px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 3
-                }}
-                >
+          <Box 
+            component="form" 
+            onSubmit={handleSubmit} 
+            sx={{ 
+              width: '100%',
+              maxWidth: '500px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 3
+            }}
+          >
               <TextField
                 variant='filled'
                 fullWidth
@@ -158,7 +146,6 @@ const Login = () => {
             </Box>
           </CardContent>
         </Card>
-      </Box>
     </GuestLayout>
   );
 };

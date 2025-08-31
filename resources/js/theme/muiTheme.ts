@@ -169,7 +169,7 @@ const components = {
     styleOverrides: {
       root: {
         '& .MuiOutlinedInput-root': {
-          borderRadius: 8,
+          borderRadius: 0,
         },
       },
     },
@@ -201,7 +201,7 @@ export const muiTheme = createTheme({
   components,
   spacing: 8, // Base spacing unit (8px)
   shape: {
-    borderRadius: 8,
+    borderRadius: 0,
   },
   breakpoints: {
     values: {

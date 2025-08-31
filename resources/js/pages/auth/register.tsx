@@ -6,21 +6,22 @@ import {
   TextField,
   Button,
   Typography,
-  Alert,
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import {
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
-import { useForm } from '@inertiajs/react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useForm, usePage } from '@inertiajs/react';
 import GuestLayout from '../../layouts/guest-layout';
 import TextLink from '../../components/TextLink';
+import AlertMessage from '../../components/AlertMessage';
 
 const Register = () => {
+  const { props } = usePage();
+  const success = (props as any).flash?.success;
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
   const { data, setData, post, processing, errors } = useForm({
     name: '',
     email: '',
@@ -31,7 +32,18 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    post('/register');
+    post('/register', {
+      onSuccess: () => {
+        // Clear form data on successful registration
+        setData({
+          name: '',
+          email: '',
+          password: '',
+          password_confirmation: '',
+          registration_code: '',
+        });
+      }
+    });
   };
 
   const togglePasswordVisibility = () => {
@@ -42,18 +54,36 @@ const Register = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+
   return (
     <GuestLayout>
-      <Card sx={{ width: '100%', maxWidth: 450 }}>
-        <CardContent sx={{ p: 4 }}>
-          <Box sx={{ mb: 3, textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" gutterBottom>
-              Create your account
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Join the predictions league
-            </Typography>
-          </Box>
+      {success ? (
+        <Box sx={{ 
+          width: '100%', 
+          maxWidth: 450,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3
+        }}>
+          <AlertMessage 
+            severity="success" 
+            message={success}
+            sx={{ 
+              textAlign: 'center'
+            }}
+          />
+          <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center' }}>
+            Please note, any accounts which have not been verified within 24 hours will be automatically deleted.
+          </Typography>
+        </Box>
+      ) : (
+        <Card sx={{ width: '100%', maxWidth: 450 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Box sx={{ mb: 3, textAlign: 'center' }}>
+              <Typography variant="h4" color="primary" gutterBottom>
+                Create your account
+              </Typography>
+            </Box>
 
             <Box 
               component="form" 
@@ -70,7 +100,7 @@ const Register = () => {
                 variant='filled'
                 fullWidth
                 id="name"
-                label="Full Name"
+                label="Name"
                 name="name"
                 type="text"
                 autoFocus
@@ -122,6 +152,7 @@ const Register = () => {
                     ),
                   },
                 }}
+                sx={{ mb: 2 }}
               />
 
               <TextField
@@ -151,6 +182,7 @@ const Register = () => {
                     ),
                   },
                 }}
+                sx={{ mb: 2 }}
               />
 
               <TextField
@@ -164,7 +196,7 @@ const Register = () => {
                 value={data.registration_code}
                 onChange={(e) => setData('registration_code', e.target.value)}
                 error={!!(errors as any).registration_code}
-                helperText={(errors as any).registration_code || "Enter the code provided to you"}
+                helperText={(errors as any).registration_code || "Enter the registration code provided to you"}
               />
 
               <Button
@@ -193,6 +225,7 @@ const Register = () => {
             </Box>
           </CardContent>
         </Card>
+      )}
     </GuestLayout>
   );
 };
