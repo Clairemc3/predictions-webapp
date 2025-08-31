@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\HandleInertiaRequests;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,10 +13,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-         $middleware->encryptCookies();
+        $middleware->redirectGuestsTo('/login');
+        $middleware->redirectUsersTo('/profile');
+        $middleware->encryptCookies();
 
         $middleware->web(append: [
             HandleInertiaRequests::class,
+        ]);
+
+        $middleware->appendToGroup('auth', [
+            EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
