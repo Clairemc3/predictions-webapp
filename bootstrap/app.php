@@ -18,11 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies();
 
         $middleware->web(append: [
-            HandleInertiaRequests::class,
-        ]);
-
-        $middleware->appendToGroup('auth', [
             EnsureEmailIsVerified::class,
+            HandleInertiaRequests::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
