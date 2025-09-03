@@ -35,11 +35,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+
+
+        // Check if registration code is configured
+        // @TODO this code will eventually go into the database
+        $registrationCode = config('registration.code');
+        if (empty($registrationCode) || trim($registrationCode) === '') {
+            throw new \InvalidArgumentException(
+                'Registration code is not configured. Please set REGISTRATION_CODE in your .env file.'
+            );
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'registration_code' => ['required', Rule::in('CMM')],
+            'registration_code' => ['required', Rule::in([$registrationCode])],
         ]);
 
         $user = User::create([
