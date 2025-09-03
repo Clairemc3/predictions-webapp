@@ -9,10 +9,14 @@ import {
   Alert,
   InputAdornment,
   IconButton,
+  FormControlLabel,
+  Checkbox,
+  Tooltip,
 } from '@mui/material';
 import {
   Visibility,
-  VisibilityOff
+  VisibilityOff,
+  InfoOutlined
 } from '@mui/icons-material';
 import { useForm } from '@inertiajs/react';
 import GuestLayout from '../../layouts/guest-layout';
@@ -23,7 +27,7 @@ const Login = () => {
   const { data, setData, post, processing, errors } = useForm({
     email: '',
     password: '',
-    remember: false,
+    remember: false as boolean,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -105,6 +109,29 @@ const Login = () => {
                   },
                 }}
               />
+
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={data.remember}
+                      onChange={(e) => setData('remember', e.target.checked)}
+                      name="remember"
+                      color="primary"
+                    />
+                  }
+                  label="Remember me"
+                />
+                <Tooltip 
+                  title="Ticking this box will keep you logged into this application in this browser until you log out."
+                  arrow
+                  placement="top"
+                >
+                  <IconButton size="small" sx={{ ml: 0.5 }}>
+                    <InfoOutlined fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
 
               <Button
                 type="submit"
