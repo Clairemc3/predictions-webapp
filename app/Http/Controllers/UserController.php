@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Queries\UserQuery;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -13,6 +15,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // Check if user can view users
+        Gate::authorize('viewAny', User::class);
+
         $search = $request->get('search', '');
 
         $usersQuery = new UserQuery()

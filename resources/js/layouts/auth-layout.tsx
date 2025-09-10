@@ -7,54 +7,17 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { router } from '@inertiajs/react';
 import muiTheme from '../theme/muiTheme';
+import NavigationDrawer from '../components/navigation-drawer';
 
 export default function AuthLayout({children}: {children: React.ReactNode}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
+  const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
-
-  const handleLogout = () => {
-    router.post('/logout');
-  };
-
-  const drawerContent = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={handleLogout}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </Box>
-  );
 
   return (
     <ThemeProvider theme={muiTheme}>
@@ -97,13 +60,10 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
         </AppBar>
 
         {/* Sliding menu drawer */}
-        <Drawer
-          anchor="right"
+        <NavigationDrawer
           open={drawerOpen}
           onClose={toggleDrawer(false)}
-        >
-          {drawerContent}
-        </Drawer>
+        />
 
         <Container
           className="mt-3"
