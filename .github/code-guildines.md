@@ -5,7 +5,7 @@ This file contains coding standards, conventions, and rules for AI assistants wo
 ## 📁 File Naming Conventions
 
 ### Frontend (TypeScript/React)
-- **All TSX/JSX files must use lowercase names** (e.g., `login.tsx`, `register.tsx`, NOT `Login.tsx`, `Register.tsx`)
+- **All TSX/JSX files which represent pages must use kebab case** (e.g., `login.tsx`, `register.tsx`, `user-page.tsx`, NOT `Login.tsx`, `Register.tsx`). All component and layout files should be PascalCase (e.g. `Header.jsx`, `Footer.jsx`, `ConfirmationDialog.jsx`).
 - **Directory names should be lowercase** (e.g., `auth/`, `components/`, NOT `Auth/`, `Components/`)
 - **Component file names should match the component name but in lowercase**
 

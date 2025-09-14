@@ -9,7 +9,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material';
-import AuthLayout from '../../layouts/auth-layout';
+import AuthLayout from '../../layouts/AuthLayout';
 import TextLink from '../../components/TextLink';
 import AlertMessage from '../../components/AlertMessage';
 

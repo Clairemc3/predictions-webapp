@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm, usePage } from '@inertiajs/react';
-import GuestLayout from '../../layouts/guest-layout';
+import GuestLayout from '../../layouts/GuestLayout';
 import TextLink from '../../components/TextLink';
 import AlertMessage from '../../components/AlertMessage';
 

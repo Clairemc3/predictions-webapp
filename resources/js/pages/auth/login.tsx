@@ -19,7 +19,7 @@ import {
   InfoOutlined
 } from '@mui/icons-material';
 import { useForm } from '@inertiajs/react';
-import GuestLayout from '../../layouts/guest-layout';
+import GuestLayout from '../../layouts/GuestLayout';
 import TextLink from '../../components/TextLink';
 
 const Login = () => {

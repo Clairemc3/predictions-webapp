@@ -32,8 +32,8 @@ import {
   Search,
   Clear,
 } from '@mui/icons-material';
-import AuthLayout from '../../layouts/auth-layout';
-import ConfirmationDialog from '../../components/confirmation-dialog';
+import AuthLayout from '../../layouts/AuthLayout';
+import ConfirmationDialog from '../../components/ConfirmationDialog';
 import { route } from '../../lib/routes';
 
 interface User {
