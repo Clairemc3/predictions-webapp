@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import muiTheme from './theme/muiTheme';
-import { FlashProvider } from './components/flash-provider';
+import { FlashProvider } from './components/FlashProvider';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

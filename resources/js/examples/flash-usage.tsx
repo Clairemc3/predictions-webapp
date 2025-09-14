@@ -1,7 +1,7 @@
 // Example usage of the simplified flash message system
 
 import React from 'react';
-import { useFlash } from '../components/flash-provider';
+import { useFlash } from '../components/FlashProvider';
 
 // In any component, you can now use:
 const ExampleComponent = () => {

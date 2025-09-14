@@ -2,18 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Head, usePage, Link, router } from '@inertiajs/react';
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Chip,
-  Stack,
   useTheme,
   useMediaQuery,
   Pagination,
@@ -21,56 +10,19 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Checkbox,
-  FormControlLabel,
 } from '@mui/material';
 import {
-  CheckCircle,
-  Cancel,
-  Email,
-  VerifiedUser,
   Search,
   Clear,
 } from '@mui/icons-material';
 import AuthLayout from '../../layouts/AuthLayout';
 import ConfirmationDialog from '../../components/ConfirmationDialog';
+import MobileUserCard from '../../components/users/MobileUserCard';
+import DesktopUserTable from '../../components/users/DesktopUserTable';
 import { route } from '../../lib/routes';
+import type { User, UsersIndexProps } from '../../types/users';
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  email_verified: boolean;
-  can_host: boolean;
-  can_toggle_permission: boolean;
-}
 
-interface PaginationLink {
-  url: string | null;
-  label: string;
-  active: boolean;
-}
-
-interface PaginatedUsers {
-  data: User[];
-  current_page: number;
-  last_page: number;
-  per_page: number;
-  total: number;
-  from: number;
-  to: number;
-  links: PaginationLink[];
-}
-
-interface Filters {
-  search: string;
-}
-
-interface UsersIndexProps {
-  users: PaginatedUsers;
-  filters: Filters;
-  [key: string]: any;
-}
 
 const UsersIndex = () => {
   const { users, filters } = usePage<UsersIndexProps>().props;
@@ -157,14 +109,6 @@ const UsersIndex = () => {
     });
   };
 
-  const renderStatusIcon = (status: boolean) => {
-    return status ? (
-      <CheckCircle color="success" />
-    ) : (
-      <Cancel color="error" />
-    );
-  };
-
   const handleClearSearch = () => {
     setSearch('');
     router.get(route('users.index'), {}, { 
@@ -172,106 +116,6 @@ const UsersIndex = () => {
       replace: true,
     });
   };
-
-  // Mobile card view
-  const MobileUserCard = ({ user }: { user: User }) => (
-    <Card 
-      variant="outlined" 
-      sx={{ 
-        mb: 2,
-        '&:last-child': { mb: 0 }
-      }}
-    >
-      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="subtitle1" noWrap>
-              {user.name}
-            </Typography>
-            <Typography 
-              variant="body2" 
-              color="text.secondary" 
-              noWrap
-              sx={{ fontSize: '0.75rem' }}
-            >
-              {user.email}
-            </Typography>
-          </Box>
-        </Box>
-        
-        <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
-          <Chip
-            icon={user.email_verified ? <VerifiedUser /> : <Email />}
-            label={user.email_verified ? 'Verified' : 'Not Verified'}
-            color={user.email_verified ? 'success' : 'default'}
-            size="small"
-            variant="outlined"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={user.can_host}
-                onChange={() => handleCanHostClick(user)}
-                size="small"
-                disabled={!user.can_toggle_permission}
-              />
-            }
-            label="Can Host"
-            sx={{ 
-              margin: 0,
-              opacity: user.can_toggle_permission ? 1 : 0.6
-            }}
-          />
-        </Stack>
-      </CardContent>
-    </Card>
-  );
-
-  // Desktop table view
-  const DesktopTable = () => (
-    <TableContainer component={Paper} sx={{ mt: 3 }}>
-      <Table sx={{ minWidth: 650 }} aria-label="users table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="center">Email Verified</TableCell>
-            <TableCell align="center">Can Host</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users.data.map((user) => (
-            <TableRow
-              key={user.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box>
-                    <Typography variant="body1" fontWeight="medium">
-                      {user.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {user.email}
-                    </Typography>
-                  </Box>
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                {renderStatusIcon(user.email_verified)}
-              </TableCell>
-              <TableCell align="center">
-                <Checkbox
-                  checked={user.can_host}
-                  onChange={() => handleCanHostClick(user)}
-                  disabled={!user.can_toggle_permission}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
 
   return (
     <AuthLayout>
@@ -343,11 +187,18 @@ const UsersIndex = () => {
             {isMobile ? (
               <Box sx={{ px: isMobile ? 2 : 0 }}>
                 {users.data.map((user) => (
-                  <MobileUserCard key={user.id} user={user} />
+                  <MobileUserCard 
+                    key={user.id} 
+                    user={user} 
+                    onCanHostClick={handleCanHostClick}
+                  />
                 ))}
               </Box>
             ) : (
-              <DesktopTable />
+              <DesktopUserTable 
+                users={users} 
+                onCanHostClick={handleCanHostClick}
+              />
             )}
 
             {/* Pagination Component */}
