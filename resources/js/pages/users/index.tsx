@@ -13,7 +13,6 @@ import {
   TableRow,
   Paper,
   Chip,
-  Avatar,
   Stack,
   useTheme,
   useMediaQuery,
@@ -22,17 +21,20 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import {
   CheckCircle,
   Cancel,
-  Person,
   Email,
   VerifiedUser,
   Search,
   Clear,
 } from '@mui/icons-material';
 import AuthLayout from '../../layouts/auth-layout';
+import ConfirmationDialog from '../../components/confirmation-dialog';
+import { route } from '../../lib/routes';
 
 interface User {
   id: number;
@@ -40,6 +42,7 @@ interface User {
   email: string;
   email_verified: boolean;
   can_host: boolean;
+  can_toggle_permission: boolean;
 }
 
 interface PaginationLink {
@@ -72,16 +75,28 @@ interface UsersIndexProps {
 const UsersIndex = () => {
   const { users, filters } = usePage<UsersIndexProps>().props;
   const [search, setSearch] = useState(filters.search || '');
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    userId: number | null;
+    userName: string;
+    currentPermission: boolean;
+    isLoading: boolean;
+  }>({
+    open: false,
+    userId: null,
+    userName: '',
+    currentPermission: false,
+    isLoading: false,
+  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Changed from 'md' to 'sm' for iPad table view
 
-
-    // Debounced search effect
+  // Debounced search effect
   useEffect(() => {
     const timer = setTimeout(() => {
       if (search !== filters.search) {
-        router.get('/users', 
+        router.get(route('users.index'), 
           { search: search || undefined }, 
           { 
             preserveState: true,
@@ -94,6 +109,54 @@ const UsersIndex = () => {
     return () => clearTimeout(timer);
   }, [search, filters.search]);
 
+  const handleCanHostClick = (user: User) => {
+    setConfirmDialog({
+      open: true,
+      userId: user.id,
+      userName: user.name,
+      currentPermission: user.can_host,
+      isLoading: false,
+    });
+  };
+
+  const handleConfirmPermissionChange = () => {
+    if (!confirmDialog.userId) return;
+
+    setConfirmDialog(prev => ({ ...prev, isLoading: true }));
+
+    router.post(
+      route('users.permissions.toggle', {
+        user: confirmDialog.userId!,
+        permission: 'host a season'
+      }),
+      {},
+      {
+        onSuccess: () => {
+          setConfirmDialog({
+            open: false,
+            userId: null,
+            userName: '',
+            currentPermission: false,
+            isLoading: false,
+          });
+        },
+        onError: () => {
+          setConfirmDialog(prev => ({ ...prev, isLoading: false }));
+        },
+      }
+    );
+  };
+
+  const handleCancelPermissionChange = () => {
+    setConfirmDialog({
+      open: false,
+      userId: null,
+      userName: '',
+      currentPermission: false,
+      isLoading: false,
+    });
+  };
+
   const renderStatusIcon = (status: boolean) => {
     return status ? (
       <CheckCircle color="success" />
@@ -104,7 +167,7 @@ const UsersIndex = () => {
 
   const handleClearSearch = () => {
     setSearch('');
-    router.get('/users', {}, { 
+    router.get(route('users.index'), {}, { 
       preserveState: true,
       replace: true,
     });
@@ -136,7 +199,7 @@ const UsersIndex = () => {
           </Box>
         </Box>
         
-        <Stack direction="row" spacing={1} justifyContent="space-between">
+        <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
           <Chip
             icon={user.email_verified ? <VerifiedUser /> : <Email />}
             label={user.email_verified ? 'Verified' : 'Not Verified'}
@@ -144,12 +207,20 @@ const UsersIndex = () => {
             size="small"
             variant="outlined"
           />
-          <Chip
-            icon={<CheckCircle />}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={user.can_host}
+                onChange={() => handleCanHostClick(user)}
+                size="small"
+                disabled={!user.can_toggle_permission}
+              />
+            }
             label="Can Host"
-            color="success"
-            size="small"
-            variant="outlined"
+            sx={{ 
+              margin: 0,
+              opacity: user.can_toggle_permission ? 1 : 0.6
+            }}
           />
         </Stack>
       </CardContent>
@@ -189,7 +260,11 @@ const UsersIndex = () => {
                 {renderStatusIcon(user.email_verified)}
               </TableCell>
               <TableCell align="center">
-                {renderStatusIcon(user.can_host)}
+                <Checkbox
+                  checked={user.can_host}
+                  onChange={() => handleCanHostClick(user)}
+                  disabled={!user.can_toggle_permission}
+                />
               </TableCell>
             </TableRow>
           ))}
@@ -300,6 +375,17 @@ const UsersIndex = () => {
           </>
         )}
       </Box>
+
+      <ConfirmationDialog
+        open={confirmDialog.open}
+        title={`${confirmDialog.currentPermission ? 'Remove' : 'Grant'} Hosting Permission`}
+        message={`Are you sure you want to ${confirmDialog.currentPermission ? 'remove hosting permission from' : 'grant hosting permission to'} ${confirmDialog.userName}?`}
+        confirmText={confirmDialog.currentPermission ? 'Remove Permission' : 'Grant Permission'}
+        cancelText="Cancel"
+        onConfirm={handleConfirmPermissionChange}
+        onCancel={handleCancelPermissionChange}
+        isLoading={confirmDialog.isLoading}
+      />
     </AuthLayout>
   );
 };

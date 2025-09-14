@@ -2,14 +2,15 @@
 
 namespace App\Queries;
 
+use App\Enums\Permission;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
-class UserQuery
+class UserIndexQuery
 {
     protected ?string $search = null;
     private array $propertiesToSearch = [];
-
 
     public function withSearch(array $propertiesToSearch, string $search): self
     {
@@ -45,6 +46,9 @@ class UserQuery
     {
         $query = User::select('id', 'name', 'email', 'email_verified_at');
         
+        /** @var \App\Models\User $user */
+        $authenticatedUser = Auth::user();
+
         return $this->apply($query)
             ->paginate($perPage)
             ->through(fn ($user) => [
@@ -52,7 +56,8 @@ class UserQuery
                 'name' => $user->name,
                 'email' => $user->email,
                 'email_verified' => !is_null($user->email_verified_at),
-                'can_host' => true,
+                'can_host' => $user->can(Permission::HostASeason),
+                'can_toggle_permission' => $authenticatedUser ? $authenticatedUser->can('changePermissionsForUser', $user) : false,
             ]);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Queries\UserQuery;
+use App\Queries\UserIndexQuery;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -20,8 +20,9 @@ class UserController extends Controller
 
         $search = $request->get('search', '');
 
-        $usersQuery = new UserQuery()
+        $usersQuery = new UserIndexQuery()
             ->withSearch(['name', 'email'], $search );
+            
         $users = $usersQuery->paginate(10)->withQueryString();
 
         return Inertia::render('users/index', [

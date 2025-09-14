@@ -1,3 +1,4 @@
+import { blue } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 // Define your custom color palette
@@ -33,9 +34,9 @@ const palette = {
     contrastText: '#ffffff',
   },
   success: {
-    main: '#4caf50',
-    light: '#81c784',
-    dark: '#388e3c',
+    main: '#5aa55eff',
+    light: '#66bb6a',
+    dark: '#1b5e20',
     contrastText: '#ffffff',
   },
   grey: {

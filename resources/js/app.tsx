@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import muiTheme from './theme/muiTheme';
+import { FlashProvider } from './components/flash-provider';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -18,7 +19,9 @@ createInertiaApp({
         root.render(
             <ThemeProvider theme={muiTheme}>
                 <CssBaseline />
-                <App {...props} />
+                <FlashProvider>
+                    <App {...props} />
+                </FlashProvider>
             </ThemeProvider>
         );
     },

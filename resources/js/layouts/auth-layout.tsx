@@ -8,9 +8,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { router } from '@inertiajs/react';
 import muiTheme from '../theme/muiTheme';
 import NavigationDrawer from '../components/navigation-drawer';
+import { FlashMessages } from '../components/flash-messages';
 
 export default function AuthLayout({children}: {children: React.ReactNode}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -83,6 +83,9 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
             {children}
           </Box>
         </Container>
+
+        {/* Flash Messages Handler */}
+        <FlashMessages />
       </Box>
     </ThemeProvider>
   );
