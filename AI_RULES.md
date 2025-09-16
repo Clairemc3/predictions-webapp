@@ -5,9 +5,8 @@ This file contains the coding standards, conventions, and rules that all AI assi
 ## 📁 File Naming Conventions
 
 ### Frontend (TypeScript/React)
-- **All TSX/JSX files must use lowercase names** (e.g., `login.tsx`, `register.tsx`, NOT `Login.tsx`, `Register.tsx`)
+- **All TSX/JSX files which represent pages must use kebab case** (e.g., `login.tsx`, `register.tsx`, `user-page.tsx`, NOT `Login.tsx`, `Register.tsx`). All component and layout files should be PascalCase (e.g. `Header.jsx`, `Footer.jsx`, `ConfirmationDialog.jsx`).
 - **Directory names should be lowercase** (e.g., `auth/`, `components/`, NOT `Auth/`, `Components/`)
-- **Component file names should match the component name but in lowercase**
 
 ### Backend (PHP/Laravel)
 - Follow PSR-4 autoloading standards
@@ -15,7 +14,7 @@ This file contains the coding standards, conventions, and rules that all AI assi
 - Models use PascalCase (e.g., `User.php`)
 - Migration files follow Laravel naming conventions
 
-## 🚫 Page Creation Rules
+## 🚫 React Page Creation Rules
 
 1. **Do NOT create new pages unless explicitly instructed**
 2. **Always ask before creating new routes or controllers**
@@ -104,7 +103,7 @@ resources/js/
 
 ## 🚨 Critical Rules
 
-1. **NEVER change file naming from lowercase to uppercase without explicit permission**
+1. **NEVER change file naming conventions without explicit permission (pages should be kebab-case, components/layouts should be PascalCase)**
 2. **ALWAYS preserve existing functionality when making modifications**
 3. **DO NOT create new pages/routes without specific instruction**
 4. **MAINTAIN the established MUI theming and component patterns**
