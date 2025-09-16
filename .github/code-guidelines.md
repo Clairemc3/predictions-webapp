@@ -15,12 +15,6 @@ This file contains coding standards, conventions, and rules for AI assistants wo
 - Models use PascalCase (e.g., `User.php`)
 - Migration files follow Laravel naming conventions
 
-## 🚫 React Page Creation Rules
-
-1. **Do NOT create new pages unless explicitly instructed**
-2. **Always ask before creating new routes or controllers**
-3. **Stick to modifying existing functionality unless specifically asked to add new features**
-
 ## 🎨 Frontend Standards
 
 ### React Components
@@ -83,11 +77,10 @@ resources/js/
 
 ## 🚨 Critical Rules
 
-1. **NEVER change file naming from lowercase to uppercase without explicit permission**
-2. **ALWAYS preserve existing functionality when making modifications**
-3. **DO NOT create new pages/routes without specific instruction**
-4. **MAINTAIN the established MUI theming and component patterns**
-5. **USE the existing import paths and component structure**
+1. **ALWAYS preserve existing functionality when making modifications**
+2. **DO NOT create new pages/routes without specific instruction**
+3. **MAINTAIN the established MUI theming and component patterns**
+4. **USE the existing import paths and component structure**
 
 
 **Last Updated**: August 12, 2025
