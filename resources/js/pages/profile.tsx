@@ -8,7 +8,7 @@ import {
   Avatar,
   Divider,
 } from '@mui/material';
-import AuthLayout from '../layouts/AuthLayout';
+import AuthLayout from '../layouts/auth-layout';
 
 interface User {
   id: number;

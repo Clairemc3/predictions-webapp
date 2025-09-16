@@ -11,9 +11,9 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useForm, usePage } from '@inertiajs/react';
-import GuestLayout from '../../layouts/GuestLayout';
-import TextLink from '../../components/TextLink';
-import AlertMessage from '../../components/AlertMessage';
+import GuestLayout from '../../layouts/guest-layout';
+import TextLink from '../../components/text-link';
+import AlertMessage from '../../components/alert-message';
 
 const Register = () => {
   const { props } = usePage();

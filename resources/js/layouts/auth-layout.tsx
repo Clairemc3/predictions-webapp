@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import muiTheme from '../theme/muiTheme';
-import NavigationDrawer from '../components/NavigationDrawer';
-import { FlashMessages } from '../components/FlashMessages';
+import NavigationDrawer from '../components/navigation-drawer';
+import { FlashMessages } from '../components/flash-messages';
 
 export default function AuthLayout({children}: {children: React.ReactNode}) {
   const [drawerOpen, setDrawerOpen] = useState(false);

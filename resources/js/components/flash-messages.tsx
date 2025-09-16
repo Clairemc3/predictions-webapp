@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { usePage } from '@inertiajs/react';
-import { useFlash } from './FlashProvider';
+import { useFlash } from './flash-provider';
 
 interface PageProps {
   flash?: {

@@ -9,9 +9,9 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material';
-import AuthLayout from '../../layouts/AuthLayout';
-import TextLink from '../../components/TextLink';
-import AlertMessage from '../../components/AlertMessage';
+import AuthLayout from '../../layouts/auth-layout';
+import TextLink from '../../components/text-link';
+import AlertMessage from '../../components/alert-message';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});

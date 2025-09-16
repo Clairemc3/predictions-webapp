@@ -15,10 +15,10 @@ import {
   Search,
   Clear,
 } from '@mui/icons-material';
-import AuthLayout from '../../layouts/AuthLayout';
-import ConfirmationDialog from '../../components/ConfirmationDialog';
-import MobileUserCard from '../../components/users/MobileUserCard';
-import DesktopUserTable from '../../components/users/DesktopUserTable';
+import AuthLayout from '../../layouts/auth-layout';
+import ConfirmationDialog from '../../components/confirmation-dialog';
+import MobileUserCard from '../../components/users/mobile-user-card';
+import DesktopUserTable from '../../components/users/desktop-user-table';
 import { route } from '../../lib/routes';
 import type { User, UsersIndexProps } from '../../types/users';
 
