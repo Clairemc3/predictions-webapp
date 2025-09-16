@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Models;
+
+use App\Enums\SeasonStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Season extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'description'
+    ];
+
+    protected $casts = [
+        'status' => SeasonStatus::class,
+    ];
+
+    /**
+     * The users that belong to the season.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withPivot('is_host', 'nickname')->withTimestamps();
+    }
+
+    /**
+     * Get the hosts of the season.
+     */
+    public function hosts(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->wherePivot('is_host', true)->withPivot('nickname')->withTimestamps();
+    }
+
+    /**
+     * Check if the given user is a host of this season.
+     */
+    public function isHost(User $user): bool
+    {
+        return $this->users()
+            ->wherePivot('user_id', $user->id)
+            ->wherePivot('is_host', true)
+            ->exists();
+    }
+}

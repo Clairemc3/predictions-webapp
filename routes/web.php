@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPermissionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 require __DIR__.'/auth.php';
 
@@ -17,6 +17,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // User permission management routes
     Route::post('/users/{user}/permissions/{permission}/toggle', [UserPermissionController::class, 'toggle'])
         ->name('users.permissions.toggle');
+    
+    // Season routes
+    Route::get('/seasons/create', [SeasonController::class, 'create'])->name('seasons.create');
+    Route::post('/seasons', [SeasonController::class, 'store'])->name('seasons.store');
+    Route::get('/seasons/{season}/edit', [SeasonController::class, 'edit'])->name('seasons.edit');
 });
 
 // Home route - redirect guests to login, authenticated users to profile

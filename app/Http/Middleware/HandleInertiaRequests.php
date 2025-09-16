@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\SeasonRepository;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,6 +43,8 @@ class HandleInertiaRequests extends Middleware
                 'info' => fn () => $request->session()->get('info'),
                 'warning' => fn () => $request->session()->get('warning'),
             ],
+            'seasons' => $request->user() ? fn () => (new SeasonRepository())
+                ->getSeasonsForUser($request->user()) : null,
         ]);
     }
 }

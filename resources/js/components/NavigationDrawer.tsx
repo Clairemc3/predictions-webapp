@@ -7,8 +7,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 interface NavigationDrawerProps {
   open: boolean;
@@ -16,6 +17,9 @@ interface NavigationDrawerProps {
 }
 
 export default function NavigationDrawer({ open, onClose }: NavigationDrawerProps) {
+  const { seasons } = usePage().props as { seasons?: Array<{ id: number; name: string; status: string; is_host: boolean }> };
+  const maxSeasons = 20;
+  
   const handleDrawerClose = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event.type === 'keydown' &&
@@ -78,6 +82,47 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
             </ListItemButton>
           </Link>
         </ListItem>
+        
+        {/* Conditional Season List or My Seasons Link */}
+        {seasons && seasons.length > 0 && (
+          seasons.length <= maxSeasons ? (
+            // Show individual seasons if 4 or fewer
+            seasons.map((season) => (
+              <ListItem key={season.id} disablePadding>
+                <Link href={`/seasons/${season.id}`}>
+                  <ListItemButton>
+                    <ListItemText
+                      primary={
+                        <Box>
+                          <Typography variant="body2">
+                            {season.name}
+                            {season.is_host && (
+                              <Typography component="span" variant="caption" sx={{ ml: 1, fontStyle: 'italic' }}>
+                                (host)
+                              </Typography>
+                            )}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {season.status}
+                          </Typography>
+                        </Box>
+                      }
+                    />
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            ))
+          ) : (
+            // Show "My Seasons" link if more than 4
+            <ListItem disablePadding>
+              <Link href="/my-seasons">
+                <ListItemButton>
+                  <ListItemText primary="My Seasons" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+          )
+        )}
         
         <Divider sx={{ my: 1 }} />
         
