@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
 interface NavigationDrawerProps {
   open: boolean;
@@ -16,14 +16,6 @@ interface NavigationDrawerProps {
 }
 
 export default function NavigationDrawer({ open, onClose }: NavigationDrawerProps) {
-  const handleLogout = () => {
-    router.post('/logout');
-  };
-
-  const handleNavigateToUsers = () => {
-    router.get('/users');
-  };
-
   const handleDrawerClose = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event.type === 'keydown' &&
@@ -47,29 +39,58 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
         <ListItem>
           <ListItemText 
             primary="Manage" 
-            primaryTypographyProps={{
-              variant: 'h6',
-              color: 'text.secondary',
-              sx: { fontWeight: 'bold', px: 2, py: 1 }
+            slotProps={{
+              primary: {
+                variant: 'h6',
+                color: 'text.secondary',
+                sx: { fontWeight: 'bold', px: 2, py: 1 }
+              }
             }}
           />
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={handleNavigateToUsers}>
-            <ListItemText primary="Users" />
-          </ListItemButton>
+          <Link href="/users">
+            <ListItemButton>
+              <ListItemText primary="Users" />
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        
+        <Divider sx={{ my: 1 }} />
+        
+        {/* Seasons Section */}
+        <ListItem>
+          <ListItemText 
+            primary="Seasons" 
+            slotProps={{
+              primary: {
+                variant: 'h6',
+                color: 'text.secondary',
+                sx: { fontWeight: 'bold', px: 2, py: 1 }
+              }
+            }}
+          />
+        </ListItem>
+        <ListItem disablePadding>
+          <Link href="/seasons/create">
+            <ListItemButton>
+              <ListItemText primary="Create a Season" />
+            </ListItemButton>
+          </Link>
         </ListItem>
         
         <Divider sx={{ my: 1 }} />
         
         {/* System Actions */}
         <ListItem disablePadding>
-          <ListItemButton onClick={handleLogout}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
+          <Link href="/logout" method="post">
+            <ListItemButton>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </Link>
         </ListItem>
       </List>
     </Box>
