@@ -18,7 +18,7 @@ interface NavigationDrawerProps {
 
 export default function NavigationDrawer({ open, onClose }: NavigationDrawerProps) {
   const { seasons } = usePage().props as { seasons?: Array<{ id: number; name: string; status: string; is_host: boolean }> };
-  const maxSeasons = 20;
+  const maxSeasons = 5;
   
   const handleDrawerClose = (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
