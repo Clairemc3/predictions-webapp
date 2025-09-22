@@ -55,7 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function seasons(): BelongsToMany
     {
-        return $this->belongsToMany(Season::class)->using(SeasonMembership::class)->withPivot('is_host', 'nickname', 'invitation_accepted_at')->withTimestamps();
+        return $this->belongsToMany(Season::class)->using(SeasonMember::class)->withPivot('is_host', 'nickname', 'invitation_accepted_at')->withTimestamps();
     }
 
     /**
@@ -63,6 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hostedSeasons(): BelongsToMany
     {
-        return $this->belongsToMany(Season::class)->using(SeasonMembership::class)->wherePivot('is_host', true)->withPivot('nickname', 'invitation_accepted_at')->withTimestamps();
+        return $this->belongsToMany(Season::class)->using(SeasonMember::class)->wherePivot('is_host', true)->withPivot('nickname', 'invitation_accepted_at')->withTimestamps();
     }
 }

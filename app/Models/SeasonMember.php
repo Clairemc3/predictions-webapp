@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class SeasonMembership extends Pivot
+class SeasonMember extends Pivot
 {
     /**
      * The table associated with the model.

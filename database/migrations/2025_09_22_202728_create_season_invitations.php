@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('season_user', function (Blueprint $table) {
+        Schema::create('season_invitations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('season_id')->constrained('seasons')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->boolean('is_host')->default(false);
-            $table->string('nickname')->nullable();
-            $table->timestamp('joined_at')->nullable();
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->string('token')->unique();
+            $table->integer('uses_count')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             
-            // Ensure a user can only be in a season once
-            $table->unique(['season_id', 'user_id']);
+            $table->index(['token', 'is_active']);
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('season_user');
+        Schema::dropIfExists('season_invitation_links');
     }
 };
