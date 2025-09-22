@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Season;
 use App\Models\SeasonInvitation;
+use App\Repositories\SeasonInvitationRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,14 +16,13 @@ class SeasonInvitationController extends Controller
     /**
      * Generate a new invitation link for a season.
      */
-    public function store(Request $request, Season $season): JsonResponse
+    public function store(Season $season): JsonResponse
     {
         Gate::authorize('update', $season);
 
-        $invitationLink = SeasonInvitation::create([
-            'season_id' => $season->id,
-            'created_by' => Auth::id()
-        ]);
+        $seasonInvitationRepository = app()->make(SeasonInvitationRepository::class);
+
+        $invitationLink = $seasonInvitationRepository->getOrCreate($season, Auth::user());
 
         return response()->json([
             'message' => 'Invitation link created successfully',
@@ -35,11 +35,11 @@ class SeasonInvitationController extends Controller
     /**
      * Accept an invitation and join the season.
      */
-    public function accept(Request $request, string $token)
+    public function accept(string $token)
     {
-        $invitationLink = SeasonInvitation::where('token', $token)->first();
+        $invitation = app()->make(SeasonInvitationRepository::class)->findByToken($token);
 
-        if (!$invitationLink || !$invitationLink->isValid()) {
+        if (!$invitation || !$invitation->isValid()) {
             return redirect()->route('home')->with('error', 'Invalid or expired invitation link.');
         }
 
@@ -50,7 +50,7 @@ class SeasonInvitationController extends Controller
             return redirect()->route('login')->with('warning', 'Please log in to accept the invitation.');
         }
 
-        $season = $invitationLink->season;
+        $season = $invitation->season;
 
         // Check if user is already a member
         if ($season->users()->where('user_id', $user->id)->exists()) {
@@ -63,7 +63,7 @@ class SeasonInvitationController extends Controller
         ]);
 
         // Increment uses count
-        $invitationLink->incrementUses();
+        $invitation->incrementUses();
 
         return redirect()->route('seasons.edit', $season)->with('success', 'Successfully joined the season!');
     }
