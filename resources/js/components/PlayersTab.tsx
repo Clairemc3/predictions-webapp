@@ -41,15 +41,31 @@ const PlayersTab = ({ users, seasonId }: PlayersTabProps) => {
 
   return (
     <>
-      {/* Invite players Button */}
-      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between', 
+        alignItems: { xs: 'stretch', sm: 'center' },
+        gap: { xs: 2, sm: 0 },
+        mb: 2 
+      }}>
         <Button
           variant="contained"
           onClick={handleInvitePlayers}
-          sx={{ textTransform: 'none' }}
+          sx={{ 
+            order: { xs: 1, sm: 2 },
+            alignSelf: { xs: 'flex-start', sm: 'center' }
+          }}
         >
           Invite players
         </Button>
+        <Typography 
+          variant="h6" 
+          component="h2"
+          sx={{ order: { xs: 2, sm: 1 } }}
+        >
+          Players
+        </Typography>
       </Box>
 
       <TableContainer component={Paper} elevation={0}>
