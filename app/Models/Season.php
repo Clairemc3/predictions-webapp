@@ -46,4 +46,13 @@ class Season extends Model
             ->wherePivot('is_host', true)
             ->exists();
     }
+
+    /**
+     * Get the questions that belong to this season.
+     */
+    public function questions(): BelongsToMany
+    {
+        return $this->belongsToMany(Question::class, 'question_season')
+            ->withTimestamps();
+    }
 }
