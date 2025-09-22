@@ -57,6 +57,7 @@ class SeasonController extends Controller
 
         return Inertia::render('seasons/edit', [
             'season' => $season->load('users'),
+            'seasonStatus' => $season->status->name()
         ]);
     }
 }

@@ -11,6 +11,7 @@ import {
 import AuthLayout from '../../layouts/AuthLayout';
 import QuestionsTab from '../../components/QuestionsTab';
 import PlayersTab from '../../components/PlayersTab';
+import StatusChip from '../../components/StatusChip';
 
 interface User {
   id: number;
@@ -25,15 +26,15 @@ interface Season {
   id: number;
   name: string;
   description: string | null;
-  status: string;
   users: User[];
 }
 
 interface EditSeasonProps {
   season: Season;
+  seasonStatus: string;
 }
 
-const EditSeason = ({ season }: EditSeasonProps) => {
+const EditSeason = ({ season, seasonStatus }: EditSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -47,18 +48,23 @@ const EditSeason = ({ season }: EditSeasonProps) => {
       <Card sx={{ width: '100%', maxWidth: 900 }}>
         <CardContent sx={{ p: 4 }}>
           {/* Season Header */}
-          <Typography 
-            variant="h4" 
-            component="h1" 
-            gutterBottom
-            sx={{ 
-              textAlign: 'center',
-              mb: 2,
-              fontFamily: '"Archivo Black", "Helvetica Neue", Helvetica, Arial, sans-serif'
-            }}
-          >
-            {season.name}
-          </Typography>
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              sx={{ 
+                fontFamily: '"Archivo Black", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                mb: 1
+              }}
+            >
+              {season.name}
+            </Typography>
+            
+            {/* Status Chip */}
+            <Box sx={{ mb: 1 }}>
+              <StatusChip status={seasonStatus} size="small" />
+            </Box>
+          </Box>
 
           {/* Season Description */}
           {season.description && (
