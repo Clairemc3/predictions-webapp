@@ -22,7 +22,6 @@ return new class extends Migration
             
             // Ensure a user can only be in a season once
             $table->unique(['season_id', 'user_id']);
-              $table->unique(['season_id', 'nickname'], 'season_user_nickname_unique');
         });
     }
 
