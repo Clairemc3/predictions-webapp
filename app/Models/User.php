@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -47,5 +48,21 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * The seasons that belong to the user.
+     */
+    public function seasons(): BelongsToMany
+    {
+        return $this->belongsToMany(Season::class)->using(SeasonMembership::class)->withPivot('is_host', 'nickname', 'invitation_accepted_at')->withTimestamps();
+    }
+
+    /**
+     * Get the seasons where the user is a host.
+     */
+    public function hostedSeasons(): BelongsToMany
+    {
+        return $this->belongsToMany(Season::class)->using(SeasonMembership::class)->wherePivot('is_host', true)->withPivot('nickname', 'invitation_accepted_at')->withTimestamps();
     }
 }
