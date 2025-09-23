@@ -29,7 +29,7 @@ class SeasonMember extends Pivot
         'user_id',
         'is_host',
         'nickname',
-        'invitation_accepted_at',
+        'joined_at',
     ];
 
     /**
@@ -37,7 +37,7 @@ class SeasonMember extends Pivot
      */
     protected $casts = [
         'is_host' => 'boolean',
-        'invitation_accepted_at' => 'datetime',
+        'joined_at' => 'datetime',
     ];
 
     /**
@@ -69,7 +69,7 @@ class SeasonMember extends Pivot
      */
     public function hasAcceptedInvitation(): bool
     {
-        return !is_null($this->invitation_accepted_at);
+        return !is_null($this->joined_at);
     }
 
     /**
@@ -77,7 +77,7 @@ class SeasonMember extends Pivot
      */
     public function acceptInvitation(): void
     {
-        $this->invitation_accepted_at = now();
+        $this->joined_at = now();
         $this->save();
     }
 }
