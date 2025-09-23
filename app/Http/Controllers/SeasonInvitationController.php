@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Season;
-use App\Models\SeasonInvitation;
 use App\Repositories\SeasonInvitationRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,7 +15,7 @@ class SeasonInvitationController extends Controller
      */
     public function store(Season $season): JsonResponse
     {
-        Gate::authorize('update', $season);
+        Gate::authorize('invitePlayers', $season);
 
         $seasonInvitationRepository = app()->make(SeasonInvitationRepository::class);
 

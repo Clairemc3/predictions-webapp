@@ -11,6 +11,7 @@ import {
   Chip,
   Button,
   Box,
+  Tooltip,
 } from '@mui/material';
 import InvitationDialog from './InvitationDialog';
 
@@ -26,10 +27,13 @@ interface User {
 interface PlayersTabProps {
   users: User[];
   seasonId: number;
+  seasonStatus: string;
 }
 
-const PlayersTab = ({ users, seasonId }: PlayersTabProps) => {
+const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const playersCanBeInvited = seasonStatus == 'draft' || seasonStatus == 'active';
 
   const handleInvitePlayers = () => {
     setDialogOpen(true);
@@ -49,16 +53,39 @@ const PlayersTab = ({ users, seasonId }: PlayersTabProps) => {
         gap: { xs: 2, sm: 0 },
         mb: 2 
       }}>
-        <Button
-          variant="contained"
-          onClick={handleInvitePlayers}
-          sx={{ 
-            order: { xs: 1, sm: 2 },
-            alignSelf: { xs: 'flex-start', sm: 'center' }
-          }}
-        >
-          Invite players
-        </Button>
+        <Box sx={{ order: { xs: 1, sm: 2 } }}>
+          <Tooltip 
+            title={!playersCanBeInvited ? "Players can be invited once the season is in `Draft`" : ""}
+            arrow
+          >
+            <span>
+              <Button
+                variant="contained"
+                onClick={handleInvitePlayers}
+                disabled={!playersCanBeInvited}
+                sx={{ 
+                  alignSelf: { xs: 'flex-start', sm: 'center' }
+                }}
+              >
+                Invite players
+              </Button>
+            </span>
+          </Tooltip>
+          {!playersCanBeInvited && (
+            <Typography 
+              variant="caption" 
+              color="text.secondary"
+              sx={{ 
+                display: { xs: 'block', sm: 'none' },
+                mt: 1,
+                fontSize: '0.75rem',
+                lineHeight: 1.2
+              }}
+            >
+              Players can be invited once the season is in Draft
+            </Typography>
+          )}
+        </Box>
         <Typography 
           variant="h6" 
           component="h2"

@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\Permission;
+use App\Enums\SeasonStatus;
 use App\Models\Season;
 use App\Models\User;
 
@@ -31,5 +32,10 @@ class SeasonPolicy
     public function update(User $user, Season $season): bool
     {
         return $season->isHost($user);
+    }
+
+    public function invitePlayers(User $user, Season $season): bool
+    {
+        return $season->isHost($user) && $season->status == SeasonStatus::Draft;
     }
 }

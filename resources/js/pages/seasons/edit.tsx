@@ -105,7 +105,7 @@ const EditSeason = ({ season, seasonStatus }: EditSeasonProps) => {
             {/* Players Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <PlayersTab users={season.users} seasonId={season.id} />
+                <PlayersTab users={season.users} seasonId={season.id} seasonStatus={seasonStatus}   />
               </Box>
             )}
           </Box>
