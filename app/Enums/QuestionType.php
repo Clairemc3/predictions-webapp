@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum QuestionType: string
 {
-    case RANKING = 'ranking';
-    case ENTITY_SELECTION = 'entity_selection';
+    case Ranking = 'ranking';
+    case EntitySelection = 'entity_selection';
 
     /**
      * Get the display name for the question type.
@@ -13,8 +13,8 @@ enum QuestionType: string
     public function name(): string
     {
         return match ($this) {
-            self::RANKING => 'Ranking',
-            self::ENTITY_SELECTION => 'EntitySelection',
+            self::Ranking => 'Ranking',
+            self::EntitySelection => 'Entity Selection',
         };
     }
 
@@ -24,8 +24,8 @@ enum QuestionType: string
     public function description(): string
     {
         return match ($this) {
-            self::RANKING => 'A question about league standings or rankings',
-            self::ENTITY_SELECTION => 'A question that requires selecting from a list of entities',
+            self::Ranking => 'A question about league standings or rankings',
+            self::EntitySelection => 'A question that requires selecting from a list of entities',
         };
     }
 
