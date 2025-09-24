@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import { Head, router, usePage, useForm } from '@inertiajs/react';
 import { ArrowBack, Add } from '@mui/icons-material';
-import Standing from '../../../components/questions/question-type-options/Standing';
-import Text from '../../../components/questions/question-type-options/Text';
+import Ranking from '../../../components/questions/question-type-options/Ranking';
+import EntitySelection from '../../../components/questions/question-type-options/EntitySelection';
 
 interface QuestionType {
   name: string;
@@ -111,14 +111,14 @@ const CreateQuestion = () => {
                           <Typography variant="body1" fontWeight="medium">
                             {type.name}
                           </Typography>
-                          {type.value === 'standing' && (
+                          {type.value === 'ranking' && (
                             <Typography variant="body2" color="text.secondary">
-                              Questions about league standings or rankings
+                              Players will predict the rankings of a league
                             </Typography>
                           )}
-                          {type.value === 'text' && (
+                          {type.value === 'entity_selection' && (
                             <Typography variant="body2" color="text.secondary">
-                              Questions that require a text-based answer
+                              Questions that require selecting from a list of entities
                             </Typography>
                           )}
                         </Box>
@@ -134,15 +134,15 @@ const CreateQuestion = () => {
               </FormControl>
 
               {/* Question Type Specific Options */}
-              {data.type === 'standing' && (
-                <Standing 
+              {data.type === 'ranking' && (
+                <Ranking 
                   data={data} 
                   setData={setData} 
                   errors={errors} 
                 />
               )}
-              {data.type === 'text' && (
-                <Text 
+              {data.type === 'entity_selection' && (
+                <EntitySelection 
                   data={data} 
                   setData={setData} 
                   errors={errors} 
