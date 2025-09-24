@@ -1,0 +1,237 @@
+[
+  {
+    "value": "Manchester City",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Real Madrid",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "La Liga"
+      }
+    ]
+  },
+  {
+    "value": "Barcelona",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "La Liga"
+      }
+    ]
+  },
+  {
+    "value": "Bayern Munich",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Bundesliga"
+      }
+    ]
+  },
+  {
+    "value": "Liverpool",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Paris Saint-Germain",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Ligue 1"
+      }
+    ]
+  },
+  {
+    "value": "Chelsea",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Manchester United",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Arsenal",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Tottenham Hotspur",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Juventus",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Serie A"
+      }
+    ]
+  },
+  {
+    "value": "AC Milan",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Serie A"
+      }
+    ]
+  },
+  {
+    "value": "Inter Milan",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Serie A"
+      }
+    ]
+  },
+  {
+    "value": "Napoli",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Serie A"
+      }
+    ]
+  },
+  {
+    "value": "Atlético Madrid",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "La Liga"
+      }
+    ]
+  },
+  {
+    "value": "Sevilla",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "La Liga"
+      }
+    ]
+  },
+  {
+    "value": "Borussia Dortmund",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Bundesliga"
+      }
+    ]
+  },
+  {
+    "value": "RB Leipzig",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Bundesliga"
+      }
+    ]
+  },
+  {
+    "value": "Porto",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Primeira Liga"
+      }
+    ]
+  },
+  {
+    "value": "Ajax",
+    "categories": ["football team", "club football team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Eredivisie"
+      }
+    ]
+  },
+  {
+    "value": "England",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  },
+  {
+    "value": "France",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Brazil",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Argentina",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Germany",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Spain",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Italy",
+    "categories": ["football team", "national team"],
+    "entityRelationships": []
+  }
+]

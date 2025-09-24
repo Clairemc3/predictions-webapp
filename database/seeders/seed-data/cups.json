@@ -1,0 +1,42 @@
+[
+  {
+    "value": "UEFA Champions League",
+    "categories": ["cup"]
+  },
+  {
+    "value": "UEFA Europa League",
+    "categories": ["cup"]
+  },
+  {
+    "value": "UEFA European Championship",
+    "categories": ["cup"]
+  },
+  {
+    "value": "FIFA World Cup",
+    "categories": ["cup"]
+  },
+  {
+    "value": "FA Cup",
+    "categories": ["cup"]
+  },
+  {
+    "value": "Copa del Rey",
+    "categories": ["cup"]
+  },
+  {
+    "value": "DFB-Pokal",
+    "categories": ["cup"]
+  },
+  {
+    "value": "Coppa Italia",
+    "categories": ["cup"]
+  },
+  {
+    "value": "Coupe de France",
+    "categories": ["cup"]
+  },
+  {
+    "value": "UEFA Super Cup",
+    "categories": ["cup"]
+  }
+]

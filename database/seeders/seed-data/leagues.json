@@ -1,0 +1,112 @@
+[
+  {
+    "value": "Premier League",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "Championship",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "League One",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "League Two",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "National League",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "La Liga",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "Spain"
+      }
+    ]
+  },
+  {
+    "value": "Serie A",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "Italy"
+      }
+    ]
+  },
+  {
+    "value": "Bundesliga",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "Germany"
+      }
+    ]
+  },
+  {
+    "value": "Ligue 1",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "France"
+      }
+    ]
+  },
+  {
+    "value": "Primeira Liga",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "Portugal"
+      }
+    ]
+  },
+  {
+    "value": "Eredivisie",
+    "categories": ["league"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_country",
+        "entity": "Netherlands"
+      }
+    ]
+  }
+]

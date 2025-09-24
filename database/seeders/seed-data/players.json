@@ -1,0 +1,322 @@
+[
+  {
+    "value": "Lionel Messi",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Inter Miami"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Argentina"
+      }
+    ]
+  },
+  {
+    "value": "Cristiano Ronaldo",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Al Nassr"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Portugal"
+      }
+    ]
+  },
+  {
+    "value": "Kylian Mbappé",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Real Madrid"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "France"
+      }
+    ]
+  },
+  {
+    "value": "Erling Haaland",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Manchester City"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Norway"
+      }
+    ]
+  },
+  {
+    "value": "Neymar Jr",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Al Hilal"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Brazil"
+      }
+    ]
+  },
+  {
+    "value": "Kevin De Bruyne",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Manchester City"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Belgium"
+      }
+    ]
+  },
+  {
+    "value": "Mohamed Salah",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Liverpool"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Egypt"
+      }
+    ]
+  },
+  {
+    "value": "Robert Lewandowski",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Barcelona"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Poland"
+      }
+    ]
+  },
+  {
+    "value": "Virgil van Dijk",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Liverpool"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Netherlands"
+      }
+    ]
+  },
+  {
+    "value": "Luka Modrić",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Real Madrid"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Croatia"
+      }
+    ]
+  },
+  {
+    "value": "Karim Benzema",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Al Ittihad"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "France"
+      }
+    ]
+  },
+  {
+    "value": "Sadio Mané",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Al Nassr"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Senegal"
+      }
+    ]
+  },
+  {
+    "value": "N'Golo Kanté",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Al Ittihad"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "France"
+      }
+    ]
+  },
+  {
+    "value": "Harry Kane",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Bayern Munich"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "Sergio Ramos",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Sevilla"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Spain"
+      }
+    ]
+  },
+  {
+    "value": "Pedri",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Barcelona"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Spain"
+      }
+    ]
+  },
+  {
+    "value": "Jude Bellingham",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Real Madrid"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "Vinicius Jr",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Real Madrid"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Brazil"
+      }
+    ]
+  },
+  {
+    "value": "Bruno Fernandes",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Manchester United"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "Portugal"
+      }
+    ]
+  },
+  {
+    "value": "Son Heung-min",
+    "categories": [
+      "player"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "plays_for",
+        "entity": "Tottenham Hotspur"
+      },
+      {
+        "relation_type": "plays_for",
+        "entity": "South Korea"
+      }
+    ]
+  }
+]

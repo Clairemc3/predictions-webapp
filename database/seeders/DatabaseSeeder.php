@@ -6,6 +6,7 @@ use App\Enums\Permission;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Validation\Rules\Can;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PermissionSeeder::class,
             SeasonSeeder::class,
+            CategoryAndEntitySeeder::class,
         ]);
     }
 }

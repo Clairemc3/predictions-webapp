@@ -1,0 +1,52 @@
+[
+  {
+    "value": "United Kingdom",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "England",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Spain",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Italy",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Germany",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "France",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Portugal",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Netherlands",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Brazil",
+    "categories": ["country"],
+    "entityRelationships": []
+  },
+  {
+    "value": "Argentina",
+    "categories": ["country"],
+    "entityRelationships": []
+  }
+]

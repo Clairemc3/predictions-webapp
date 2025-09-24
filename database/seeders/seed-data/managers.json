@@ -1,0 +1,250 @@
+[
+  {
+    "value": "Pep Guardiola",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Manchester City"
+      }
+    ]
+  },
+  {
+    "value": "Jürgen Klopp",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Liverpool"
+      }
+    ]
+  },
+  {
+    "value": "Carlo Ancelotti",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Real Madrid"
+      }
+    ]
+  },
+  {
+    "value": "Thomas Tuchel",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "England"
+      }
+    ]
+  },
+  {
+    "value": "Antonio Conte",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Napoli"
+      }
+    ]
+  },
+  {
+    "value": "Mikel Arteta",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Arsenal"
+      }
+    ]
+  },
+  {
+    "value": "Erik ten Hag",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Manchester United"
+      }
+    ]
+  },
+  {
+    "value": "Xavi Hernández",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Barcelona"
+      }
+    ]
+  },
+  {
+    "value": "Mauricio Pochettino",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Paris Saint-Germain"
+      }
+    ]
+  },
+  {
+    "value": "Diego Simeone",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Atlético Madrid"
+      }
+    ]
+  },
+  {
+    "value": "Zinedine Zidane",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Real Madrid"
+      }
+    ]
+  },
+  {
+    "value": "José Mourinho",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "AS Roma"
+      }
+    ]
+  },
+  {
+    "value": "Massimiliano Allegri",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Juventus"
+      }
+    ]
+  },
+  {
+    "value": "Julian Nagelsmann",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Bayern Munich"
+      }
+    ]
+  },
+  {
+    "value": "Hansi Flick",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Germany"
+      },
+      {
+        "relation_type": "manages",
+        "entity": "Bayern Munich"
+      }
+    ]
+  },
+  {
+    "value": "Roberto Mancini",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Italy"
+      },
+      {
+        "relation_type": "manages",
+        "entity": "Manchester City"
+      }
+    ]
+  },
+  {
+    "value": "Luis Enrique",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Spain"
+      }
+    ]
+  },
+  {
+    "value": "Frank Lampard",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Chelsea"
+      }
+    ]
+  },
+  {
+    "value": "Steven Gerrard",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "Al-Ettifaq"
+      }
+    ]
+  },
+  {
+    "value": "Patrick Vieira",
+    "categories": [
+      "manager"
+    ],
+    "entityRelationships": [
+      {
+        "relation_type": "manages",
+        "entity": "RC Strasbourg"
+      }
+    ]
+  }
+]
