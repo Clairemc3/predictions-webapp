@@ -50,12 +50,12 @@ class SeasonInvitationController extends Controller
         $season = $invitation->season;
 
         // Check if user is already a member
-        if ($season->users()->where('user_id', $user->id)->exists()) {
+        if ($season->members()->where('user_id', $user->id)->exists()) {
             return redirect()->route('seasons.edit', $season)->with('warning', 'You are already a member of this season.');
         }
 
         // Add user to season
-        $season->users()->attach($user->id, [
+        $season->members()->attach($user->id, [
             'nickname' => $user->name, // Default nickname to user's name
         ]);
 

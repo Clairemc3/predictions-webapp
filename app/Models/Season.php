@@ -48,7 +48,7 @@ class Season extends Model
      */
     public function isHost(User $user): bool
     {
-        return $this->users()
+        return $this->members()
             ->wherePivot('user_id', $user->id)
             ->wherePivot('is_host', true)
             ->exists();

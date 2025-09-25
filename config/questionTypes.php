@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\ApplicationContext;
 use App\Enums\QuestionType;
 
 return [
-
     // Generic base types
     'base' => [
         QuestionType::Ranking => [
@@ -17,13 +17,13 @@ return [
     ],
 
     // Specialized question types built on top of base types
-    'custom' => [
+    ApplicationContext::UKFootball => [
         'standings' => [
             'base' => QuestionType::Ranking,
             'label' => 'Standings',
-            'setup_description_short' => 'Players should predict the final order of teams in a league.',
-            'setup_description' => 'Players predict the standings of teams in a league and are awarded 1 or 2 points for correct predictions.',
-            // The selections defines which drop downs the user will see and whether 
+            'setup_description_short' => 'Members should predict the final order of teams in a league.',
+            'setup_description' => 'Members predict the standings of teams in a league and are awarded 1 or 2 points for correct predictions.',
+            // The selections defines which drop downs the user will see and whether
             // they have any pre-set filters applied to them.
             'selections' => [
                 'name' => ['league'],
@@ -35,8 +35,8 @@ return [
             'base' => QuestionType::EntitySelection,
             'category' => 'manager',
             'label' => 'Managers',
-            'setup_description_short' => 'Use this when players should select one or more managers.',
-            'setup_description' => 'Players select one manager from a list of available managers.',
+            'setup_description_short' => 'Use this when members should select one or more managers.',
+            'setup_description' => 'Members select one manager from a list of available managers.',
             'selections' => [
                 [
                     'name' => ['league'],
@@ -49,8 +49,8 @@ return [
             'base' => QuestionType::EntitySelection,
             'category' => 'player',
             'label' => 'Players',
-            'setup_description_short' => 'Use this when players should select one or more players.',
-            'setup_description' => 'Players select one players from a list of available players.',
+            'setup_description_short' => 'Use this when members should select one or more players.',
+            'setup_description' => 'Members select one player from a list of available players.',
             'selections' => [
                 [
                     'name' => ['league'],

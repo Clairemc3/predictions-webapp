@@ -37,7 +37,7 @@ class SeasonSeeder extends Seeder
             
             // Attach users to season
             foreach ($seasonUsers as $index => $user) {
-                $season->users()->attach($user->id, [
+                $season->members()->attach($user->id, [
                     'is_host' => $index === 0, // First user is the host
                 ]);
             }

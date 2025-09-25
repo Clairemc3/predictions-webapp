@@ -16,7 +16,7 @@ class SeasonRepository
      */
     public function getSeasonsForUser(User $user): Collection
     {
-        return Season::with('users')
+        return Season::with('members')
             ->get()
             ->map(function ($season) use ($user) {
                 return [

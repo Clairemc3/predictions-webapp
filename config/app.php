@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\ApplicationContext;
+use Illuminate\Console\Application;
+
 return [
 
     /*
@@ -122,5 +125,23 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Context
+    |--------------------------------------------------------------------------
+    |
+    | This context is used to define the various application contexts
+    | that the application can operate within. Each context may have
+    | its own specific configurations and settings.
+    |
+    | ** This is currently defined globally per application, but could
+    | be set per user/per 'season' etc
+    |
+    */
+
+    'context' => env('APP_CONTEXT', ApplicationContext::UKFootball->value),
 
 ];

@@ -40,7 +40,7 @@ class SeasonController extends Controller
         ]);
 
         // Make the authenticated user a host of this season
-        $season->users()->attach($request->user()->id, [
+        $season->members()->attach($request->user()->id, [
             'is_host' => true,
         ]);
 
@@ -56,7 +56,7 @@ class SeasonController extends Controller
         Gate::authorize('update', $season);
 
         return Inertia::render('seasons/edit', [
-            'season' => $season->load('users'),
+            'season' => $season->load('members'),
             'seasonStatus' => $season->status->name()
         ]);
     }
