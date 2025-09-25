@@ -34,7 +34,7 @@ class SeasonPolicy
         return $season->isHost($user);
     }
 
-    public function invitePlayers(User $user, Season $season): bool
+    public function inviteMembers(User $user, Season $season): bool
     {
         return $season->isHost($user) && $season->status == SeasonStatus::Draft;
     }

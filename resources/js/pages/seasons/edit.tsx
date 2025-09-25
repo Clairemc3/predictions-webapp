@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import AuthLayout from '../../layouts/AuthLayout';
 import QuestionsTab from '../../components/QuestionsTab';
-import PlayersTab from '../../components/PlayersTab';
+import MembersTab from '../../components/MembersTab';
 import StatusChip from '../../components/StatusChip';
 
 interface User {
@@ -91,7 +91,7 @@ const EditSeason = ({ season, seasonStatus }: EditSeasonProps) => {
                 centered
               >
                 <Tab label="Questions" />
-                <Tab label="Players" />
+                <Tab label="Members" />
               </Tabs>
             </Box>
 
@@ -102,10 +102,10 @@ const EditSeason = ({ season, seasonStatus }: EditSeasonProps) => {
               </Box>
             )}
 
-            {/* Players Tab Panel */}
+            {/* Members Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <PlayersTab users={season.users} seasonId={season.id} seasonStatus={seasonStatus}   />
+                <MembersTab users={season.users} seasonId={season.id} seasonStatus={seasonStatus}   />
               </Box>
             )}
           </Box>

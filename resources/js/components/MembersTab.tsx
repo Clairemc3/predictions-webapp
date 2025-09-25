@@ -24,18 +24,18 @@ interface User {
   };
 }
 
-interface PlayersTabProps {
+interface MembersTabProps {
   users: User[];
   seasonId: number;
   seasonStatus: string;
 }
 
-const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
+const MembersTab = ({ users, seasonId, seasonStatus }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const playersCanBeInvited = seasonStatus == 'draft' || seasonStatus == 'active';
+  const membersCanBeInvited = seasonStatus == 'draft' || seasonStatus == 'active';
 
-  const handleInvitePlayers = () => {
+  const handleInviteMembers = () => {
     setDialogOpen(true);
   };
 
@@ -55,23 +55,23 @@ const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
       }}>
         <Box sx={{ order: { xs: 1, sm: 2 } }}>
           <Tooltip 
-            title={!playersCanBeInvited ? "Players can be invited once the season is in `Draft`" : ""}
+            title={!membersCanBeInvited ? "Members can be invited once the season is in `Draft`" : ""}
             arrow
           >
             <span>
               <Button
                 variant="contained"
-                onClick={handleInvitePlayers}
-                disabled={!playersCanBeInvited}
+                onClick={handleInviteMembers}
+                disabled={!membersCanBeInvited}
                 sx={{ 
                   alignSelf: { xs: 'flex-start', sm: 'center' }
                 }}
               >
-                Invite players
+                Invite members
               </Button>
             </span>
           </Tooltip>
-          {!playersCanBeInvited && (
+          {!membersCanBeInvited && (
             <Typography 
               variant="caption" 
               color="text.secondary"
@@ -82,7 +82,7 @@ const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
                 lineHeight: 1.2
               }}
             >
-              Players can be invited once the season is in Draft
+              Members can be invited once the season is in Draft
             </Typography>
           )}
         </Box>
@@ -91,7 +91,7 @@ const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
           component="h2"
           sx={{ order: { xs: 2, sm: 1 } }}
         >
-          Players
+          Members
         </Typography>
       </Box>
 
@@ -132,7 +132,7 @@ const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
             <TableRow>
               <TableCell colSpan={2} align="center" sx={{ py: 4 }}>
                 <Typography variant="body2" color="text.secondary">
-                  No players in this season yet
+                  No members in this season yet
                 </Typography>
               </TableCell>
             </TableRow>
@@ -151,4 +151,4 @@ const PlayersTab = ({ users, seasonId, seasonStatus }: PlayersTabProps) => {
   );
 };
 
-export default PlayersTab;
+export default MembersTab;

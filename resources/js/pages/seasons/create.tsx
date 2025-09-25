@@ -49,7 +49,7 @@ const CreateSeason = () => {
               fontStyle: 'italic'
             }}
           >
-            You will be able to add predictions questions and invite players after you have setup the season
+            You will be able to add predictions questions and invite members after you have setup the season
           </Typography>
 
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>

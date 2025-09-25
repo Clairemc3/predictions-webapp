@@ -15,7 +15,7 @@ class SeasonInvitationController extends Controller
      */
     public function store(Season $season): JsonResponse
     {
-        Gate::authorize('invitePlayers', $season);
+        Gate::authorize('inviteMembers', $season);
 
         $seasonInvitationRepository = app()->make(SeasonInvitationRepository::class);
 

@@ -23,9 +23,12 @@ class Season extends Model
     /**
      * The users that belong to the season.
      */
-    public function users(): BelongsToMany
+    public function members(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(SeasonMember::class)->withPivot('is_host', 'nickname', 'joined_at')->withTimestamps();
+        return $this->belongsToMany(User::class)
+            ->using(SeasonMember::class)
+            ->withPivot('is_host', 'nickname', 'joined_at')
+            ->withTimestamps();
     }
 
     /**
@@ -33,7 +36,11 @@ class Season extends Model
      */
     public function hosts(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(SeasonMember::class)->wherePivot('is_host', true)->withPivot('nickname', 'joined_at')->withTimestamps();
+        return $this->belongsToMany(User::class)
+            ->using(SeasonMember::class)
+            ->wherePivot('is_host', true)
+            ->withPivot('nickname', 'joined_at')
+            ->withTimestamps();
     }
 
     /**

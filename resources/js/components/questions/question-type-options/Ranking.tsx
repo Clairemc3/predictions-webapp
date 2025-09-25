@@ -45,7 +45,7 @@ const Ranking = ({ data, setData, errors }: RankingProps) => {
           <MenuItem value="ligue-1">Ligue 1</MenuItem>
         </Select>
         <FormHelperText error={!!errors.league}>
-          {errors.league || 'Choose the league for the players to predict'}
+          {errors.league || 'Choose the league for the members to predict'}
         </FormHelperText>
       </FormControl>
 

@@ -113,7 +113,7 @@ const CreateQuestion = () => {
                           </Typography>
                           {type.value === 'ranking' && (
                             <Typography variant="body2" color="text.secondary">
-                              Players will predict the rankings of a league
+                              Members will predict the rankings of a league
                             </Typography>
                           )}
                           {type.value === 'entity_selection' && (
