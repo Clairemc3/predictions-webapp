@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ApplicationContext;
 use App\Enums\QuestionType;
 use App\Models\Season;
+use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
+use Illuminate\Console\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -19,9 +22,15 @@ class QuestionController extends Controller
     {
         Gate::authorize('update', $season);
 
+        $questionTypeService = new ContextualQuestionTypeService(
+            ApplicationContext::UKFootball
+        );
+
+        $questionTypes = $questionTypeService->build();
+
         return Inertia::render('seasons/questions/create', [
             'season' => $season,
-            'questionTypes' => QuestionType::options(),
+            'questionTypes' => $questionTypes
         ]);
     }
 

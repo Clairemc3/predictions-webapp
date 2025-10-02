@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -18,10 +19,19 @@ import { Head, router, usePage, useForm } from '@inertiajs/react';
 import { ArrowBack, Add } from '@mui/icons-material';
 import Ranking from '../../../components/questions/question-type-options/Ranking';
 import EntitySelection from '../../../components/questions/question-type-options/EntitySelection';
+import QuestionOptions from '../../../components/questions/QuestionOptions';
 
 interface QuestionType {
-  name: string;
-  value: string;
+  key: string;
+  label: string;
+  shortDescription: string;
+  description: string;
+  base: {
+    name: string;
+    value: string;
+  };
+  answerCategoryFilters: any[];
+  answerCategory: string | null;
 }
 
 interface Season {
@@ -36,12 +46,49 @@ interface PageProps extends Record<string, any> {
 }
 
 const CreateQuestion = () => {
-  const { season, questionTypes } = usePage<PageProps>().props;
+  const { season, questionTypes = [] } = usePage<PageProps>().props;
+
+  console.log('Question types:', questionTypes);
   
   const { data, setData, post, processing, errors } = useForm({
-    title: '',
-    type: questionTypes[0]?.value || '',
+    type: ''
   });
+
+  // Find the selected question type
+  const selectedQuestionType = data.type ? questionTypes.find(questionType => questionType.key === data.type) : null;
+
+  // Show loading or error state if no question types are available
+  if (!questionTypes || questionTypes.length === 0) {
+    return (
+      <>
+        <Head title={`Create Question - ${season.name}`} />
+        
+        <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
+          <Box sx={{ mb: 3 }}>
+            <Button
+              startIcon={<ArrowBack />}
+              onClick={() => router.visit(`/seasons/${season.id}/edit`)}
+              sx={{ mb: 2 }}
+            >
+              Back to {season.name}
+            </Button>
+            
+            <Typography variant="h4" component="h1" gutterBottom>
+              Create New Question
+            </Typography>
+          </Box>
+
+          <Paper elevation={1}>
+            <CardContent sx={{ p: 4 }}>
+              <Alert severity="warning">
+                No question types are available. Please check your configuration.
+              </Alert>
+            </CardContent>
+          </Paper>
+        </Box>
+      </>
+    );
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -103,24 +150,17 @@ const CreateQuestion = () => {
                 >
                   {questionTypes.map((type) => (
                     <FormControlLabel
-                      key={type.value}
-                      value={type.value}
+                      key={type.key}
+                      value={type.key}
                       control={<Radio />}
                       label={
                         <Box>
                           <Typography variant="body1" fontWeight="medium">
-                            {type.name}
+                            {type.label}
                           </Typography>
-                          {type.value === 'ranking' && (
-                            <Typography variant="body2" color="text.secondary">
-                              Members will predict the rankings of a league
-                            </Typography>
-                          )}
-                          {type.value === 'entity_selection' && (
-                            <Typography variant="body2" color="text.secondary">
-                              Questions that require selecting from a list of entities
-                            </Typography>
-                          )}
+                          <Typography variant="body2" color="text.secondary">
+                            {type.shortDescription}
+                          </Typography>
                         </Box>
                       }
                     />
@@ -133,20 +173,9 @@ const CreateQuestion = () => {
                 )}
               </FormControl>
 
-              {/* Question Type Specific Options */}
-              {data.type === 'ranking' && (
-                <Ranking 
-                  data={data} 
-                  setData={setData} 
-                  errors={errors} 
-                />
-              )}
-              {data.type === 'entity_selection' && (
-                <EntitySelection 
-                  data={data} 
-                  setData={setData} 
-                  errors={errors} 
-                />
+              {/* Question Options Section - Show when type is selected */}
+              {selectedQuestionType && (
+                <QuestionOptions selectedQuestionType={selectedQuestionType} />
               )}
 
               {/* Form Actions */}

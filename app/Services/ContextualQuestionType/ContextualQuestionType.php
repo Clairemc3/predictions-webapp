@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\QuestionType;
+namespace App\Services\ContextualQuestionType;
 
 use App\Enums\QuestionType;
 
@@ -10,10 +10,10 @@ class ContextualQuestionType
         public readonly string $key,
         public readonly QuestionType $base,
         public readonly string $label,
-        public readonly string $setupDescriptionShort,
-        public readonly string $setupDescription,
-        public readonly array $selections = [],
-        public readonly ?string $category = null,
+        public readonly string $shortDescription,
+        public readonly string $description,
+        public readonly array $answerCategoryFilters = [],
+        public readonly ?string $answerCategory = null,
     ) {}
 
     /**
@@ -25,10 +25,10 @@ class ContextualQuestionType
             key: $key,
             base: $config['base'],
             label: $config['label'],
-            setupDescriptionShort: $config['setup_description_short'],
-            setupDescription: $config['setup_description'],
-            selections: $config['selections'] ?? [],
-            category: $config['category'] ?? null,
+            shortDescription: $config['short_description'],
+            description: $config['description'],
+            answerCategoryFilters: $config['answer_category_filters'] ?? [],
+            answerCategory: $config['answer_category'] ?? null,
         );
     }
 
@@ -41,38 +41,28 @@ class ContextualQuestionType
             'key' => $this->key,
             'base' => $this->base->value,
             'label' => $this->label,
-            'setup_description_short' => $this->setupDescriptionShort,
-            'setup_description' => $this->setupDescription,
-            'selections' => $this->selections,
-            'category' => $this->category,
+            'short_description' => $this->shortDescription,
+            'description' => $this->description,
+            'answer_category_filters' => $this->answerCategoryFilters,
+            'answer_category' => $this->answerCategory,
         ];
     }
 
     /**
-     * Get formatted option for dropdowns
+     * Get option for inputs
      */
     public function toOption(): array
     {
         return [
             'value' => $this->key,
             'label' => $this->label,
-            'description' => $this->setupDescriptionShort,
+            'description' => $this->shortDescription,
         ];
     }
 
-    /**
-     * Check if this question type has selections
-     */
-    public function hasSelections(): bool
-    {
-        return !empty($this->selections);
-    }
 
-    /**
-     * Get the base type name
-     */
-    public function getBaseTypeName(): QuestionType
+    public function answerCategoryFilters(): array
     {
-        return $this->base;
+        return $this->answerCategoryFilters;
     }
 }
