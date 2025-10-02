@@ -1,7 +1,7 @@
 [
   {
     "value": "Premier League",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -11,7 +11,7 @@
   },
   {
     "value": "Championship",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -21,7 +21,7 @@
   },
   {
     "value": "League One",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -31,7 +31,7 @@
   },
   {
     "value": "League Two",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -41,7 +41,7 @@
   },
   {
     "value": "National League",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -51,7 +51,7 @@
   },
   {
     "value": "La Liga",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -61,7 +61,7 @@
   },
   {
     "value": "Serie A",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -71,7 +71,7 @@
   },
   {
     "value": "Bundesliga",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -81,7 +81,7 @@
   },
   {
     "value": "Ligue 1",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -91,7 +91,7 @@
   },
   {
     "value": "Primeira Liga",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",
@@ -101,7 +101,7 @@
   },
   {
     "value": "Eredivisie",
-    "categories": ["league"],
+    "categories": ["football-league"],
     "entityRelationships": [
       {
         "relation_type": "in_country",

@@ -1,7 +1,7 @@
 [
   {
     "value": "Manchester City",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -11,7 +11,7 @@
   },
   {
     "value": "Real Madrid",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -21,7 +21,7 @@
   },
   {
     "value": "Barcelona",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -31,7 +31,7 @@
   },
   {
     "value": "Bayern Munich",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -41,7 +41,7 @@
   },
   {
     "value": "Liverpool",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -51,7 +51,7 @@
   },
   {
     "value": "Paris Saint-Germain",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -61,7 +61,7 @@
   },
   {
     "value": "Chelsea",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -71,7 +71,7 @@
   },
   {
     "value": "Manchester United",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -81,7 +81,7 @@
   },
   {
     "value": "Arsenal",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -91,7 +91,7 @@
   },
   {
     "value": "Tottenham Hotspur",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -101,7 +101,7 @@
   },
   {
     "value": "Juventus",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -111,7 +111,7 @@
   },
   {
     "value": "AC Milan",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -121,7 +121,7 @@
   },
   {
     "value": "Inter Milan",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -131,7 +131,7 @@
   },
   {
     "value": "Napoli",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -141,7 +141,7 @@
   },
   {
     "value": "Atlético Madrid",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -151,7 +151,7 @@
   },
   {
     "value": "Sevilla",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -161,7 +161,7 @@
   },
   {
     "value": "Borussia Dortmund",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -171,7 +171,7 @@
   },
   {
     "value": "RB Leipzig",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -181,7 +181,7 @@
   },
   {
     "value": "Porto",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -191,7 +191,7 @@
   },
   {
     "value": "Ajax",
-    "categories": ["football team", "club football team"],
+    "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
@@ -201,37 +201,37 @@
   },
   {
     "value": "England",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "France",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Brazil",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Argentina",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Germany",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Spain",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Italy",
-    "categories": ["football team", "national team"],
+    "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   }
 ]

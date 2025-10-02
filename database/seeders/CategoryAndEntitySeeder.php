@@ -12,6 +12,7 @@ class CategoryAndEntitySeeder extends Seeder
     private array $managersData;
     private array $teamsData;
     private array $competitionsData;
+    private array $leaguesData;
     private array $allEntities;
 
     public function __construct()
@@ -20,12 +21,15 @@ class CategoryAndEntitySeeder extends Seeder
         $this->playersData = json_decode(file_get_contents(database_path('seeders/seed-data/players.json')), true);
         $this->managersData = json_decode(file_get_contents(database_path('seeders/seed-data/managers.json')), true);
         $this->teamsData = json_decode(file_get_contents(database_path('seeders/seed-data/teams.json')), true);
+        $this->leaguesData = json_decode(file_get_contents(database_path('seeders/seed-data/leagues.json')), true);
 
         $this->allEntities = array_merge(
             $this->playersData, 
             $this->managersData, 
             $this->teamsData, 
-            $this->competitionsData);
+            $this->competitionsData,
+            $this->leaguesData
+        );
     }
 
     /**
@@ -45,12 +49,12 @@ class CategoryAndEntitySeeder extends Seeder
     private function seedCategories(): void
     {
         $categories = [
-            'football team',
-            'club football team',
-            'national football team',
+            'football-team',
+            'club-football-team',
+            'national-football-team',
             'manager',
             'player',
-            'football league',
+            'football-league',
             'competition',
             'country'
         ];
