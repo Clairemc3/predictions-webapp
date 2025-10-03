@@ -55,10 +55,12 @@ const CreateQuestion = () => {
   });
 
   // Find the selected question type
-  const selectedQuestionType = data.type ? questionTypes.find(questionType => questionType.key === data.type) : null;
+  const selectedQuestionType = data.type && questionTypes?.length > 0 
+    ? questionTypes.find(questionType => questionType.key === data.type) 
+    : null;
 
   // Show loading or error state if no question types are available
-  if (!questionTypes || questionTypes.length === 0) {
+  if (!questionTypes || !Array.isArray(questionTypes) || questionTypes.length === 0) {
     return (
       <>
         <Head title={`Create Question - ${season.name}`} />
@@ -148,7 +150,7 @@ const CreateQuestion = () => {
                   onChange={(e) => setData('type', e.target.value)}
                   sx={{ mt: 1 }}
                 >
-                  {questionTypes.map((type) => (
+                  {questionTypes && Array.isArray(questionTypes) && questionTypes.map((type) => (
                     <FormControlLabel
                       key={type.key}
                       value={type.key}

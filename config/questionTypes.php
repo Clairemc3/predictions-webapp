@@ -27,7 +27,7 @@ return [
             // they have any pre-set filters applied to them.
             'answer_category_filters' => [
                 [
-                    'name' => 'league',
+                    'name' => 'football-league',
                     'label' => 'Select a UK league',
                     'filters' => ['country' => 'United Kingdom']
                 ]
@@ -41,7 +41,7 @@ return [
             'description' => 'Members select one manager from a list of available managers.',
             'answer_category_filters' => [
                 [
-                    'name' => 'league',
+                    'name' => 'football-league',
                     'label' => 'Select a League',
                     'description' => 'Select the league the manager should work within',
                     'filters' => []
@@ -56,7 +56,7 @@ return [
             'description' => 'Members select one player from a list of available players.',
             'answer_category_filters' => [
                 [
-                    'name' => 'league',
+                    'name' => 'football-league',
                     'label' => 'Select a League',
                     'description' => 'Select the league the player should work within',
                     'filters' => []
