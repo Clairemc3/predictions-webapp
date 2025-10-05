@@ -5,6 +5,11 @@ import AnswerCount from '../form-fields/AnswerCount';
 import { RankingsProps } from '../../../types/question';
 
 const Rankings: React.FC<RankingsProps> = ({ selectedQuestionType }) => {
+  // Add defensive checks
+  if (!selectedQuestionType) {
+    return null;
+  }
+
   return (
     <Box>      
       {/* Render select dropdowns based on answerCategoryFilters */}

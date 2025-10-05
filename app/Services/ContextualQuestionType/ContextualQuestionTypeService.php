@@ -26,7 +26,7 @@ class ContextualQuestionTypeService
     /**
      * Get all question types for a specific application context
      */
-    private function getQuestionTypesForContext(): Collection
+    public function getQuestionTypesForContext(): Collection
     {
         $config = config('questionTypes');
 

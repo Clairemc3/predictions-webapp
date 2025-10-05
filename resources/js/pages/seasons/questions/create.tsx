@@ -33,18 +33,47 @@ interface PageProps extends Record<string, any> {
 }
 
 const CreateQuestion = () => {
-  const { season, questionTypes = [] } = usePage<PageProps>().props;
+  const pageProps = usePage<PageProps>().props;
+  const { season, questionTypes = [] } = pageProps;
 
+  console.log('Full page props:', pageProps);
   console.log('Question types:', questionTypes);
+  console.log('Question types type:', typeof questionTypes);
+  console.log('Question types is array:', Array.isArray(questionTypes));
   
   const { data, setData, post, processing, errors } = useForm({
-    type: ''
+    type: '',
+    title: '',
+    short_title: '',
+    base_type: '',
+    selected_entity_id: '',
+    answer_count: 1
   });
+
+  // Handle data changes from question options
+  const handleQuestionOptionsChange = (optionsData: { title?: string; selectedEntityId?: number; answerCount?: number }) => {
+    setData(prevData => ({
+      ...prevData,
+      title: optionsData.title || prevData.title,
+      selected_entity_id: optionsData.selectedEntityId?.toString() || prevData.selected_entity_id,
+      answer_count: optionsData.answerCount || prevData.answer_count
+    }));
+  };
 
   // Find the selected question type
   const selectedQuestionType = data.type && questionTypes?.length > 0 
     ? questionTypes.find(questionType => questionType.key === data.type) 
     : null;
+
+  // Update base_type when question type changes
+  React.useEffect(() => {
+    if (selectedQuestionType) {
+      setData(prevData => ({
+        ...prevData,
+        base_type: selectedQuestionType.base
+      }));
+    }
+  }, [selectedQuestionType, setData]);
 
   // Show loading or error state if no question types are available
   if (!questionTypes || !Array.isArray(questionTypes) || questionTypes.length === 0) {
@@ -164,7 +193,10 @@ const CreateQuestion = () => {
 
               {/* Question Options Section - Show when type is selected */}
               {selectedQuestionType && (
-                <QuestionOptions selectedQuestionType={selectedQuestionType} />
+                <QuestionOptions 
+                  selectedQuestionType={selectedQuestionType} 
+                  onDataChange={handleQuestionOptionsChange}
+                />
               )}
 
               {/* Form Actions */}

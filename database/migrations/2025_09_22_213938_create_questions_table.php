@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+            $table->enum('base_type', ['ranking', 'entity_selection'])->index();
             $table->string('title');
             $table->string('short_title', 50);
-            $table->enum('type', ['ranking', 'entity_selection']);
             $table->foreignId('created_by')->constrained('users');
             $table->integer('answer_count')->default(1);
             $table->timestamps();
-            $table->index(['type']);
         });
     }
 

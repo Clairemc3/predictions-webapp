@@ -25,7 +25,9 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
   onChange,
   value: externalValue
 }) => {
-  const [isAllSelected, setIsAllSelected] = useState(externalValue?.isAll || false);
+  const [isAllSelected, setIsAllSelected] = useState(
+    externalValue?.isAll || false
+  );
   const [numberValue, setNumberValue] = useState<string>(
     externalValue?.count?.toString() || ''
   );
@@ -36,11 +38,13 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
     const checked = event.target.checked;
     
     if (isControlled && onChange) {
-      onChange({ isAll: checked, count: undefined });
+      onChange({ isAll: checked, count: checked ? maxValue : undefined });
     } else {
       setIsAllSelected(checked);
       if (checked) {
-        setNumberValue(''); // Clear number input when "all" is selected
+        setNumberValue(maxValue.toString()); // Set to max value when "all" is selected
+      } else {
+        setNumberValue(''); // Clear number input when "all" is unchecked
       }
     }
   };
@@ -66,7 +70,7 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
 
   const currentIsAll = isControlled ? externalValue?.isAll || false : isAllSelected;
   const currentNumberValue = isControlled 
-    ? (externalValue?.count?.toString() || '') 
+    ? (externalValue?.isAll ? maxValue.toString() : (externalValue?.count?.toString() || ''))
     : numberValue;
 
   return (
@@ -86,7 +90,7 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
                 checked={currentIsAll}
                 onChange={handleAllChange}
                 name="answer_count_all"
-                disabled={currentNumberValue !== ''}
+                disabled={!currentIsAll && currentNumberValue !== ''}
               />
             }
             label="All"
