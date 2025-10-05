@@ -29,7 +29,7 @@ return [
                 [
                     'name' => 'football-league',
                     'label' => 'Select a UK league',
-                    'filters' => ['country' => 'United Kingdom']
+                    'filters' => ['country' => 'England']
                 ]
             ],
         ],
