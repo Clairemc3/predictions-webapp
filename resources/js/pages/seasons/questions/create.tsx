@@ -17,22 +17,9 @@ import {
 } from '@mui/material';
 import { Head, router, usePage, useForm } from '@inertiajs/react';
 import { ArrowBack, Add } from '@mui/icons-material';
-import Ranking from '../../../components/questions/question-type-options/Ranking';
-import EntitySelection from '../../../components/questions/question-type-options/EntitySelection';
-import QuestionOptions from '../../../components/questions/QuestionOptions';
-
-interface QuestionType {
-  key: string;
-  label: string;
-  shortDescription: string;
-  description: string;
-  base: {
-    name: string;
-    value: string;
-  };
-  answerCategoryFilters: any[];
-  answerCategory: string | null;
-}
+import AuthLayout from '../../../layouts/AuthLayout';
+import QuestionOptions from '../../../components/question-builder/QuestionOptions';
+import { QuestionType } from '../../../types/question';
 
 interface Season {
   id: number;
@@ -108,7 +95,7 @@ const CreateQuestion = () => {
   };
 
   return (
-    <>
+    <AuthLayout>
       <Head title={`Create Question - ${season.name}`} />
       
       <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
@@ -201,7 +188,7 @@ const CreateQuestion = () => {
           </CardContent>
         </Paper>
       </Box>
-    </>
+    </AuthLayout>
   );
 };
 

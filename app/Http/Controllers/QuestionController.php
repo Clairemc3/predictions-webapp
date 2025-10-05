@@ -34,12 +34,4 @@ class QuestionController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created question.
-     */
-    public function store(Request $request, Season $season): JsonResponse
-    {
-      //
-    }
-
 }

@@ -32,6 +32,8 @@ return [
                     'filters' => ['country' => 'England']
                 ]
             ],
+            'answer_count_label' => 'Number of teams to predict',
+            'answer_count_helper_text' => 'The order of how many teams should be predicted?'
         ],
         'managers' => [
             'base' => QuestionType::EntitySelection,
