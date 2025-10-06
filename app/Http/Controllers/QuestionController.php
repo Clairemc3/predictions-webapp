@@ -43,7 +43,6 @@ class QuestionController extends Controller
     {
         Gate::authorize('update', $season);
 
-
         $validated = $request->validated();
 
         $question = new Question();

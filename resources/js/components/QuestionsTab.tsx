@@ -10,17 +10,34 @@ import {
   Typography,
   Button,
   Box,
+  IconButton,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { router } from '@inertiajs/react';
 
 interface QuestionsTabProps {
   seasonId: number;
+  questions: QuestionRow[];
 }
 
-const QuestionsTab = ({ seasonId }: QuestionsTabProps) => {
+interface QuestionRow {
+  id: number;
+  title: string;
+  type?: string;
+  base_type?: string;
+}
+
+const QuestionsTab = ({ seasonId, questions }: QuestionsTabProps) => {
   const handleAddQuestion = () => {
     router.visit(`/seasons/${seasonId}/questions/create`);
+  };
+
+  const formatType = (q: QuestionRow): string => {
+    const raw = q.type ?? q.base_type ?? '';
+    return raw
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
   return (
@@ -55,20 +72,36 @@ const QuestionsTab = ({ seasonId }: QuestionsTabProps) => {
         <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Question</TableCell>
+            <TableCell>Title</TableCell>
             <TableCell>Type</TableCell>
-            <TableCell>Status</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell colSpan={4} align="center" sx={{ py: 4 }}>
-              <Typography variant="body2" color="text.secondary">
-                No questions created yet
-              </Typography>
-            </TableCell>
-          </TableRow>
+          {questions.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={3} align="center" sx={{ py: 4 }}>
+                <Typography variant="body2" color="text.secondary">
+                  No questions created yet
+                </Typography>
+              </TableCell>
+            </TableRow>
+          ) : (
+            questions.map((q) => (
+              <TableRow key={q.id} hover>
+                <TableCell>{q.title}</TableCell>
+                <TableCell>{formatType(q)}</TableCell>
+                <TableCell>
+                  <IconButton aria-label="edit question" size="small">
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton aria-label="delete question" size="small" color="error">
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>

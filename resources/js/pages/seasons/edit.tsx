@@ -32,9 +32,18 @@ interface Season {
 interface EditSeasonProps {
   season: Season;
   seasonStatus: string;
+  questions: Question[];
 }
 
-const EditSeason = ({ season, seasonStatus }: EditSeasonProps) => {
+interface Question {
+  id: number;
+  title: string;
+  // Backend currently returns either `type` or `base_type`; include both for safety
+  type?: string;
+  base_type?: string;
+}
+
+const EditSeason = ({ season, seasonStatus, questions }: EditSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -98,7 +107,7 @@ const EditSeason = ({ season, seasonStatus }: EditSeasonProps) => {
             {/* Questions Tab Panel */}
             {selectedTab === 0 && (
               <Box sx={{ pt: 3 }}>
-                <QuestionsTab seasonId={season.id} />
+                <QuestionsTab seasonId={season.id} questions={questions} />
               </Box>
             )}
 
