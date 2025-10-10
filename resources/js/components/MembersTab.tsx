@@ -25,12 +25,12 @@ interface User {
 }
 
 interface MembersTabProps {
-  users: User[];
+  users?: User[];
   seasonId: number;
   seasonStatus: string;
 }
 
-const MembersTab = ({ users, seasonId, seasonStatus }: MembersTabProps) => {
+const MembersTab = ({ users = [], seasonId, seasonStatus }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const membersCanBeInvited = seasonStatus == 'draft' || seasonStatus == 'active';
@@ -104,14 +104,14 @@ const MembersTab = ({ users, seasonId, seasonStatus }: MembersTabProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.length > 0 ? (
+          {users && users.length > 0 ? (
             users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>
                   <Typography variant="body2">
                     {user.name}
                   </Typography>
-                  {user.pivot.is_host && (
+                  {user.pivot?.is_host && (
                     <Chip 
                       label="Host" 
                       color="primary" 

@@ -26,7 +26,7 @@ interface Season {
   id: number;
   name: string;
   description: string | null;
-  users: User[];
+  members?: User[];
 }
 
 interface EditSeasonProps {
@@ -114,7 +114,7 @@ const EditSeason = ({ season, seasonStatus, questions }: EditSeasonProps) => {
             {/* Members Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <MembersTab users={season.users} seasonId={season.id} seasonStatus={seasonStatus}   />
+                <MembersTab users={season.members} seasonId={season.id} seasonStatus={seasonStatus}   />
               </Box>
             )}
           </Box>
