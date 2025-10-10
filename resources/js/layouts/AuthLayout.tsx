@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import muiTheme from '../theme/muiTheme';
-import NavigationDrawer from '../components/NavigationDrawer';
+import NavigationDrawer from '../components/Navigation/NavigationDrawer';
 import { FlashMessages } from '../components/FlashMessages';
 
 export default function AuthLayout({children}: {children: React.ReactNode}) {
