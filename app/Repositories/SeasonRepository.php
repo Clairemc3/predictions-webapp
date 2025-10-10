@@ -17,6 +17,7 @@ class SeasonRepository
     public function getSeasonsForUser(User $user): Collection
     {
         return Season::with('members')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($season) use ($user) {
                 return [

@@ -4,14 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Enums\SeasonStatus;
 use App\Models\Season;
+use App\Repositories\SeasonRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class SeasonController extends Controller
 {
+    /**
+     * Display a listing of all seasons the user belongs to.
+     */
+    public function index(): Response
+    {
+        $seasonRepository = app()->make(SeasonRepository::class);
+        $seasons = $seasonRepository->getSeasonsForUser(Auth::user());
+
+        return Inertia::render('seasons/index', [
+            'seasons' => $seasons
+        ]);
+    }
+
     /**
      * Show the form for creating a new season.
      */

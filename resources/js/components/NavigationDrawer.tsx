@@ -83,11 +83,11 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
           </Link>
         </ListItem>
         
-        {/* Conditional Season List or My Seasons Link */}
-        {seasons && seasons.length > 0 && (
-          seasons.length <= maxSeasons ? (
-            // Show individual seasons if 4 or fewer
-            seasons.map((season) => (
+        {/* Conditional Season List or All Seasons Link */}
+        {seasons && seasons.length > 0 ? (
+          <>
+            {/* Show first 5 seasons */}
+            {seasons.slice(0, maxSeasons).map((season) => (
               <ListItem key={season.id} disablePadding>
                 <Link href={`/seasons/${season.id}`}>
                   <ListItemButton>
@@ -111,17 +111,32 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
                   </ListItemButton>
                 </Link>
               </ListItem>
-            ))
-          ) : (
-            // Show "My Seasons" link if more than 4
-            <ListItem disablePadding>
-              <Link href="/my-seasons">
-                <ListItemButton>
-                  <ListItemText primary="My Seasons" />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          )
+            ))}
+            
+            {/* Show "All seasons" link if more than 5 */}
+            {seasons.length > maxSeasons && (
+              <ListItem disablePadding>
+                <Link href="/seasons">
+                  <ListItemButton>
+                    <ListItemText primary="All seasons" />
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            )}
+          </>
+        ) : (
+          <ListItem>
+            <ListItemText 
+              primary="No seasons yet" 
+              slotProps={{
+                primary: {
+                  variant: 'body2',
+                  color: 'text.secondary',
+                  sx: { px: 2, py: 1, fontStyle: 'italic' }
+                }
+              }}
+            />
+          </ListItem>
         )}
         
         <Divider sx={{ my: 1 }} />
