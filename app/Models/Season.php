@@ -26,6 +26,7 @@ class Season extends Model
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
+            ->as('membership')
             ->using(SeasonMember::class)
             ->withPivot('is_host', 'nickname', 'joined_at')
             ->withTimestamps();

@@ -11,13 +11,14 @@ interface PredictionSeason {
   id: number;
   name: string;
   status: string;
+  membership_id: number;
 }
 
 interface MyPredictionsProps {
-  predictionSeasons?: PredictionSeason[];
+  seasons?: PredictionSeason[];
 }
 
-export default function MyPredictions({ predictionSeasons }: MyPredictionsProps) {
+export default function MyPredictions({ seasons }: MyPredictionsProps) {
   return (
     <>
       {/* My Predictions Section Header */}
@@ -35,10 +36,10 @@ export default function MyPredictions({ predictionSeasons }: MyPredictionsProps)
       </ListItem>
       
       {/* Prediction Seasons List */}
-      {predictionSeasons && predictionSeasons.length > 0 ? (
-        predictionSeasons.slice(0, 3).map((season) => (
+      {seasons && seasons.length > 0 ? (
+        seasons.slice(0, 3).map((season) => (
           <ListItem key={season.id} disablePadding>
-            <Link href={`/predictions/${season.id}`}>
+            <Link href={`/predictions/${season.membership_id}`}>
               <ListItemButton>
                 <ListItemText
                   primary={

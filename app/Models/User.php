@@ -55,7 +55,11 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function seasons(): BelongsToMany
     {
-        return $this->belongsToMany(Season::class)->using(SeasonMember::class)->withPivot('is_host', 'nickname', 'joined_at')->withTimestamps();
+        return $this->belongsToMany(Season::class)
+         ->as('membership')
+        ->using(SeasonMember::class)
+        ->withPivot('id', 'is_host', 'nickname', 'joined_at')
+        ->withTimestamps();
     }
 
     /**

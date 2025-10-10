@@ -63,6 +63,7 @@ class SeasonRepository
     public function getRecentMemberSeasons(User $user, $limit = 5): Collection
     {
         return $user->seasons()
+            ->withPivot('id')
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get()
@@ -70,7 +71,8 @@ class SeasonRepository
                 return [
                     'id' => $season->id,
                     'name' => $season->name,
-                    'status' => $season->status->name()
+                    'status' => $season->status->name(),
+                    'membership_id' => $season->membership->id,
                 ];
             });
     }

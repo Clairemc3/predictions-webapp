@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'hostedSeasons' => $request->user() ? fn () => (new SeasonRepository())
                 ->getRecentHostedSeasons($request->user()) : null,
-            'predictionSeasons' => $request->user() ? fn () => (new SeasonRepository())
+            'memberSeasons' => $request->user() ? fn () => (new SeasonRepository())
                 ->getRecentMemberSeasons($request->user()) : null,
             'canHost' => $request->user() ? fn () => $request->user()->can('create', Season::class) : false,
         ]);

@@ -26,12 +26,11 @@ interface User {
 }
 
 interface MembersTabProps {
-  users?: User[];
+  members?: User[];
   seasonId: number;
-  seasonStatus: string;
 }
 
-const MembersTab = ({ users = [], seasonId, seasonStatus }: MembersTabProps) => {
+const MembersTab = ({ members = [], seasonId }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const membersCanBeInvited = usePage().props.canInviteMembers as boolean;
@@ -105,14 +104,14 @@ const MembersTab = ({ users = [], seasonId, seasonStatus }: MembersTabProps) => 
           </TableRow>
         </TableHead>
         <TableBody>
-          {users && users.length > 0 ? (
-            users.map((user) => (
-              <TableRow key={user.id}>
+          {members && members.length > 0 ? (
+            members.map((member) => (
+              <TableRow key={member.id}>
                 <TableCell>
                   <Typography variant="body2">
-                    {user.name}
+                    {member.name}
                   </Typography>
-                  {user.pivot?.is_host && (
+                  {member.pivot?.is_host && (
                     <Chip 
                       label="Host" 
                       color="primary" 

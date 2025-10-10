@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('is_host')->default(false);
             $table->string('nickname')->nullable();
             $table->timestamp('joined_at')->nullable();
+            $table->float('percentage_complete')->default(0);
             $table->timestamps();
             
             // Ensure a user can only be in a season once

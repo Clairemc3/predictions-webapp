@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckPredictionComplete;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             EnsureEmailIsVerified::class,
             HandleInertiaRequests::class,
+        ]);
+
+        $middleware->alias([
+            'prediction.complete' => CheckPredictionComplete::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

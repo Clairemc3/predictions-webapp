@@ -72,6 +72,11 @@ class SeasonMember extends Pivot
         return !is_null($this->joined_at);
     }
 
+    public function isComplete(): bool
+    {
+        return $this->percentage_complete >= 100;
+    }
+
     /**
      * Mark the invitation as accepted.
      */

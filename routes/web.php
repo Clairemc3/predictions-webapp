@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
 require __DIR__.'/seasons.php';
-require __DIR__.'/admin.php';       
+require __DIR__.'/admin.php';
+require __DIR__.'/predictions.php';
 
 // Public invitation acceptance route (accessible without authentication)
 Route::get('/invitations/{token}', [SeasonInvitationController::class, 'accept'])->name('season-invitations.accept');

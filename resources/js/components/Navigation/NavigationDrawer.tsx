@@ -18,9 +18,9 @@ interface NavigationDrawerProps {
 }
 
 export default function NavigationDrawer({ open, onClose }: NavigationDrawerProps) {
-  const { hostedSeasons, predictionSeasons, canHost } = usePage().props as { 
+  const { hostedSeasons, memberSeasons, canHost } = usePage().props as { 
     hostedSeasons?: Array<{ id: number; name: string; status: string; is_host: boolean }>;
-    predictionSeasons?: Array<{ id: number; name: string; status: string }>;
+    memberSeasons?: Array<{ id: number; name: string; status: string; membership_id: number }>;
     canHost?: boolean;
   };
   
@@ -67,7 +67,7 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
         <Divider sx={{ my: 1 }} />
         
         {/* My Predictions Section */}
-        <MyPredictions predictionSeasons={predictionSeasons} />
+        <MyPredictions seasons={memberSeasons} />
         
         <Divider sx={{ my: 1 }} />
         
