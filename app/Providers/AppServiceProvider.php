@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\Question;
 use App\Observers\QuestionObserver;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -34,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
             }
             return $user->hasRole(Role::SuperAdmin) ? true : null;
         });
+
+        JsonResource::withoutWrapping();
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
         return (new MailMessage)

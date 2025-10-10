@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\SeasonStatus;
+use App\Http\Resources\SeasonQuestionResource;
 use App\Models\Season;
 use App\Repositories\SeasonRepository;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
+use stdClass;
 
 class SeasonController extends Controller
 {
@@ -73,7 +75,7 @@ class SeasonController extends Controller
         return Inertia::render('seasons/edit', [
             'season' => $season->load('members'),
             'seasonStatus' => $season->status->name(),
-            'questions' => $season->questions
+            'questions' => SeasonQuestionResource::collection($season->questions()->with('entities')->get()),
         ]);
     }
 }

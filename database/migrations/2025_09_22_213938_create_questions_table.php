@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->enum('base_type', ['ranking', 'entity_selection'])->index();
             $table->string('type');
-            $table->string('title');
-            $table->string('short_title', 50);
+            $table->string('title')->nullable();
+            $table->string('short_title', 50)->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->integer('answer_count')->default(1);
             $table->timestamps();
