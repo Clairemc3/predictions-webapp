@@ -8,8 +8,19 @@ import Rankings from './question-type-options/Rankings';
 import EntitySelection from './question-type-options/EntitySelection';
 import { QuestionOptionsProps } from '../../types/question';
 
-const QuestionOptions: React.FC<QuestionOptionsProps> = ({ 
-  selectedQuestionType 
+interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
+  errors?: Record<string, string>;
+  setData: (callback: (prevData: any) => any) => void;
+  currentEntities?: number[];
+  currentAnswerCount?: number | string;
+}
+
+const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({ 
+  selectedQuestionType,
+  errors = {},
+  setData,
+  currentEntities = [],
+  currentAnswerCount
 }) => {
   // Debug: Log the base value to see what we're working with
   console.log('selectedQuestionType.base:', selectedQuestionType?.base);
@@ -29,10 +40,20 @@ const QuestionOptions: React.FC<QuestionOptionsProps> = ({
 
         {/* Render component based on BaseQuestionType value */}
         {selectedQuestionType?.base === 'ranking' && (
-          <Rankings selectedQuestionType={selectedQuestionType} />
+          <Rankings 
+            selectedQuestionType={selectedQuestionType} 
+            errors={errors}
+            setData={setData}
+            currentEntities={currentEntities}
+            currentAnswerCount={currentAnswerCount}
+          />
         )}
         {selectedQuestionType?.base === 'entity_selection' && (
-          <EntitySelection selectedQuestionType={selectedQuestionType} />
+          <EntitySelection 
+            selectedQuestionType={selectedQuestionType}
+            setData={setData}
+            currentEntities={currentEntities}
+          />
         )}
       </Box>
     </>

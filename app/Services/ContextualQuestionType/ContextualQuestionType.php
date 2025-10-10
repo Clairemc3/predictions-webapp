@@ -9,6 +9,7 @@ class ContextualQuestionType
     public function __construct(
         public readonly string $key,
         public readonly QuestionType $base,
+        public readonly string $type,
         public readonly string $label,
         public readonly string $shortDescription,
         public readonly string $description,
@@ -26,6 +27,7 @@ class ContextualQuestionType
         return new self(
             key: $key,
             base: $config['base'],
+            type: $key,
             label: $config['label'],
             shortDescription: $config['short_description'],
             description: $config['description'],

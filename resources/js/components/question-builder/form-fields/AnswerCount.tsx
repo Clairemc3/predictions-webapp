@@ -16,6 +16,11 @@ interface AnswerCountProps {
   maxValue?: number;
   onChange?: (value: { isAll: boolean; count?: number }) => void;
   value?: { isAll: boolean; count?: number };
+  required?: boolean;
+  error?: boolean;
+  errorText?: string;
+  setData?: (callback: (prevData: any) => any) => void;
+  currentAnswerCount?: number | string;
 }
 
 const AnswerCount: React.FC<AnswerCountProps> = ({
@@ -23,7 +28,12 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
   helperText = "Choose either 'all' to predict all rankings, or specify a number.",
   maxValue = 20,
   onChange,
-  value: externalValue
+  value: externalValue,
+  required = false,
+  error = false,
+  errorText,
+  setData,
+  currentAnswerCount
 }) => {
   const [isAllSelected, setIsAllSelected] = useState(
     externalValue?.isAll || false
@@ -34,17 +44,44 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
 
   const isControlled = externalValue !== undefined && onChange !== undefined;
 
+  // Determine current values based on mode
+  const currentIsAll = (() => {
+    if (isControlled) {
+      return externalValue?.isAll || false;
+    } else if (setData && currentAnswerCount !== undefined) {
+      return currentAnswerCount === maxValue;
+    } else {
+      return isAllSelected;
+    }
+  })();
+
+  const currentNumberValue = (() => {
+    if (isControlled) {
+      return externalValue?.isAll ? maxValue.toString() : (externalValue?.count?.toString() || '');
+    } else if (setData && currentAnswerCount !== undefined) {
+      return currentAnswerCount.toString();
+    } else {
+      return numberValue;
+    }
+  })();
+
   const handleAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     
     if (isControlled && onChange) {
       onChange({ isAll: checked, count: checked ? maxValue : undefined });
+    } else if (setData) {
+      // Use setData to update form state directly
+      setData((prevData: any) => ({
+        ...prevData,
+        answer_count: checked ? maxValue : ''
+      }));
     } else {
       setIsAllSelected(checked);
       if (checked) {
-        setNumberValue(maxValue.toString()); // Set to max value when "all" is selected
+        setNumberValue(maxValue.toString());
       } else {
-        setNumberValue(''); // Clear number input when "all" is unchecked
+        setNumberValue('');
       }
     }
   };
@@ -59,28 +96,29 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
           isAll: false, 
           count: value === '' ? undefined : numValue 
         });
+      } else if (setData) {
+        // Use setData to update form state directly
+        setData((prevData: any) => ({
+          ...prevData,
+          answer_count: value === '' ? '' : numValue
+        }));
       } else {
         setNumberValue(value);
         if (value !== '') {
-          setIsAllSelected(false); // Uncheck "all" when number is entered
+          setIsAllSelected(false);
         }
       }
     }
   };
 
-  const currentIsAll = isControlled ? externalValue?.isAll || false : isAllSelected;
-  const currentNumberValue = isControlled 
-    ? (externalValue?.isAll ? maxValue.toString() : (externalValue?.count?.toString() || ''))
-    : numberValue;
-
   return (
     <Box sx={{ mt: 3 }}>
-      <FormControl component="fieldset" fullWidth>
+      <FormControl component="fieldset" fullWidth required={required} error={error}>
         <FormLabel component="legend">
           {label}
         </FormLabel>
         <FormHelperText sx={{ mb: 2 }}>
-          {helperText}
+          {errorText || helperText}
         </FormHelperText>
         
         <FormGroup>
@@ -90,7 +128,6 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
                 checked={currentIsAll}
                 onChange={handleAllChange}
                 name="answer_count_all"
-                disabled={!currentIsAll && currentNumberValue !== ''}
               />
             }
             label="All"
@@ -103,6 +140,8 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
             value={currentNumberValue}
             onChange={handleNumberChange}
             disabled={currentIsAll}
+            required={required && !currentIsAll}
+            error={error && !currentIsAll && !currentNumberValue}
             inputProps={{
               min: 1,
               max: maxValue

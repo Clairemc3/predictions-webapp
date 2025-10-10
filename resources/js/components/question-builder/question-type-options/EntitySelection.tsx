@@ -3,7 +3,16 @@ import { Box, Typography } from '@mui/material';
 import EntitySelect from '../form-fields/EntitySelect';
 import { EntitySelectionProps } from '../../../types/question';
 
-const EntitySelection: React.FC<EntitySelectionProps> = ({ selectedQuestionType }) => {
+interface EntitySelectionExtendedProps extends EntitySelectionProps {
+  setData?: (callback: (prevData: any) => any) => void;
+  currentEntities?: number[];
+}
+
+const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({ 
+  selectedQuestionType,
+  setData,
+  currentEntities = []
+}) => {
   return (
     <Box>      
       {/* Render select dropdowns based on answerCategoryFilters */}
@@ -17,6 +26,8 @@ const EntitySelection: React.FC<EntitySelectionProps> = ({ selectedQuestionType 
               label={filter?.label || 'Select an option'}
               description={filter?.description}
               index={index}
+              setData={setData}
+              currentEntities={currentEntities}
             />
           ))}
         </Box>

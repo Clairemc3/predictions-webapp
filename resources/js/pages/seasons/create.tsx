@@ -14,6 +14,7 @@ const CreateSeason = () => {
   const { data, setData, post, processing, errors } = useForm({
     name: '',
     description: '',
+    type: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,7 +53,7 @@ const CreateSeason = () => {
             You will be able to add predictions questions and invite members after you have setup the season
           </Typography>
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>            
             <TextField
               fullWidth
               label="Season Name"

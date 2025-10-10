@@ -3,11 +3,16 @@
 namespace App\Http\Requests;
 
 use App\Enums\QuestionType;
+use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class StoreQuestionRequest extends FormRequest
 {
+
+    public function __construct(private readonly ContextualQuestionTypeService $contextualQuestionTypeService)
+    {
+    }
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,6 +32,9 @@ class StoreQuestionRequest extends FormRequest
             'title' => ['nullable', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:50'],
             'base_type' => ['required', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
+            'type' => ['required', Rule::in($this->contextualQuestionTypeService->allTypes())],
+            'entities' => ['nullable', 'array'],
+            'entities.*' => ['integer', 'exists:entities,id'],
             'answer_count' => ['nullable', 'integer', 'min:1', 'max:20'],
         ];
     }
@@ -37,15 +45,7 @@ class StoreQuestionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'The question title is required.',
-            'short_title.required' => 'The short title is required.',
-            'short_title.max' => 'The short title cannot be longer than 50 characters.',
-            'question_type.required' => 'Please select a question type.',
-            'type.required' => 'The question type is required.',
-            'type.in' => 'Invalid question type selected.',
-            'answer_count.min' => 'Answer count must be at least 1.',
-            'answer_count.max' => 'Answer count cannot be more than 20.',
-            'selected_entities.*.exists' => 'One or more selected entities are invalid.',
+            //
         ];
     }
 
@@ -61,10 +61,10 @@ class StoreQuestionRequest extends FormRequest
             ]);
         }
 
-        // If answer_count_all is true, set answer_count to null
+        // If answer_count_all is true, set answer_count to 20 (max value)
         if ($this->boolean('answer_count_all')) {
             $this->merge([
-                'answer_count' => null
+                'answer_count' => 20
             ]);
         }
     }

@@ -44,4 +44,15 @@ class ContextualQuestionTypeService
 
         return $questionTypes;
     }
+
+
+    public function allTypes(): array
+    {
+        $config = config('questionTypes');
+        $contextTypes = $config[$this->context->value];
+
+        $allTypes = array_keys($contextTypes);
+
+        return $allTypes;
+    }
 }

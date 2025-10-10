@@ -4,7 +4,20 @@ import EntitySelect from '../form-fields/EntitySelect';
 import AnswerCount from '../form-fields/AnswerCount';
 import { RankingsProps } from '../../../types/question';
 
-const Rankings: React.FC<RankingsProps> = ({ selectedQuestionType }) => {
+interface RankingsExtendedProps extends RankingsProps {
+  errors?: Record<string, string>;
+  setData: (callback: (prevData: any) => any) => void;
+  currentEntities?: number[];
+  currentAnswerCount?: number | string;
+}
+
+const Rankings: React.FC<RankingsExtendedProps> = ({ 
+  selectedQuestionType, 
+  errors = {},
+  setData,
+  currentEntities = [],
+  currentAnswerCount
+}) => {
   // Add defensive checks
   if (!selectedQuestionType) {
     return null;
@@ -23,6 +36,12 @@ const Rankings: React.FC<RankingsProps> = ({ selectedQuestionType }) => {
               label={filter?.label || 'Select an option'}
               description={filter?.description}
               index={index}
+              required={true}
+              error={!!errors[`entities[${index}]`]}
+              helperText={errors[`entities[${index}]`]}
+              name={`entities[${index}]`}
+              setData={setData}
+              currentEntities={currentEntities}
             />
           ))}
         </Box>
@@ -32,6 +51,11 @@ const Rankings: React.FC<RankingsProps> = ({ selectedQuestionType }) => {
       <AnswerCount 
         label={selectedQuestionType?.answerCountLabel || undefined}
         helperText={selectedQuestionType?.answerCountHelperText || undefined}
+        required={true}
+        error={!!errors.answer_count}
+        errorText={errors.answer_count}
+        setData={setData}
+        currentAnswerCount={currentAnswerCount}
       />
     </Box>
   );

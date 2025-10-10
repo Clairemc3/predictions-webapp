@@ -13,10 +13,15 @@ class Question extends Model
     use HasFactory;
 
     protected $fillable = [
+        'type',
+        'base_type',
+        'title',
+        'short_title',
+        'answer_count',
     ];
 
     protected $casts = [
-        'type' => QuestionType::class,
+        'base_type' => QuestionType::class,
     ];
 
     /**
@@ -32,6 +37,7 @@ class Question extends Model
      */
     public function entities(): BelongsToMany
     {
-        return $this->belongsToMany(Entity::class, 'question_entities');
+        return $this->belongsToMany(Entity::class, 'question_entities')
+            ->withTimestamps();
     }
 }

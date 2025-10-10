@@ -2,21 +2,18 @@ import React from 'react';
 import {
   Box,
   Button,
-  Card,
   CardContent,
-  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
   Radio,
   RadioGroup,
-  TextField,
   Typography,
   Alert,
   Paper,
 } from '@mui/material';
 import { Head, router, usePage, useForm } from '@inertiajs/react';
-import { ArrowBack, Add } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import AuthLayout from '../../../layouts/AuthLayout';
 import QuestionOptions from '../../../components/question-builder/QuestionOptions';
 import { QuestionType } from '../../../types/question';
@@ -35,30 +32,16 @@ interface PageProps extends Record<string, any> {
 const CreateQuestion = () => {
   const pageProps = usePage<PageProps>().props;
   const { season, questionTypes = [] } = pageProps;
-
-  console.log('Full page props:', pageProps);
-  console.log('Question types:', questionTypes);
-  console.log('Question types type:', typeof questionTypes);
-  console.log('Question types is array:', Array.isArray(questionTypes));
   
-  const { data, setData, post, processing, errors } = useForm({
+  const { data, setData, post, processing, errors, setError, clearErrors } = useForm({
     type: '',
     title: '',
     short_title: '',
     base_type: '',
-    selected_entity_id: '',
-    answer_count: 1
+    entities: [] as number[],
+    answer_count: '',
+    answer_count_all: false as boolean
   });
-
-  // Handle data changes from question options
-  const handleQuestionOptionsChange = (optionsData: { title?: string; selectedEntityId?: number; answerCount?: number }) => {
-    setData(prevData => ({
-      ...prevData,
-      title: optionsData.title || prevData.title,
-      selected_entity_id: optionsData.selectedEntityId?.toString() || prevData.selected_entity_id,
-      answer_count: optionsData.answerCount || prevData.answer_count
-    }));
-  };
 
   // Find the selected question type
   const selectedQuestionType = data.type && questionTypes?.length > 0 
@@ -70,52 +53,24 @@ const CreateQuestion = () => {
     if (selectedQuestionType) {
       setData(prevData => ({
         ...prevData,
+        type: selectedQuestionType.type,
         base_type: selectedQuestionType.base
       }));
     }
   }, [selectedQuestionType, setData]);
 
-  // Show loading or error state if no question types are available
-  if (!questionTypes || !Array.isArray(questionTypes) || questionTypes.length === 0) {
-    return (
-      <>
-        <Head title={`Create Question - ${season.name}`} />
-        
-        <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
-          <Box sx={{ mb: 3 }}>
-            <Button
-              startIcon={<ArrowBack />}
-              onClick={() => router.visit(`/seasons/${season.id}/edit`)}
-              sx={{ mb: 2 }}
-            >
-              Back to {season.name}
-            </Button>
-            
-            <Typography variant="h4" component="h1" gutterBottom>
-              Create New Question
-            </Typography>
-          </Box>
-
-          <Paper elevation={1}>
-            <CardContent sx={{ p: 4 }}>
-              <Alert severity="warning">
-                No question types are available. Please check your configuration.
-              </Alert>
-            </CardContent>
-          </Paper>
-        </Box>
-      </>
-    );
-  }
-
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    
+    clearErrors();
+
+    // Submit using useForm's post method
     post(`/seasons/${season.id}/questions`, {
       onSuccess: () => {
-        // Redirect back to season edit page
         router.visit(`/seasons/${season.id}/edit`);
       },
+      onError: (errors) => {
+        console.log('Submission errors:', errors);
+      }
     });
   };
 
@@ -127,7 +82,12 @@ const CreateQuestion = () => {
     <AuthLayout>
       <Head title={`Create Question - ${season.name}`} />
       
-      <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
+      <Box sx={{ 
+        maxWidth: 800, 
+        minWidth: { xs: 'auto', md: 800 }, 
+        mx: 'auto', 
+        p: 3 
+      }}>
         {/* Header */}
         <Box sx={{ mb: 3 }}>
           <Button
@@ -194,9 +154,21 @@ const CreateQuestion = () => {
               {/* Question Options Section - Show when type is selected */}
               {selectedQuestionType && (
                 <QuestionOptions 
-                  selectedQuestionType={selectedQuestionType} 
-                  onDataChange={handleQuestionOptionsChange}
+                  selectedQuestionType={selectedQuestionType}
+                  errors={errors}
+                  setData={setData}
+                  currentEntities={data.entities}
+                  currentAnswerCount={data.answer_count}
                 />
+              )}
+
+              {/* Debug: Show current form data */}
+              {process.env.NODE_ENV === 'development' && (
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+                  <Typography variant="caption" component="pre">
+                    {JSON.stringify(data, null, 2)}
+                  </Typography>
+                </Box>
               )}
 
               {/* Form Actions */}

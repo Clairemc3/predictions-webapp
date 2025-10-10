@@ -2,6 +2,7 @@
 
 export interface QuestionType {
   key: string;
+  type: string;
   label: string;
   shortDescription: string;
   description: string;
