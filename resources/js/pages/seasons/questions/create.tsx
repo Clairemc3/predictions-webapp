@@ -13,6 +13,7 @@ import {
   Paper,
 } from '@mui/material';
 import { Head, router, usePage, useForm } from '@inertiajs/react';
+import { route } from '../../../lib/routes';
 import { ArrowBack } from '@mui/icons-material';
 import AuthLayout from '../../../layouts/AuthLayout';
 import QuestionOptions from '../../../components/question-builder/QuestionOptions';
@@ -66,7 +67,7 @@ const CreateQuestion = () => {
     // Submit using useForm's post method
     post(`/seasons/${season.id}/questions`, {
       onSuccess: () => {
-        router.visit(`/seasons/${season.id}/edit`);
+        router.visit(route('seasons.edit', { season: season.id }));
       },
       onError: (errors) => {
         console.log('Submission errors:', errors);
@@ -75,7 +76,7 @@ const CreateQuestion = () => {
   };
 
   const handleCancel = () => {
-    router.visit(`/seasons/${season.id}/edit`);
+    router.visit(route('seasons.edit', { season: season.id }));
   };
 
   return (

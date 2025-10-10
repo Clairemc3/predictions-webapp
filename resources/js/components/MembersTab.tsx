@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import InvitationDialog from './InvitationDialog';
+import { usePage } from '@inertiajs/react';
 
 interface User {
   id: number;
@@ -33,7 +34,7 @@ interface MembersTabProps {
 const MembersTab = ({ users = [], seasonId, seasonStatus }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const membersCanBeInvited = seasonStatus == 'draft' || seasonStatus == 'active';
+  const membersCanBeInvited = usePage().props.canInviteMembers as boolean;
 
   const handleInviteMembers = () => {
     setDialogOpen(true);

@@ -11,7 +11,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/seasons', [SeasonController::class, 'index'])->name('seasons.index');
     Route::get('/seasons/create', [SeasonController::class, 'create'])->name('seasons.create');
     Route::post('/seasons', [SeasonController::class, 'store'])->name('seasons.store');
-    Route::get('/seasons/{season}/edit', [SeasonController::class, 'edit'])->name('seasons.edit');
+    Route::get('/seasons/{season}', [SeasonController::class, 'edit'])->name('seasons.edit');
     
     // Season invitation routes
     Route::post('/seasons/{season}/invitations', [SeasonInvitationController::class, 'store'])->name('season-invitations.store');

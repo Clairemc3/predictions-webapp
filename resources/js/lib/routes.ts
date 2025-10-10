@@ -21,6 +21,12 @@ export const buildRoute = (name: string, params: RouteParams = {}): string => {
     case 'users.index':
       return '/users';
     
+    case 'seasons.edit':
+      return `/seasons/${params.season}`;
+    
+    case 'seasons.show':
+      return `/seasons/${params.season}`;
+    
     default:
       console.warn(`Unknown route name: ${name}`);
       return '';
@@ -34,7 +40,9 @@ export type RouteName =
   | 'users.permissions.toggle'
   | 'users.permissions.grant' 
   | 'users.permissions.revoke'
-  | 'users.index';
+  | 'users.index'
+  | 'seasons.edit'
+  | 'seasons.show';
 
 /**
  * Type-safe version of buildRoute

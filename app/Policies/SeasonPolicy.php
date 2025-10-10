@@ -36,6 +36,8 @@ class SeasonPolicy
 
     public function inviteMembers(User $user, Season $season): bool
     {
-        return $season->isHost($user) && $season->status == SeasonStatus::Draft;
+        return $season->questions()->count() > 0 &&
+               $season->isHost($user) && 
+               $season->status == SeasonStatus::Draft;
     }
 }

@@ -49,7 +49,7 @@ const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) =>
       const data = await response.json();
       setInvitationUrl(data.invitation_link.url);
     } catch (err) {
-      setError('Failed to create invitation link. Please try again.');
+      setError('Failed to create invitation link.');
     } finally {
       setLoading(false);
     }
@@ -99,15 +99,16 @@ const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) =>
     setInvitationUrl('');
     setError('');
     setCopied(false);
+    setLoading(false);
     onClose();
   };
 
   // Create invitation link when dialog opens
   useEffect(() => {
-    if (open && !invitationUrl && !loading) {
+    if (open && !invitationUrl && !loading && !error) {
       createInvitationLink();
     }
-  }, [open, invitationUrl, loading]);
+  }, [open, invitationUrl, loading, error]);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -118,9 +119,20 @@ const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) =>
             <CircularProgress />
           </Box>
         ) : error ? (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
+          <>
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+              <Button
+                onClick={createInvitationLink}
+                variant="contained"
+                disabled={loading}
+              >
+                {loading ? 'Retrying...' : 'Try Again'}
+              </Button>
+            </Box>
+          </>
         ) : invitationUrl ? (
           <>
             <Typography variant="body2" sx={{ mb: 2 }}>

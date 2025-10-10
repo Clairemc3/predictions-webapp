@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\SeasonStatus;
 use App\Http\Resources\SeasonQuestionResource;
 use App\Models\Season;
 use App\Repositories\SeasonRepository;
@@ -12,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
-use stdClass;
 
 class SeasonController extends Controller
 {
@@ -52,8 +50,7 @@ class SeasonController extends Controller
 
         $season = Season::create([
             'name' => $validated['name'],
-            'description' => $validated['description'],
-            'status' => SeasonStatus::Pending,
+            'description' => $validated['description']
         ]);
 
         // Make the authenticated user a host of this season
@@ -76,6 +73,7 @@ class SeasonController extends Controller
             'season' => $season->load('members'),
             'seasonStatus' => $season->status->name(),
             'questions' => SeasonQuestionResource::collection($season->questions()->with('entities')->get()),
+            'canInviteMembers' => Gate::allows('inviteMembers', $season),
         ]);
     }
 }

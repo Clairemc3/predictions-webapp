@@ -4,11 +4,10 @@ namespace App\Enums;
 
 enum SeasonStatus: int
 {
-    case Pending = 1;
-    case Draft = 2;
-    case Active = 3;
-    case Completed = 4;
-    case Inactive = 5;
+    case Draft = 1;
+    case Active = 2;
+    case Completed = 3;
+    case Inactive = 4;
 
     /**
      * Get the label for the status.
@@ -16,7 +15,6 @@ enum SeasonStatus: int
     public function label(): string
     {
         return match($this) {
-            self::Pending => 'Pending',
             self::Draft => 'Draft',
             self::Active => 'Active',
             self::Completed => 'Completed',
@@ -30,7 +28,6 @@ enum SeasonStatus: int
     public function name(): string
     {
         return match($this) {
-            self::Pending => 'pending',
             self::Draft => 'draft',
             self::Active => 'active',
             self::Completed => 'completed',
@@ -52,7 +49,6 @@ enum SeasonStatus: int
     public static function fromName(string $name): ?self
     {
         return match(strtolower($name)) {
-            'pending' => self::Pending,
             'draft' => self::Draft,
             'active' => self::Active,
             'completed' => self::Completed,
