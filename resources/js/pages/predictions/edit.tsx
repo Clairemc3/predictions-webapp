@@ -32,29 +32,7 @@ const PredictionsEdit = () => {
   return (
     <AuthLayout>
       <Head title="Edit Predictions" />
-      
-      {/* Add mobile scrolling CSS */}
-      <style>
-        {`
-          @media (max-width: 768px) {
-            body {
-              overflow-y: auto !important;
-              -webkit-overflow-scrolling: touch !important;
-              height: auto !important;
-            }
-            
-            .mobile-scroll-container {
-              overflow-y: auto !important;
-              -webkit-overflow-scrolling: touch !important;
-              touch-action: pan-y !important;
-              height: auto !important;
-              max-height: none !important;
-            }
-          }
-        `}
-      </style>
-      
-      <Box 
+      <Box
         className="mobile-scroll-container"
         sx={{ 
           maxWidth: 1200, 
@@ -90,17 +68,6 @@ const PredictionsEdit = () => {
               No questions available for this season yet.
             </Typography>
           </Paper>
-        )}
-
-        {/* Debug Info */}
-        {process.env.NODE_ENV === 'development' && (
-          <Box sx={{ mt: 4, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-            <Typography variant="caption" component="pre">
-              Membership ID: {membershipId}
-              {'\n'}
-              Questions: {JSON.stringify(questions, null, 2)}
-            </Typography>
-          </Box>
         )}
 
         {/* Action Buttons */}

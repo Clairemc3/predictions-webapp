@@ -33,14 +33,14 @@ interface OtherQuestion extends BaseQuestion {
   primary_entity_name?: string; 
 }
 
-type Question = RankingQuestion | OtherQuestion;
+type QuestionData = RankingQuestion | OtherQuestion;
 
 interface QuestionProps {
-  question: Question;
+  question: QuestionData;
 }
 
 const Question: React.FC<QuestionProps> = ({ question }) => {
-  const isRankingQuestion = (q: Question): q is RankingQuestion => {
+  const isRankingQuestion = (q: QuestionData): q is RankingQuestion => {
     return q.base_type === 'ranking';
   };
 
