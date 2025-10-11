@@ -69,16 +69,6 @@ const PredictionsEdit = () => {
             </Typography>
           </Paper>
         )}
-
-        {/* Action Buttons */}
-        <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-          <Button variant="outlined">
-            Save Draft
-          </Button>
-          <Button variant="contained">
-            Submit Predictions
-          </Button>
-        </Box>
       </Box>
     </AuthLayout>
   );
