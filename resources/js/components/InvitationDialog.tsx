@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { usePage } from '@inertiajs/react';
+import { apiPost } from '../lib/api';
 
 interface InvitationDialogProps {
   open: boolean;
@@ -32,15 +33,7 @@ const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) =>
     setError('');
 
     try {
-      const csrfToken = (props as any).csrf_token || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-      
-      const response = await fetch(`/seasons/${seasonId}/invitations`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrfToken,
-        },
-      });
+      const response = await apiPost(`/seasons/${seasonId}/invitations`);
 
       if (!response.ok) {
         throw new Error('Failed to create invitation link');

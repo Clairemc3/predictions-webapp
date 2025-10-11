@@ -20,6 +20,7 @@ return [
     ApplicationContext::UKFootball->value => [
         'standings' => [
             'base' => QuestionType::Ranking,
+            'answer_category' => 'football-team',
             'label' => 'Standings',
             'short_description' => 'Members should predict the final order of teams in a league.',
             'description' => 'Members predict the standings of teams in a league and are awarded 1 or 2 points for correct predictions.',

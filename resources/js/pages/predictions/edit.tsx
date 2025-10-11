@@ -1,14 +1,12 @@
-import React from 'react';
 import {
   Box,
   Typography,
   Paper,
-  Card,
-  CardContent,
   Button,
 } from '@mui/material';
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
+import Question from '../../components/Answering/Question';
 
 interface Question {
   id: number;
@@ -35,11 +33,40 @@ const PredictionsEdit = () => {
     <AuthLayout>
       <Head title="Edit Predictions" />
       
-      <Box sx={{ 
-        maxWidth: 1200, 
-        mx: 'auto', 
-        p: 3 
-      }}>
+      {/* Add mobile scrolling CSS */}
+      <style>
+        {`
+          @media (max-width: 768px) {
+            body {
+              overflow-y: auto !important;
+              -webkit-overflow-scrolling: touch !important;
+              height: auto !important;
+            }
+            
+            .mobile-scroll-container {
+              overflow-y: auto !important;
+              -webkit-overflow-scrolling: touch !important;
+              touch-action: pan-y !important;
+              height: auto !important;
+              max-height: none !important;
+            }
+          }
+        `}
+      </style>
+      
+      <Box 
+        className="mobile-scroll-container"
+        sx={{ 
+          maxWidth: 1200, 
+          mx: 'auto', 
+          p: { xs: 2, sm: 3 }, // Responsive padding
+          width: '100%', // Ensure full width on mobile
+          // Mobile scrolling fixes
+          overflow: 'visible',
+          touchAction: 'auto',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
         {/* Header */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom>
@@ -54,42 +81,7 @@ const PredictionsEdit = () => {
         {questions && questions.length > 0 ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {questions.map((question) => (
-              <Paper key={question.id} elevation={1}>
-                <Card>
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h6" gutterBottom>
-                      {question.title}
-                    </Typography>
-                    
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                      Type: {question.type} | Base Type: {question.base_type}
-                    </Typography>
-
-                    {question.entities && question.entities.length > 0 && (
-                      <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Options:
-                        </Typography>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                          {question.entities.map((entity) => (
-                            <Button
-                              key={entity.id}
-                              variant="outlined"
-                              size="small"
-                            >
-                              {entity.name}
-                            </Button>
-                          ))}
-                        </Box>
-                      </Box>
-                    )}
-
-                    <Typography variant="body2" color="text.secondary">
-                      Answer Count: {question.answer_count}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Paper>
+              <Question key={question.id} question={question} />
             ))}
           </Box>
         ) : (

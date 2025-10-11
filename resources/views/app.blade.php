@@ -10,6 +10,38 @@
     @viteReactRefresh
     @vite(['resources/js/app.tsx'])
     @inertiaHead
+    <style>
+      /* Ensure proper mobile scrolling */
+      html {
+        height: 100%;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: manipulation;
+      }
+      
+      body {
+        height: auto !important;
+        min-height: 100%;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: manipulation;
+        position: relative;
+      }
+      
+      /* Fix for Material-UI containers */
+      .MuiContainer-root, .MuiBox-root {
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: auto !important;
+      }
+      
+      /* Ensure all content is scrollable on mobile */
+      #app, [data-reactroot] {
+        height: auto !important;
+        min-height: 100vh;
+        overflow: visible;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
   </head>
   <body>
     @inertia

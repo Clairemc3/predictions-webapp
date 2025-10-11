@@ -41,7 +41,7 @@ const CreateQuestion = () => {
     base_type: '',
     entities: [] as number[],
     answer_count: '',
-    answer_count_all: false as boolean
+    answer_count_all: false as boolean,
   });
 
   // Find the selected question type
