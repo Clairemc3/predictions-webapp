@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('short_title', 50)->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->integer('answer_count')->default(1);
-            $table->foreignId('answer_ategory_id')->nullable()->constrained('categories');
+            $table->foreignId('answer_category_id')->nullable()->constrained('categories');
             $table->timestamps();
         });
     }

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
   Paper,
   Card,
   CardContent,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
 import { usePage } from '@inertiajs/react';
 import PredictionsHeading from '../Predictions/PredictionsHeading';
 import SortableItem from './SortableItem';
-import { apiPost } from '../../lib/api';
+import { apiPost, apiGet } from '../../lib/api';
 import {
   DndContext,
   closestCenter,
@@ -26,44 +28,26 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
+interface Entity {
+  id: number;
+  name: string;
+}
+
 interface RankingProps {
   primary_entity_name: string;
   answer_count: number;
   question_id: number;
+  answer_entities_route: string;
 }
 
-const entities = [
-  { id: 1, name: 'Team A' },
-  { id: 2, name: 'Team B' },
-  { id: 3, name: 'Team C' },
-  { id: 4, name: 'Team D' },
-  { id: 5, name: 'Team E' },
-  { id: 6, name: 'Team F' },
-  { id: 7, name: 'Team G' },
-  { id: 8, name: 'Team H' },
-  { id: 9, name: 'Team I' },
-  { id: 10, name: 'Team J' },
-  { id: 11, name: 'Team K' },
-  { id: 12, name: 'Team L' },                 
-  { id: 13, name: 'Team M' },
-  { id: 14, name: 'Team N' },
-  { id: 15, name: 'Team O' },
-  { id: 16, name: 'Team P' },
-  { id: 17, name: 'Team Q' },
-  { id: 18, name: 'Team R' },
-  { id: 19, name: 'Team S' },
-  { id: 20, name: 'Team T' },
-  { id: 21, name: 'Team U' },
-  { id: 22, name: 'Team V' },
-  { id: 23, name: 'Team W' },
-  { id: 24, name: 'Team X' },                 
-  { id: 25, name: 'Team Y' },
-  { id: 26, name: 'Team Z' },
-];
+const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, question_id, answer_entities_route }) => {
+  // State to track entities from the backend
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, question_id }) => {
   // State to track selected entities for each position
-  const [selectedEntities, setSelectedEntities] = useState<(typeof entities[0] | null)[]>(
+  const [selectedEntities, setSelectedEntities] = useState<(Entity | null)[]>(
     Array(answer_count).fill(null)
   );
 
@@ -84,6 +68,41 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
     })
   );
 
+  // Fetch entities from the backend route
+  useEffect(() => {
+    const fetchEntities = async () => {
+      if (!answer_entities_route) {
+        setError('No entities route provided');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError('');
+        
+        const response = await apiGet(answer_entities_route);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setEntities(data);
+          console.log('Entities loaded:', data);
+        } else {
+          const errorData = await response.json();
+          setError('Failed to load entities');
+          console.error('Error loading entities:', errorData);
+        }
+      } catch (error) {
+        setError('Failed to load entities');
+        console.error('Error fetching entities:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEntities();
+  }, [answer_entities_route]);
+
   // Function to get available entities for a specific position
   const getAvailableAnswerEntities = (currentIndex: number) => {
     const selectedIds = selectedEntities
@@ -94,7 +113,7 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
   };
 
   // Function to handle entity select
-  const handleEntitySelect = async (index: number, newValue: typeof entities[0] | null) => {
+  const handleEntitySelect = async (index: number, newValue: Entity | null) => {
     const newSelectedEntities = [...selectedEntities];
     newSelectedEntities[index] = newValue;
     setSelectedEntities(newSelectedEntities);
@@ -144,7 +163,7 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
   };
 
   // Function to send reordered answers
-  const sendReorderedAnswers = async (reorderedEntities: (typeof entities[0] | null)[]) => {
+  const sendReorderedAnswers = async (reorderedEntities: (Entity | null)[]) => {
     const promises = reorderedEntities.map(async (entity, index) => {
       if (entity) {
         try {
@@ -196,28 +215,55 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
         </Typography>   
         
         <CardContent sx={{ p: 3 }}>
-          <DndContext 
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext items={items} strategy={verticalListSortingStrategy}>
-              {/* Create select fields for each answer count */}
-              {items.map((itemId, index) => {
-                const actualIndex = parseInt(itemId.split('-')[1]);
-                return (
-                  <SortableItem
-                    key={itemId}
-                    id={itemId}
-                    index={actualIndex}
-                    selectedEntity={selectedEntities[index]}
-                    availableEntities={getAvailableAnswerEntities(index)}
-                    onEntitySelect={(_, value) => handleEntitySelect(index, value)}
-                  />
-                );
-              })}
-            </SortableContext>
-          </DndContext>
+          {/* Loading state */}
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+              <CircularProgress />
+              <Typography variant="body2" sx={{ ml: 2, color: 'primary.contrastText' }}>
+                Loading teams...
+              </Typography>
+            </Box>
+          )}
+
+          {/* Error state */}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          {/* Drag and drop content - only show when entities are loaded */}
+          {!loading && !error && entities.length > 0 && (
+            <DndContext 
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext items={items} strategy={verticalListSortingStrategy}>
+                {/* Create select fields for each answer count */}
+                {items.map((itemId, index) => {
+                  const actualIndex = parseInt(itemId.split('-')[1]);
+                  return (
+                    <SortableItem
+                      key={itemId}
+                      id={itemId}
+                      index={actualIndex}
+                      selectedEntity={selectedEntities[index]}
+                      availableEntities={getAvailableAnswerEntities(index)}
+                      onEntitySelect={(_, value) => handleEntitySelect(index, value)}
+                    />
+                  );
+                })}
+              </SortableContext>
+            </DndContext>
+          )}
+
+          {/* No entities state */}
+          {!loading && !error && entities.length === 0 && (
+            <Alert severity="info">
+              No entities available for this question.
+            </Alert>
+          )}
         </CardContent>
 
       </Card>

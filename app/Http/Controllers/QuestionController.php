@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
+use App\Models\Category;
 use App\Models\Question;
 use App\Models\Season;
 use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
@@ -14,14 +15,18 @@ use Inertia\Response;
 
 class QuestionController extends Controller
 {
+
+    public function __construct(private ContextualQuestionTypeService $questionTypeService)
+    {
+    }
     /**
      * Show the form for creating a new question.
      */
-    public function create(Season $season, ContextualQuestionTypeService $questionTypeService): Response
+    public function create(Season $season): Response
     {
         Gate::authorize('update', $season);
 
-        $questionTypes = $questionTypeService->build();
+        $questionTypes = $this->questionTypeService->build();
 
         return Inertia::render('seasons/questions/create', [
             'season' => $season,
@@ -36,10 +41,14 @@ class QuestionController extends Controller
     {
         Gate::authorize('update', $season);
 
+        $questionType = $this->questionTypeService->questionByKey($request->input('type'));
+
         $question = new Question();
         $question->fill($request->validated());
-
         $question->created_by = Auth::id();
+
+        // @TODO: Refine this
+        $question->answer_category_id = Category::where('name', $questionType->answerCategory)->first()->id;
         $season->questions()->save($question);
 
         // Link any entity selections

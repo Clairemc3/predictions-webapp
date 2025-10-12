@@ -21,6 +21,7 @@ interface BaseQuestion {
   type: string;
   answer_count: number;
   entities?: Entity[];
+  answer_entities_route: string;
 }
 
 interface RankingQuestion extends BaseQuestion {
@@ -61,6 +62,7 @@ const Question: React.FC<QuestionProps> = ({ question }) => {
               primary_entity_name={question.primary_entity_name} 
               answer_count={question.answer_count}
               question_id={question.id}
+              answer_entities_route={question.answer_entities_route}
             />
           )}
     </Paper>

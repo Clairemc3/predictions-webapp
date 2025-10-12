@@ -40,4 +40,9 @@ class Question extends Model
         return $this->belongsToMany(Entity::class, 'question_entities')
             ->withTimestamps();
     }
+
+    public function answerCategory(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'answer_category_id');
+    }
 }

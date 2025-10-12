@@ -25,6 +25,20 @@ class PredictionQuestionsResource extends JsonResource
             'answer_count' => $this->answer_count,
             'entities' => EntityResource::collection($this->whenLoaded('entities')),
             'primary_entity_name' => $this->entities->first()?->value,
+            'answer_entities_route' => $this->generateCategoryEntitiesRoute(),
         ];
+    }
+
+
+    private function generateCategoryEntitiesRoute(): string
+    {
+        $routeParams = [];
+        $routeParams = ['category' => $this->answerCategory];
+
+        foreach ($this->entities as $entity) {
+            $routeParams[$entity->category->name] = $entity->value;
+        }
+
+        return route('api.categories.entities.index', $routeParams);
     }
 }

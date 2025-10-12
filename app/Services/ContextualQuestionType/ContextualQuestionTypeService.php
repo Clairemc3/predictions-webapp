@@ -55,4 +55,12 @@ class ContextualQuestionTypeService
 
         return $allTypes;
     }
+
+    public function questionByKey(string $key): ?ContextualQuestionType
+    {
+        $config = config('questionTypes');  
+        $contextTypes = $config[$this->context->value];
+
+        return ContextualQuestionType::fromConfig($key, $contextTypes[$key] ?? []);
+    }
 }

@@ -15,6 +15,7 @@ interface Question {
   type: string;
   base_type: string;
   answer_count: number;
+  answer_entities_route: string;
   entities?: Array<{
     id: number;
     name: string;
