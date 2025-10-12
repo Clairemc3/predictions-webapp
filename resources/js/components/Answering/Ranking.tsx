@@ -30,7 +30,7 @@ import {
 
 interface Entity {
   id: number;
-  name: string;
+  name: string; // Keep as 'name' to match SortableItem expectations
 }
 
 interface RankingProps {
@@ -85,8 +85,23 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
         
         if (response.ok) {
           const data = await response.json();
-          setEntities(data);
-          console.log('Entities loaded:', data);
+          console.log('Full API response:', data);
+          console.log('Entities from response:', data.entities);
+          console.log('Entities type:', typeof data.entities);
+          console.log('Entities is array:', Array.isArray(data.entities));
+          
+          if (data.entities && Array.isArray(data.entities)) {
+            // Transform API response to match Entity interface (value -> name)
+            const transformedEntities = data.entities.map((entity: any) => ({
+              id: entity.id,
+              name: entity.value // Transform 'value' to 'name'
+            }));
+            setEntities(transformedEntities);
+            console.log('Entities set successfully:', transformedEntities);
+          } else {
+            console.error('Entities is not an array or is undefined:', data.entities);
+            setError('Invalid entities data received');
+          }
         } else {
           const errorData = await response.json();
           setError('Failed to load entities');

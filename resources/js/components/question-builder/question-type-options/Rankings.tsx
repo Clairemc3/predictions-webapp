@@ -7,7 +7,7 @@ import { RankingsProps } from '../../../types/question';
 interface RankingsExtendedProps extends RankingsProps {
   errors?: Record<string, string>;
   setData: (callback: (prevData: any) => any) => void;
-  currentEntities?: number[];
+  currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
 }
 
@@ -32,6 +32,7 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
             <EntitySelect
               key={index}
               category={filter?.name || ''}
+              category_id={filter.category_id}
               filters={filter?.filters || {}}
               label={filter?.label || 'Select an option'}
               description={filter?.description}

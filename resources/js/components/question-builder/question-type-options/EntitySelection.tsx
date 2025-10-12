@@ -5,7 +5,7 @@ import { EntitySelectionProps } from '../../../types/question';
 
 interface EntitySelectionExtendedProps extends EntitySelectionProps {
   setData?: (callback: (prevData: any) => any) => void;
-  currentEntities?: number[];
+  currentEntities?: Array<{entity_id: number; category_id: number}>;
 }
 
 const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({ 
@@ -22,6 +22,7 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
             <EntitySelect
               key={index}
               category={filter?.name || ''}
+              category_id={selectedQuestionType?.answerCategoryId}
               filters={filter?.filters || {}}
               label={filter?.label || 'Select an option'}
               description={filter?.description}

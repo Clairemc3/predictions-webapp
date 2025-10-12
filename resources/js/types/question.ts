@@ -9,6 +9,7 @@ export interface QuestionType {
   base: string;
   answerCategoryFilters: any[];
   answerCategory: string | null;
+  answerCategoryId: number | null;
   answerCountLabel: string | null;
   answerCountHelperText: string | null;
 }

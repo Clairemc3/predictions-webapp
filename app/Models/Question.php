@@ -38,6 +38,7 @@ class Question extends Model
     public function entities(): BelongsToMany
     {
         return $this->belongsToMany(Entity::class, 'question_entities')
+            ->withPivot('category_id')
             ->withTimestamps();
     }
 

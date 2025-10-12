@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Enums\QuestionType;
+use App\Models\Category;
+use App\Models\Entity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,16 +31,17 @@ class PredictionQuestionsResource extends JsonResource
         ];
     }
 
-
     private function generateCategoryEntitiesRoute(): string
     {
         $routeParams = [];
         $routeParams = ['category' => $this->answerCategory];
 
         foreach ($this->entities as $entity) {
-            $routeParams[$entity->category->name] = $entity->value;
+            $category = Category::find($entity->pivot->category_id);
+            $entity = Entity::find($entity->pivot->entity_id);
+            $routeParams[$category->name] = $entity->value;
         }
 
-        return route('api.categories.entities.index', $routeParams);
+        return route('api.category-entities.index', $routeParams);
     }
 }

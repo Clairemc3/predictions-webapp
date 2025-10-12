@@ -26,7 +26,7 @@ class CategoryEntitiesRequest extends FormRequest
         return [
             // Validate that the parameter values are entity values, not category names
             'country' => 'sometimes|string|exists:entities,value',
-            'league' => 'sometimes|string|exists:entities,value',
+            'football-league' => 'sometimes|string|exists:entities,value',
             'team' => 'sometimes|string|exists:entities,value',
         ];
     }
@@ -53,7 +53,7 @@ class CategoryEntitiesRequest extends FormRequest
      */
     private function isValidCategoryName(string $categoryName): bool
     {
-        $allowedCategories = ['country'];
+        $allowedCategories = ['country', 'football-league'];
         if (!in_array($categoryName, $allowedCategories)) {
             return false;
         }

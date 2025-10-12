@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('question_entities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('entity_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             

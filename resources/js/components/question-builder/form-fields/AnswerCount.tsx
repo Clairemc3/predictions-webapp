@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Box,
   FormControl, 
@@ -14,8 +14,6 @@ interface AnswerCountProps {
   label?: string;
   helperText?: string;
   maxValue?: number;
-  onChange?: (value: { isAll: boolean; count?: number }) => void;
-  value?: { isAll: boolean; count?: number };
   required?: boolean;
   error?: boolean;
   errorText?: string;
@@ -27,62 +25,25 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
   label = 'Number to predict',
   helperText = "Choose either 'all' to predict all rankings, or specify a number.",
   maxValue = 20,
-  onChange,
-  value: externalValue,
   required = false,
   error = false,
   errorText,
   setData,
   currentAnswerCount
 }) => {
-  const [isAllSelected, setIsAllSelected] = useState(
-    externalValue?.isAll || false
-  );
-  const [numberValue, setNumberValue] = useState<string>(
-    externalValue?.count?.toString() || ''
-  );
-
-  const isControlled = externalValue !== undefined && onChange !== undefined;
-
-  // Determine current values based on mode
-  const currentIsAll = (() => {
-    if (isControlled) {
-      return externalValue?.isAll || false;
-    } else if (setData && currentAnswerCount !== undefined) {
-      return currentAnswerCount === maxValue;
-    } else {
-      return isAllSelected;
-    }
-  })();
-
-  const currentNumberValue = (() => {
-    if (isControlled) {
-      return externalValue?.isAll ? maxValue.toString() : (externalValue?.count?.toString() || '');
-    } else if (setData && currentAnswerCount !== undefined) {
-      return currentAnswerCount.toString();
-    } else {
-      return numberValue;
-    }
-  })();
+  // Determine current values based on currentAnswerCount
+  const currentIsAll = currentAnswerCount === maxValue;
+  const currentNumberValue = currentAnswerCount?.toString() || '';
 
   const handleAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     
-    if (isControlled && onChange) {
-      onChange({ isAll: checked, count: checked ? maxValue : undefined });
-    } else if (setData) {
+    if (setData) {
       // Use setData to update form state directly
       setData((prevData: any) => ({
         ...prevData,
         answer_count: checked ? maxValue : ''
       }));
-    } else {
-      setIsAllSelected(checked);
-      if (checked) {
-        setNumberValue(maxValue.toString());
-      } else {
-        setNumberValue('');
-      }
     }
   };
 
@@ -91,22 +52,12 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
     const numValue = parseInt(value);
     
     if (value === '' || (numValue >= 1 && numValue <= maxValue)) {
-      if (isControlled && onChange) {
-        onChange({ 
-          isAll: false, 
-          count: value === '' ? undefined : numValue 
-        });
-      } else if (setData) {
+      if (setData) {
         // Use setData to update form state directly
         setData((prevData: any) => ({
           ...prevData,
           answer_count: value === '' ? '' : numValue
         }));
-      } else {
-        setNumberValue(value);
-        if (value !== '') {
-          setIsAllSelected(false);
-        }
       }
     }
   };

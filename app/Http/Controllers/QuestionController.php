@@ -48,11 +48,16 @@ class QuestionController extends Controller
         $question->created_by = Auth::id();
 
         // @TODO: Refine this
-        $question->answer_category_id = Category::where('name', $questionType->answerCategory)->first()->id;
+        $question->answer_category_id = $questionType->answerCategoryId;
         $season->questions()->save($question);
+        
+        $entities = collect($request->entities)->mapWithKeys(function ($entity) {
+            return [$entity['entity_id'] => [
+                'category_id' => $entity['category_id']
+            ]];
+        })->toArray();
 
-        // Link any entity selections
-        $question->entities()->attach($request->input('entities', []));
+        $question->entities()->attach($entities);
 
         return response()->redirectTo(route('seasons.edit', [$season, $question]));
     }

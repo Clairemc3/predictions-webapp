@@ -39,7 +39,7 @@ const CreateQuestion = () => {
     title: '',
     short_title: '',
     base_type: '',
-    entities: [] as number[],
+    entities: [] as Array<{entity_id: number; category_id: number}>,
     answer_count: '',
     answer_count_all: false as boolean
   });

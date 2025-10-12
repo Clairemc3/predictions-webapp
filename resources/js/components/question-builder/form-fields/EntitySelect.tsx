@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   FormControl,
   FormHelperText,
@@ -10,11 +10,10 @@ import { useEntityFetcher } from '../../../hooks/useEntityFetcher';
 
 interface EntitySelectProps {
   category: string;
+  category_id?: number | null;
   filters?: Record<string, any>;
   label?: string;
   description?: string;
-  value?: string | number;
-  onChange?: (value: string | number) => void;
   name?: string;
   index?: number;
   fullWidth?: boolean;
@@ -23,16 +22,15 @@ interface EntitySelectProps {
   error?: boolean;
   helperText?: string;
   setData?: (callback: (prevData: any) => any) => void;
-  currentEntities?: number[];
+  currentEntities?: Array<{entity_id: number; category_id: number}>;
 }
 
 const EntitySelect: React.FC<EntitySelectProps> = ({
   category,
+  category_id,
   filters = {},
   label = 'Select an option',
   description,
-  value: externalValue,
-  onChange: externalOnChange,
   name = 'entity',
   index = 0,
   fullWidth = true,
@@ -45,14 +43,8 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
 }) => {
   const { entityOptions, loading, fetchEntitiesForCategory } = useEntityFetcher();
   
-  // Use internal state if no external value/onChange is provided
-  const [internalValue, setInternalValue] = useState<string | number>('');
-  const isControlled = externalValue !== undefined && externalOnChange !== undefined;
-  
-  // Use currentEntities value if setData is provided, otherwise fall back to other values
-  const value = setData 
-    ? (currentEntities[index] || '') 
-    : (isControlled ? externalValue : internalValue);
+  // Use currentEntities value if setData is provided
+  const value = currentEntities[index]?.entity_id || '';
   
   const entityKey = `${category}-${index}`;
   const labelId = `entity-select-label-${index}`;
@@ -61,20 +53,36 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   const handleChange = (event: any) => {
     const newValue = event.target.value;
     
-    if (isControlled && externalOnChange) {
-      externalOnChange(newValue);
-    } else if (setData) {
-      // Use setData to update form state directly - update the entire entities array
+    if (setData) {
+      // Use setData to update form state directly
+      // Store entity data in the format: entities => [{'entity_id' => 1, 'category_id' => 2}]
       setData((prevData: any) => {
         const newEntities = [...(prevData.entities || [])];
-        newEntities[index] = newValue;
+        
+        if (newValue && category_id) {
+          // Ensure array is long enough and set the value at the correct index
+          while (newEntities.length <= index) {
+            newEntities.push(null);
+          }
+          newEntities[index] = {
+            entity_id: parseInt(newValue),
+            category_id: category_id
+          };
+        } else {
+          // Set to null instead of removing to maintain array structure
+          if (newEntities.length > index) {
+            newEntities[index] = null;
+          }
+        }
+        
+        // Filter out null values for the final array
+        const filteredEntities = newEntities.filter(entity => entity !== null);
+        
         return {
           ...prevData,
-          entities: newEntities
+          entities: filteredEntities
         };
       });
-    } else {
-      setInternalValue(newValue);
     }
   };
 
@@ -92,7 +100,9 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
         onChange={handleChange}
         required={required}
         onOpen={() => {
+          console.log('Select onOpen triggered:', { category, entityKey, hasOptions: !!entityOptions[entityKey], isLoading: !!loading[entityKey] });
           if (category && !entityOptions[entityKey] && !loading[entityKey]) {
+            console.log('Fetching entities for category:', category);
             fetchEntitiesForCategory(category, index, filters);
           }
         }}
@@ -105,11 +115,19 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
             Loading...
           </MenuItem>
         )}
-        {entityOptions[entityKey]?.map((entity) => (
-          <MenuItem key={entity.id} value={entity.id}>
-            {entity.value}
+        {!loading[entityKey] && (!entityOptions[entityKey] || entityOptions[entityKey].length === 0) && (
+          <MenuItem disabled>
+            No options available
           </MenuItem>
-        ))}
+        )}
+        {entityOptions[entityKey]?.map((entity) => {
+          console.log('Rendering entity:', entity);
+          return (
+            <MenuItem key={entity.id} value={entity.id}>
+              {entity.value}
+            </MenuItem>
+          );
+        })}
       </Select>
       {(helperText || description) && (
         <FormHelperText>{helperText || description}</FormHelperText>

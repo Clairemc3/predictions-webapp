@@ -34,7 +34,8 @@ class StoreQuestionRequest extends FormRequest
             'base_type' => ['required', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
             'type' => ['required', Rule::in($this->contextualQuestionTypeService->allTypes())],
             'entities' => ['nullable', 'array'],
-            'entities.*' => ['integer', 'exists:entities,id'],
+            'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],
+            'entities.*.category_id' => ['required', 'integer', 'exists:categories,id'],
             'answer_count' => ['nullable', 'integer', 'min:1', 'max:20'],
         ];
     }
@@ -45,8 +46,17 @@ class StoreQuestionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            //
+            'entities.*.entity_id.exists' => 'The selected entity is invalid.',
+            'entities.*.category_id.exists' => 'The selected entity category is invalid.',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator)
+    {
+        // No longer needed since entities now contains both entity_id and category_id
     }
 
     /**
@@ -66,6 +76,14 @@ class StoreQuestionRequest extends FormRequest
             $this->merge([
                 'answer_count' => 20
             ]);
+        }
+
+        // Clean up entities array to remove empty values
+        if ($this->has('entities')) {
+            $entities = array_filter($this->input('entities'), function($entity) {
+                return !empty($entity['entity_id']) && !empty($entity['category_id']);
+            });
+            $this->merge(['entities' => array_values($entities)]);
         }
     }
 }
