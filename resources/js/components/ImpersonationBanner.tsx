@@ -12,6 +12,7 @@ interface ImpersonatedUser {
 interface PageProps {
   impersonating: boolean;
   impersonatedUser: ImpersonatedUser | null;
+  [key: string]: any;
 }
 
 const ImpersonationBanner: React.FC = () => {
