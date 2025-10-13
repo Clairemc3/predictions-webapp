@@ -15,11 +15,11 @@ class ImpersonationController extends Controller
      */
     public function start(Request $request, User $user): RedirectResponse
     {
+        // Check if the authenticated user can impersonate the target user
+        Gate::authorize('impersonate', $user);
+
         /** @var \App\Models\User $authenticatedUser */
         $authenticatedUser = Auth::user();
-
-        // Check if the authenticated user can impersonate the target user
-        Gate::authorize('impersonate', [$authenticatedUser, $user]);
 
         // Store the original user ID in session
         $request->session()->put('impersonate_original_user_id', $authenticatedUser->id);
