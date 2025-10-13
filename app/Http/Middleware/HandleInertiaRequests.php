@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
             'memberSeasons' => $request->user() ? fn () => (new SeasonRepository())
                 ->getRecentMemberSeasons($request->user()) : null,
             'canHost' => $request->user() ? fn () => $request->user()->can('create', Season::class) : false,
+            'isAdmin' => $request->user() ? fn () => $request->user()->hasRole('super-admin') : false
         ]);
     }
 }

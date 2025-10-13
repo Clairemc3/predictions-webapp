@@ -18,10 +18,11 @@ interface NavigationDrawerProps {
 }
 
 export default function NavigationDrawer({ open, onClose }: NavigationDrawerProps) {
-  const { hostedSeasons, memberSeasons, canHost } = usePage().props as { 
+  const { hostedSeasons, memberSeasons, canHost, isAdmin } = usePage().props as { 
     hostedSeasons?: Array<{ id: number; name: string; status: string; is_host: boolean }>;
     memberSeasons?: Array<{ id: number; name: string; status: string; membership_id: number }>;
     canHost?: boolean;
+    isAdmin?: boolean;
   };
   
   const handleDrawerClose = (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -43,28 +44,32 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
       onKeyDown={handleDrawerClose}
     >
       <List>
-        {/* Manage Section */}
-        <ListItem>
-          <ListItemText 
-            primary="Manage" 
-            slotProps={{
-              primary: {
-                variant: 'h6',
-                color: 'text.secondary',
-                sx: { fontWeight: 'bold', px: 2, py: 1 }
-              }
-            }}
-          />
-        </ListItem>
-        <ListItem disablePadding>
-          <Link href="/users">
-            <ListItemButton>
-              <ListItemText primary="Users" />
-            </ListItemButton>
-          </Link>
-        </ListItem>
-        
-        <Divider sx={{ my: 1 }} />
+        {/* Manage Section - Only show if user is admin */}
+        {isAdmin && (
+          <>
+            <ListItem>
+              <ListItemText 
+                primary="Manage" 
+                slotProps={{
+                  primary: {
+                    variant: 'h6',
+                    color: 'text.secondary',
+                    sx: { fontWeight: 'bold', px: 2, py: 1 }
+                  }
+                }}
+              />
+            </ListItem>
+            <ListItem disablePadding>
+              <Link href="/users">
+                <ListItemButton>
+                  <ListItemText primary="Users" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            
+            <Divider sx={{ my: 1 }} />
+          </>
+        )}
         
         {/* My Predictions Section */}
         <MyPredictions seasons={memberSeasons} />
