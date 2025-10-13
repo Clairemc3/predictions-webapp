@@ -5,6 +5,7 @@ export interface User {
   email_verified: boolean;
   can_host: boolean;
   can_toggle_permission: boolean;
+  can_impersonate: boolean;
   seasons_count: number;
 }
 

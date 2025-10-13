@@ -117,6 +117,14 @@ const UsersIndex = () => {
     });
   };
 
+  const handleImpersonateClick = (user: User) => {
+    if (confirm(`Are you sure you want to impersonate ${user.name}?`)) {
+      router.post(route('users.impersonate.start', { user: user.id }), {}, {
+        preserveScroll: false,
+      });
+    }
+  };
+
   return (
     <AuthLayout>
       <Head title="Users" />
@@ -191,6 +199,7 @@ const UsersIndex = () => {
                     key={user.id} 
                     user={user} 
                     onCanHostClick={handleCanHostClick}
+                    onImpersonateClick={handleImpersonateClick}
                   />
                 ))}
               </Box>
@@ -198,6 +207,7 @@ const UsersIndex = () => {
               <DesktopUserTable 
                 users={users} 
                 onCanHostClick={handleCanHostClick}
+                onImpersonateClick={handleImpersonateClick}
               />
             )}
 

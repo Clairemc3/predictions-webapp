@@ -21,6 +21,12 @@ export const buildRoute = (name: string, params: RouteParams = {}): string => {
     case 'users.index':
       return '/users';
     
+    case 'users.impersonate.start':
+      return `/users/${params.user}/impersonate`;
+    
+    case 'users.impersonate.stop':
+      return '/impersonate/stop';
+    
     case 'seasons.edit':
       return `/seasons/${params.season}`;
     
@@ -41,6 +47,8 @@ export type RouteName =
   | 'users.permissions.grant' 
   | 'users.permissions.revoke'
   | 'users.index'
+  | 'users.impersonate.start'
+  | 'users.impersonate.stop'
   | 'seasons.edit'
   | 'seasons.show';
 

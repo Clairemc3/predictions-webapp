@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  Chip,
 } from '@mui/material';
 import {
   CheckCircle,
@@ -20,9 +21,10 @@ import type { User, PaginatedUsers } from '../../types/users';
 interface DesktopUserTableProps {
   users: PaginatedUsers;
   onCanHostClick: (user: User) => void;
+  onImpersonateClick: (user: User) => void;
 }
 
-const DesktopUserTable: React.FC<DesktopUserTableProps> = ({ users, onCanHostClick }) => {
+const DesktopUserTable: React.FC<DesktopUserTableProps> = ({ users, onCanHostClick, onImpersonateClick }) => {
   const renderStatusIcon = (status: boolean) => {
     return status ? (
       <CheckCircle color="success" />
@@ -40,6 +42,7 @@ const DesktopUserTable: React.FC<DesktopUserTableProps> = ({ users, onCanHostCli
             <TableCell align="center">Email Verified</TableCell>
             <TableCell align="center">Seasons</TableCell>
             <TableCell align="center">Can Host</TableCell>
+            <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -74,6 +77,17 @@ const DesktopUserTable: React.FC<DesktopUserTableProps> = ({ users, onCanHostCli
                   onChange={() => onCanHostClick(user)}
                   disabled={!user.can_toggle_permission}
                 />
+              </TableCell>
+              <TableCell align="center">
+                {user.can_impersonate && (
+                  <Chip
+                    label="Impersonate"
+                    color="primary"
+                    size="small"
+                    onClick={() => onImpersonateClick(user)}
+                    sx={{ cursor: 'pointer' }}
+                  />
+                )}
               </TableCell>
             </TableRow>
           ))}

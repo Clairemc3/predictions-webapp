@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         Question::observe(QuestionObserver::class);
 
         Gate::before(function ($user, $ability) {
-            if ($ability === 'changePermissionsForUser') {
+            if ($ability === 'changePermissionsForUser' || $ability === 'impersonate') {
                 return null;
             }
             return $user->hasRole(Role::SuperAdmin) ? true : null;

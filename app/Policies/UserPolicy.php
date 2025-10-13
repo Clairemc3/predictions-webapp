@@ -13,9 +13,9 @@ class UserPolicy
      */
     public function before(User $user, string $ability): bool|null
     {
-         // Allow all actions for Super Admins except changing their own permissions
-        if ($ability === 'changePermissionsForUser') {
-            return null;
+         // Allow all actions for Super Admins except special cases
+        if ($ability === 'changePermissionsForUser' || $ability === 'impersonate') {
+            return null; // Let the specific policy method handle it
         }
 
         if ($user->hasRole(Role::SuperAdmin)) {
@@ -102,5 +102,23 @@ class UserPolicy
     public function forceDelete(User $user, User $model): bool
     {
         return false;
+    }
+
+    /**
+     * Determine whether the user can impersonate the target user.
+     */
+    public function impersonate(User $authenticatedUser, User $targetUser): bool
+    {
+        // Only super admins can impersonate
+        if (!$authenticatedUser->hasRole(Role::SuperAdmin)) {
+            return false;
+        }
+
+        // Cannot impersonate yourself
+        if ($authenticatedUser->id === $targetUser->id) {
+            return false;
+        }
+
+        return true;
     }
 }

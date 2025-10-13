@@ -18,9 +18,10 @@ import type { User } from '../../types/users';
 interface MobileUserCardProps {
   user: User;
   onCanHostClick: (user: User) => void;
+  onImpersonateClick: (user: User) => void;
 }
 
-const MobileUserCard: React.FC<MobileUserCardProps> = ({ user, onCanHostClick }) => (
+const MobileUserCard: React.FC<MobileUserCardProps> = ({ user, onCanHostClick, onImpersonateClick }) => (
   <Card 
     variant="outlined" 
     sx={{ 
@@ -57,7 +58,7 @@ const MobileUserCard: React.FC<MobileUserCardProps> = ({ user, onCanHostClick })
           {user.seasons_count} season{user.seasons_count !== 1 ? 's' : ''}
         </Typography>
       </Stack>
-      <Stack direction="row" justifyContent="flex-end">
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
         <FormControlLabel
           control={
             <Checkbox
@@ -73,6 +74,15 @@ const MobileUserCard: React.FC<MobileUserCardProps> = ({ user, onCanHostClick })
             opacity: user.can_toggle_permission ? 1 : 0.6
           }}
         />
+        {user.can_impersonate && (
+          <Chip
+            label="Impersonate"
+            color="primary"
+            size="small"
+            onClick={() => onImpersonateClick(user)}
+            sx={{ cursor: 'pointer' }}
+          />
+        )}
       </Stack>
     </CardContent>
   </Card>

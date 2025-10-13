@@ -57,6 +57,7 @@ class UserIndexQuery
                 'email_verified' => ! is_null($user->email_verified_at),
                 'can_host' => $user->can(Permission::HostASeason),
                 'can_toggle_permission' => $authenticatedUser ? $authenticatedUser->can('changePermissionsForUser', $user) : false,
+                'can_impersonate' => $authenticatedUser ? $authenticatedUser->can('impersonate', $user) : false,
                 'seasons_count' => $user->seasons_count,
             ]);
     }

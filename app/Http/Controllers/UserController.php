@@ -20,9 +20,7 @@ class UserController extends Controller
 
         $search = $request->get('search', '');
 
-        $usersQuery = new UserIndexQuery()
-            ->withSearch(['name', 'email'], $search );
-            
+        $usersQuery = (new UserIndexQuery())->withSearch(['name', 'email'], $search);
         $users = $usersQuery->paginate(10)->withQueryString();
 
         return Inertia::render('users/index', [

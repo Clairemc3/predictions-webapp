@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import muiTheme from '../theme/muiTheme';
 import NavigationDrawer from '../components/Navigation/NavigationDrawer';
 import { FlashMessages } from '../components/FlashMessages';
+import ImpersonationBanner from '../components/ImpersonationBanner';
 
 export default function AuthLayout({children}: {children: React.ReactNode}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -23,6 +24,9 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <Box>
+        {/* Impersonation Banner */}
+        <ImpersonationBanner />
+        
         {/* Header with burger menu */}
         <AppBar position="static">
           <Toolbar
