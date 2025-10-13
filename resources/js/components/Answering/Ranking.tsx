@@ -136,10 +136,8 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
 
         if (response.ok) {
           const data = await response.json();
-          console.log('Answer saved successfully:', data);
         } else {
           const errorData = await response.json();
-          console.error('Error saving answer:', errorData);
         }
       } catch (error) {
         console.error('Error making request:', error);
@@ -180,10 +178,8 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
 
           if (response.ok) {
             const data = await response.json();
-            console.log(`Reordered answer for position ${index + 1}:`, data);
           } else {
             const errorData = await response.json();
-            console.error(`Error reordering answer for position ${index + 1}:`, errorData);
           }
         } catch (error) {
           console.error(`Error making reorder request for position ${index + 1}:`, error);
@@ -265,7 +261,7 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
           {/* No entities state */}
           {!loading && !error && entities.length === 0 && (
             <Alert severity="info">
-              No entities available for this question.
+              No options available for this question.
             </Alert>
           )}
         </CardContent>
