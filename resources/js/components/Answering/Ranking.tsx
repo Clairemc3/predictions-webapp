@@ -85,10 +85,6 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
         
         if (response.ok) {
           const data = await response.json();
-          console.log('Full API response:', data);
-          console.log('Entities from response:', data.entities);
-          console.log('Entities type:', typeof data.entities);
-          console.log('Entities is array:', Array.isArray(data.entities));
           
           if (data.entities && Array.isArray(data.entities)) {
             // Transform API response to match Entity interface (value -> name)
@@ -97,19 +93,15 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
               name: entity.value // Transform 'value' to 'name'
             }));
             setEntities(transformedEntities);
-            console.log('Entities set successfully:', transformedEntities);
           } else {
-            console.error('Entities is not an array or is undefined:', data.entities);
             setError('Invalid entities data received');
           }
         } else {
           const errorData = await response.json();
           setError('Failed to load entities');
-          console.error('Error loading entities:', errorData);
         }
       } catch (error) {
         setError('Failed to load entities');
-        console.error('Error fetching entities:', error);
       } finally {
         setLoading(false);
       }
@@ -132,8 +124,6 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
     const newSelectedEntities = [...selectedEntities];
     newSelectedEntities[index] = newValue;
     setSelectedEntities(newSelectedEntities);
-    
-    console.log(`Position ${index + 1}:`, newValue);
     
     // Make POST request to /answers when an entity is selected
     if (newValue) {
@@ -202,7 +192,6 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
     });
 
     await Promise.all(promises);
-    console.log('All reorder requests completed');
   };
   return (
     <Paper 
