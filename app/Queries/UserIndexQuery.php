@@ -10,20 +10,19 @@ use Illuminate\Support\Facades\Auth;
 class UserIndexQuery
 {
     protected ?string $search = null;
+
     private array $propertiesToSearch = [];
 
     public function withSearch(array $propertiesToSearch, string $search): self
     {
         $this->propertiesToSearch = $propertiesToSearch;
         $this->search = $search;
+
         return $this;
     }
 
     /**
      * Apply search filters to the User query.
-     *
-     * @param Builder $query
-     * @return Builder
      */
     private function apply(Builder $query): Builder
     {
@@ -39,13 +38,13 @@ class UserIndexQuery
     /**
      * Get paginated users with search applied.
      *
-     * @param int $perPage
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate(int $perPage = 10)
     {
-        $query = User::select('id', 'name', 'email', 'email_verified_at');
-        
+        $query = User::select('id', 'name', 'email', 'email_verified_at')
+            ->withCount('seasons');
+
         /** @var \App\Models\User $user */
         $authenticatedUser = Auth::user();
 
@@ -55,9 +54,10 @@ class UserIndexQuery
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'email_verified' => !is_null($user->email_verified_at),
+                'email_verified' => ! is_null($user->email_verified_at),
                 'can_host' => $user->can(Permission::HostASeason),
                 'can_toggle_permission' => $authenticatedUser ? $authenticatedUser->can('changePermissionsForUser', $user) : false,
+                'seasons_count' => $user->seasons_count,
             ]);
     }
 }

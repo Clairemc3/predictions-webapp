@@ -38,6 +38,7 @@ const DesktopUserTable: React.FC<DesktopUserTableProps> = ({ users, onCanHostCli
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell align="center">Email Verified</TableCell>
+            <TableCell align="center">Seasons</TableCell>
             <TableCell align="center">Can Host</TableCell>
           </TableRow>
         </TableHead>
@@ -61,6 +62,11 @@ const DesktopUserTable: React.FC<DesktopUserTableProps> = ({ users, onCanHostCli
               </TableCell>
               <TableCell align="center">
                 {renderStatusIcon(user.email_verified)}
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="body2" fontWeight="medium">
+                  {user.seasons_count}
+                </Typography>
               </TableCell>
               <TableCell align="center">
                 <Checkbox

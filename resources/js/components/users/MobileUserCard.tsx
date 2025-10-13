@@ -45,7 +45,7 @@ const MobileUserCard: React.FC<MobileUserCardProps> = ({ user, onCanHostClick })
         </Box>
       </Box>
       
-      <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
+      <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
         <Chip
           icon={user.email_verified ? <VerifiedUser /> : <Email />}
           label={user.email_verified ? 'Verified' : 'Not Verified'}
@@ -53,6 +53,11 @@ const MobileUserCard: React.FC<MobileUserCardProps> = ({ user, onCanHostClick })
           size="small"
           variant="outlined"
         />
+        <Typography variant="body2" color="text.secondary">
+          {user.seasons_count} season{user.seasons_count !== 1 ? 's' : ''}
+        </Typography>
+      </Stack>
+      <Stack direction="row" justifyContent="flex-end">
         <FormControlLabel
           control={
             <Checkbox
