@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->smallInteger('status')->default(1);
             $table->timestamps();
+
+            $table->unique(['name', 'description']);
         });
     }
 

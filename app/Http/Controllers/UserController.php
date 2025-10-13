@@ -15,6 +15,13 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $users = User::all();
+
+        foreach ($users as $user)
+        {
+            $user->seasons;
+        }
+
         // Check if user can view users
         Gate::authorize('viewAny', User::class);
 
