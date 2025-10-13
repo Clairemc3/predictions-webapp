@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Enums\Permission;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Validation\Rules\Can;
 
 class DatabaseSeeder extends Seeder
 {
