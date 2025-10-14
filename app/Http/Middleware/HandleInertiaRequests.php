@@ -38,6 +38,9 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $impersonatedUserId = $request->session()->get('impersonated_user_id');
+        $originalUserId = $request->session()->get('original_user_id');
+        
         return array_merge(parent::share($request), [
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
@@ -50,7 +53,15 @@ class HandleInertiaRequests extends Middleware
             'memberSeasons' => $request->user() ? fn () => (new SeasonRepository())
                 ->getRecentMemberSeasons($request->user()) : null,
             'canHost' => $request->user() ? fn () => $request->user()->can('create', Season::class) : false,
-            'isAdmin' => $request->user() ? fn () => $request->user()->hasRole('super-admin') : false
+            'isAdmin' => $request->user() ? fn () => $request->user()->hasRole('super-admin') : false,
+            'impersonating' => $impersonatedUserId && $originalUserId ? fn () => [
+                'impersonated_user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                ] : null,
+                'original_user_id' => $originalUserId,
+            ] : null,
         ]);
     }
 }

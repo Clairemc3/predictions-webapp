@@ -32,5 +32,6 @@ export interface Filters {
 export interface UsersIndexProps {
   users: PaginatedUsers;
   filters: Filters;
+  isAdmin?: boolean;
   [key: string]: any;
 }

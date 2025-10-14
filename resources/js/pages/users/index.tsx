@@ -25,7 +25,7 @@ import type { User, UsersIndexProps } from '../../types/users';
 
 
 const UsersIndex = () => {
-  const { users, filters } = usePage<UsersIndexProps>().props;
+  const { users, filters, isAdmin } = usePage<UsersIndexProps>().props;
   const [search, setSearch] = useState(filters.search || '');
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
@@ -69,6 +69,12 @@ const UsersIndex = () => {
       currentPermission: user.can_host,
       isLoading: false,
     });
+  };
+
+  const handleImpersonateClick = (user: User) => {
+    if (confirm(`Are you sure you want to impersonate ${user.name}?`)) {
+      router.post(route('users.impersonate', { user: user.id }), {});
+    }
   };
 
   const handleConfirmPermissionChange = () => {
@@ -191,6 +197,8 @@ const UsersIndex = () => {
                     key={user.id} 
                     user={user} 
                     onCanHostClick={handleCanHostClick}
+                    onImpersonateClick={handleImpersonateClick}
+                    isAdmin={isAdmin || false}
                   />
                 ))}
               </Box>
@@ -198,6 +206,8 @@ const UsersIndex = () => {
               <DesktopUserTable 
                 users={users} 
                 onCanHostClick={handleCanHostClick}
+                onImpersonateClick={handleImpersonateClick}
+                isAdmin={isAdmin || false}
               />
             )}
 

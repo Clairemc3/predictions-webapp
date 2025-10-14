@@ -11,9 +11,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import muiTheme from '../theme/muiTheme';
 import NavigationDrawer from '../components/Navigation/NavigationDrawer';
 import { FlashMessages } from '../components/FlashMessages';
+import ImpersonationBanner from '../components/ImpersonationBanner';
+import { usePage } from '@inertiajs/react';
 
 export default function AuthLayout({children}: {children: React.ReactNode}) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { impersonating } = usePage().props as { impersonating?: any };
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -23,6 +26,9 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <Box>
+        {/* Impersonation Banner */}
+        {impersonating && <ImpersonationBanner impersonating={impersonating} />}
+        
         {/* Header with burger menu */}
         <AppBar position="static">
           <Toolbar
