@@ -3,7 +3,7 @@ import { Head, router, usePage } from '@inertiajs/react';
 import { route } from '../../../lib/routes';
 import QuestionOptions from '../../../components/QuestionBuilder/QuestionOptions';
 import { QuestionType } from '../../../types/question';
-import { Season } from '../../../types/season';
+import { Season, Question } from '../../../types/season';
 import {
   QuestionFormLayout,
   QuestionTypeSelector,
@@ -13,13 +13,27 @@ import {
 
 interface PageProps extends Record<string, any> {
   season: Season;
+  question: Question;
   questionTypes: QuestionType[];
 }
 
-const CreateQuestion = () => {
+const EditQuestion = () => {
   const pageProps = usePage<PageProps>().props;
-  const { season, questionTypes = [] } = pageProps;
+  const { season, question, questionTypes = [] } = pageProps;
   
+  const initialData = {
+    type: question.type || '',
+    title: question.title || '',
+    short_title: question.short_title || '',
+    base_type: question.base_type || '',
+    entities: question.entities?.map(e => ({
+      entity_id: e.entity_id,
+      category_id: e.category_id
+    })) || [],
+    answer_count: question.answer_count?.toString() || '',
+    answer_count_all: false,
+  };
+
   const {
     data,
     setData,
@@ -27,12 +41,12 @@ const CreateQuestion = () => {
     errors,
     selectedQuestionType,
     handleTypeChange,
-    submitCreate,
-  } = useQuestionForm({ questionTypes });
+    submitUpdate,
+  } = useQuestionForm({ initialData, questionTypes });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    submitCreate(season.id, () => {
+    submitUpdate(season.id, question.id, () => {
       router.visit(route('seasons.edit', { season: season.id }));
     });
   };
@@ -43,12 +57,12 @@ const CreateQuestion = () => {
 
   return (
     <>
-      <Head title={`Create Question - ${season.name}`} />
+      <Head title={`Edit Question - ${season.name}`} />
       <QuestionFormLayout
-        title="Create New Question"
-        description={`Add a new question to "${season.name}"`}
+        title="Edit Question"
+        description={`Update question in "${season.name}"`}
         seasonName={season.name}
-        pageTitle={`Create Question - ${season.name}`}
+        pageTitle={`Edit Question - ${season.name}`}
         onCancel={handleCancel}
       >
         <form onSubmit={handleSubmit}>
@@ -73,7 +87,7 @@ const CreateQuestion = () => {
             onCancel={handleCancel}
             onSubmit={handleSubmit}
             processing={processing}
-            submitText="Create Question"
+            submitText="Update Question"
           />
         </form>
       </QuestionFormLayout>
@@ -81,4 +95,4 @@ const CreateQuestion = () => {
   );
 };
 
-export default CreateQuestion;
+export default EditQuestion;

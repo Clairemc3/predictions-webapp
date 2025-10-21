@@ -22,6 +22,7 @@ class SeasonQuestionResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->getTitle(),
+            'type' => $this->type,
         ];
     }
 

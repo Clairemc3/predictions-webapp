@@ -20,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/seasons/{season}/questions', [QuestionController::class, 'index'])->name('seasons.questions.index');
     Route::get('/seasons/{season}/questions/create', [QuestionController::class, 'create'])->name('seasons.questions.create');
     Route::post('/seasons/{season}/questions', [QuestionController::class, 'store'])->name('seasons.questions.store');
-    Route::get('/seasons/{season}/questions/{question}', [QuestionController::class, 'show'])->name('seasons.questions.show');
+    Route::get('/seasons/{season}/questions/{question}/edit', [QuestionController::class, 'edit'])->name('seasons.questions.edit');
     Route::put('/seasons/{season}/questions/{question}', [QuestionController::class, 'update'])->name('seasons.questions.update');
     Route::delete('/seasons/{season}/questions/{question}', [QuestionController::class, 'destroy'])->name('seasons.questions.destroy');
 });

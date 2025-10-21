@@ -13,7 +13,7 @@ import {
   Box,
   Tooltip,
 } from '@mui/material';
-import InvitationDialog from './InvitationDialog';
+import InvitationDialog from '../InvitationDialog';
 import { usePage } from '@inertiajs/react';
 
 interface User {

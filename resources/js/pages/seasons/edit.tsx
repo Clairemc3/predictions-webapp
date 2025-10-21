@@ -9,8 +9,7 @@ import {
   Tab,
 } from '@mui/material';
 import AuthLayout from '../../layouts/AuthLayout';
-import QuestionsTab from '../../components/QuestionsTab';
-import MembersTab from '../../components/MembersTab';
+import { QuestionsTab, MembersTab } from '../../components/Season';
 import StatusChip from '../../components/StatusChip';
 
 interface User {

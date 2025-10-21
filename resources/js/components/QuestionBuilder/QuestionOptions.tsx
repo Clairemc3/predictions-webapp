@@ -4,8 +4,8 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import Rankings from './question-type-options/Rankings';
-import EntitySelection from './question-type-options/EntitySelection';
+import Rankings from './QuestionTypeOptions/Rankings';
+import EntitySelection from './QuestionTypeOptions/EntitySelection';
 import { QuestionOptionsProps } from '../../types/question';
 
 interface QuestionOptionsExtendedProps extends QuestionOptionsProps {

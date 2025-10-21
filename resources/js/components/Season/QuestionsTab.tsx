@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -15,22 +15,40 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { router } from '@inertiajs/react';
-
-interface QuestionsTabProps {
-  seasonId: number;
-  questions: QuestionRow[];
-}
-
-interface QuestionRow {
-  id: number;
-  title: string;
-  type?: string;
-  base_type?: string;
-}
+import ConfirmationDialog from '../ConfirmationDialog';
+import { QuestionsTabProps, QuestionRow } from '../../types/season';
 
 const QuestionsTab = ({ seasonId, questions }: QuestionsTabProps) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState<QuestionRow | null>(null);
+
   const handleAddQuestion = () => {
     router.visit(`/seasons/${seasonId}/questions/create`);
+  };
+
+  const handleDeleteClick = (question: QuestionRow) => {
+    setQuestionToDelete(question);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (questionToDelete) {
+      router.delete(`/seasons/${seasonId}/questions/${questionToDelete.id}`, {
+        onSuccess: () => {
+          setDeleteDialogOpen(false);
+          setQuestionToDelete(null);
+        },
+      });
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setQuestionToDelete(null);
+  };
+
+  const handleEditClick = (question: QuestionRow) => {
+    router.visit(`/seasons/${seasonId}/questions/${question.id}/edit`);
   };
 
   const formatType = (q: QuestionRow): string => {
@@ -92,10 +110,19 @@ const QuestionsTab = ({ seasonId, questions }: QuestionsTabProps) => {
                 <TableCell>{q.title}</TableCell>
                 <TableCell>{formatType(q)}</TableCell>
                 <TableCell>
-                  <IconButton aria-label="edit question" size="small">
+                  <IconButton 
+                    aria-label="edit question" 
+                    size="small"
+                    onClick={() => handleEditClick(q)}
+                  >
                     <EditIcon fontSize="small" />
                   </IconButton>
-                  <IconButton aria-label="delete question" size="small" color="error">
+                  <IconButton 
+                    aria-label="delete question" 
+                    size="small" 
+                    color="error"
+                    onClick={() => handleDeleteClick(q)}
+                  >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -105,6 +132,16 @@ const QuestionsTab = ({ seasonId, questions }: QuestionsTabProps) => {
         </TableBody>
       </Table>
     </TableContainer>
+
+    <ConfirmationDialog
+      open={deleteDialogOpen}
+      title="Delete Question"
+      message={`Are you sure you want to delete the question "${questionToDelete?.title}"? This action cannot be undone.`}
+      confirmText="Delete"
+      cancelText="Cancel"
+      onConfirm={handleDeleteConfirm}
+      onCancel={handleDeleteCancel}
+    />
     </>
   );
 };
