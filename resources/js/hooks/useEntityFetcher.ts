@@ -7,12 +7,14 @@ interface EntityOption {
 
 interface UseEntityFetcherReturn {
   entityOptions: { [key: string]: EntityOption[] };
+  entityTotal: { [key: string]: number };
   loading: { [key: string]: boolean };
   fetchEntitiesForCategory: (categoryName: string, filterIndex: number, filters?: Record<string, any>) => Promise<void>;
 }
 
 export const useEntityFetcher = (): UseEntityFetcherReturn => {
   const [entityOptions, setEntityOptions] = useState<{ [key: string]: EntityOption[] }>({});
+  const [entityTotal, setEntityTotal] = useState<{ [key: string]: number }>({});
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
 
   const fetchEntitiesForCategory = async (
@@ -49,6 +51,12 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
           ...prev, 
           [cacheKey]: entities 
         }));
+        
+        // Store the count from the API response
+        setEntityTotal(prev => ({
+          ...prev,
+          [cacheKey]: data.count || entities.length
+        }));
       } else {
         console.error('Failed to fetch entities - response not ok:', response.status);
         setEntityOptions(prev => ({ 
@@ -69,6 +77,7 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
 
   return {
     entityOptions,
+    entityTotal,
     loading,
     fetchEntitiesForCategory
   };

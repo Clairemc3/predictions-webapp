@@ -28,6 +28,7 @@ class CategoryEntitiesRequest extends FormRequest
             'country' => 'sometimes|string|exists:entities,value',
             'football-league' => 'sometimes|string|exists:entities,value',
             'team' => 'sometimes|string|exists:entities,value',
+            'count' => 'sometimes|string|in:football-team,football-league,country',
         ];
     }
 
@@ -38,7 +39,9 @@ class CategoryEntitiesRequest extends FormRequest
     {
         return [
             function (Validator $validator) {
-                foreach ($this->all() as $key => $value) {
+                $categories = $this->all();
+                unset($categories['count']);
+                foreach ($categories as $key => $value) {
                     // Check if the parameter key exists as a category name in the database
                     if (!$this->isValidCategoryName($key)) {
                         $validator->errors()->add($key, "The {$key} parameter is not a valid category name.");
@@ -58,5 +61,13 @@ class CategoryEntitiesRequest extends FormRequest
             return false;
         }
         return true;
+    }
+
+
+    public function validatedFilters(): array
+    {
+        $data = $this->validated();
+        unset($data['count']);
+        return $data;
     }
 }

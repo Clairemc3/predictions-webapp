@@ -31,7 +31,7 @@ class Entity extends Model
         return $this->belongsToMany(
             Entity::class, 
             'entity_relationships', 
-            'parent_entity_id', 
-            'child_entity_id')->withPivot('relation_type');
+            'child_entity_id',
+            'parent_entity_id')->withPivot('relation_type');
     }   
 }

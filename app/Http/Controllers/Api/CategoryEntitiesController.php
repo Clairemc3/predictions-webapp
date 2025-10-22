@@ -7,7 +7,6 @@ use App\Http\Requests\CategoryEntitiesRequest;
 use App\Http\Resources\EntityResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CategoryEntitiesController extends Controller
 {
@@ -16,8 +15,13 @@ class CategoryEntitiesController extends Controller
     {
         $entityQuery = new \App\Queries\EntityQuery($category);
 
-        foreach($request->validated() as $key => $value) {
+        foreach($request->validatedFilters() as $key => $value) {
             $entityQuery->filter($key, $value);
+        }
+
+        if ($request->has('count')) {
+            $countingCategory = Category::where('name', $request->input('count'))->first();
+            $entityQuery->includeEntityCount($countingCategory);
         }
 
         $entities = $entityQuery->get();

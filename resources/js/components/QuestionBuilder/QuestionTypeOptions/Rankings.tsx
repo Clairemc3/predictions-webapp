@@ -18,6 +18,11 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
   currentEntities = [],
   currentAnswerCount
 }) => {
+  const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
+
+  const handleEntityChange = (count: number) => {
+    setMaxAnswerCount(count);
+  };
   // Add defensive checks
   if (!selectedQuestionType) {
     return null;
@@ -43,21 +48,25 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
               name={`entities[${index}]`}
               setData={setData}
               currentEntities={currentEntities}
+              onChange={handleEntityChange}
             />
           ))}
         </Box>
       )}
 
-      {/* Number to predict field */}
-      <AnswerCount 
-        label={selectedQuestionType?.answerCountLabel || undefined}
-        helperText={selectedQuestionType?.answerCountHelperText || undefined}
-        required={true}
-        error={!!errors.answer_count}
-        errorText={errors.answer_count}
-        setData={setData}
-        currentAnswerCount={currentAnswerCount}
-      />
+      {/* Number to predict field - Only show when entity has been selected */}
+      {maxAnswerCount !== undefined && (
+        <AnswerCount 
+          label={selectedQuestionType?.answerCountLabel || undefined}
+          helperText={selectedQuestionType?.answerCountHelperText || undefined}
+          required={true}
+          error={!!errors.answer_count}
+          errorText={errors.answer_count}
+          setData={setData}
+          currentAnswerCount={currentAnswerCount}
+          maxValue={maxAnswerCount}
+        />
+      )}
     </Box>
   );
 };

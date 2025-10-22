@@ -109,3 +109,133 @@ it('returns empty collection when filter matches no entities', function () {
     expect($result)->toBeInstanceOf(Collection::class);
     expect($result)->toHaveCount(0);
 });
+
+it('returns instance of EntityQuery when includeEntityCount is called for method chaining', function () {
+    $query = new EntityQuery($this->category);
+    $result = $query->includeEntityCount($this->category);
+    
+    expect($result)->toBe($query);
+    expect($result)->toBeInstanceOf(EntityQuery::class);
+});
+
+it('includes entities_count when includeEntityCount is called', function () {
+    // Create a counting category with entities
+    $countingCategory = Category::factory()->create(['name' => 'teams']);
+    
+    // Create entities that belong to both our main category and the counting category
+    $sharedEntities = Entity::factory()->count(2)->create();
+    
+    // Attach shared entities to both categories
+    $this->category->entities()->attach($sharedEntities->pluck('id'));
+    $countingCategory->entities()->attach($sharedEntities->pluck('id'));
+    
+    $query = new EntityQuery($this->category);
+    $result = $query->includeEntityCount($countingCategory)->get();
+    
+    expect($result)->toHaveCount(5); // 3 original + 2 shared
+    
+    // Check that entities_count attribute is present on all entities
+    $result->each(function ($entity) {
+        expect($entity)->toHaveAttribute('entities_count');
+        expect($entity->entities_count)->toBeInt();
+    });
+});
+
+it('returns correct count for entities that belong to the specified category', function () {
+    // Create a counting category
+    $countingCategory = Category::factory()->create(['name' => 'leagues']);
+    
+    // Create some entities that will belong to the counting category
+    $leagueEntities = Entity::factory()->count(3)->create();
+    $countingCategory->entities()->attach($leagueEntities->pluck('id'));
+    
+    // Attach one of our main entities to the counting category as well
+    $countingCategory->entities()->attach($this->entities->first()->id);
+    
+    $query = new EntityQuery($this->category);
+    $result = $query->includeEntityCount($countingCategory)->get();
+    
+    expect($result)->toHaveCount(3);
+    
+    // The first entity should have a count > 0 since it belongs to the counting category
+    $firstEntity = $result->first();
+    expect($firstEntity->entities_count)->toBeGreaterThan(0);
+    
+    // The other entities should have count = 0 since they don't belong to the counting category
+    $otherEntities = $result->slice(1);
+    $otherEntities->each(function ($entity) {
+        expect($entity->entities_count)->toBe(0);
+    });
+});
+
+it('returns zero count for entities not in the specified category when using includeEntityCount', function () {
+    // Create a counting category that our entities don't belong to
+    $otherCategory = Category::factory()->create(['name' => 'other-teams']);
+    
+    $query = new EntityQuery($this->category);
+    $result = $query->includeEntityCount($otherCategory)->get();
+    
+    expect($result)->toHaveCount(3);
+    
+    // All entities should have zero count since they don't belong to 'other-teams'
+    $result->each(function ($entity) {
+        expect($entity->entities_count)->toBe(0);
+    });
+});
+
+it('can chain includeEntityCount with filters', function () {
+    // Create filter categories
+    $countryCategory = Category::factory()->create(['name' => 'country']);
+    $countingCategory = Category::factory()->create(['name' => 'leagues']);
+    
+    $ukEntity = Entity::factory()->create(['value' => 'United Kingdom']);
+    $countryCategory->entities()->attach($ukEntity->id);
+    
+    // Create a test entity that matches the filter
+    $testEntity = Entity::factory()->create(['value' => 'Test Team']);
+    $this->category->entities()->attach($testEntity->id);
+    $countingCategory->entities()->attach($testEntity->id);
+    
+    $query = new EntityQuery($this->category);
+    $result = $query
+        ->includeEntityCount($countingCategory)
+        ->filter('country', 'United Kingdom')
+        ->get();
+    
+    // Test that chaining works and returns a collection with entities_count
+    expect($result)->toBeInstanceOf(Collection::class);
+    
+    // Each result should have the entities_count attribute
+    $result->each(function ($entity) {
+        expect($entity)->toHaveAttribute('entities_count');
+        expect($entity->entities_count)->toBeInt();
+    });
+});
+
+it('works correctly with different categories for includeEntityCount', function () {
+    // Create multiple different categories
+    $category1 = Category::factory()->create(['name' => 'teams']);
+    $category2 = Category::factory()->create(['name' => 'leagues']);
+    
+    // Create entities and attach to different categories
+    $entity1 = Entity::factory()->create();
+    $entity2 = Entity::factory()->create();
+    
+    $category1->entities()->attach([$entity1->id]);
+    $category2->entities()->attach([$entity2->id]);
+    
+    // Both entities should be in our main category too
+    $this->category->entities()->attach([$entity1->id, $entity2->id]);
+    
+    $query = new EntityQuery($this->category);
+    $result = $query->includeEntityCount($category1)->get();
+    
+    expect($result)->toHaveCount(5); // 3 original + 2 new
+    
+    // Find the entity that belongs to category1
+    $entityInCategory1 = $result->first(function ($entity) use ($entity1) {
+        return $entity->id === $entity1->id;
+    });
+    
+    expect($entityInCategory1->entities_count)->toBeGreaterThan(0);
+});

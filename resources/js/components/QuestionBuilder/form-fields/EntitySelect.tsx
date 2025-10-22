@@ -23,6 +23,7 @@ interface EntitySelectProps {
   helperText?: string;
   setData?: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
+  onChange?: (count: number) => void;
 }
 
 const EntitySelect: React.FC<EntitySelectProps> = ({
@@ -39,9 +40,10 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   error = false,
   helperText,
   setData,
-  currentEntities = []
+  currentEntities = [],
+  onChange
 }) => {
-  const { entityOptions, loading, fetchEntitiesForCategory } = useEntityFetcher();
+  const { entityOptions, entityTotal, loading, fetchEntitiesForCategory } = useEntityFetcher();
   
   // Use currentEntities value if setData is provided
   const value = currentEntities[index]?.entity_id || '';
@@ -49,6 +51,14 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   const entityKey = `${category}-${index}`;
   const labelId = `entity-select-label-${index}`;
   const selectId = `entity-select-${index}`;
+
+  // Notify parent component when number of entities changes
+  React.useEffect(() => {
+    const count = entityTotal[entityKey];
+    if (count !== undefined && onChange) {
+      onChange(count);
+    }
+  }, [entityTotal, entityKey, onChange]);
 
   const handleChange = (event: any) => {
     const newValue = event.target.value;

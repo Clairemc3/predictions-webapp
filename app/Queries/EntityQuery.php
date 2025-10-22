@@ -35,12 +35,23 @@ class EntityQuery
         return $this;
     }
 
-
-
-
-
     public function get(): Collection
     {
         return $this->query->get();
+    }
+
+    public function includeEntityCount(Category $category): self
+    {
+        if (!$category) {
+            throw new \InvalidArgumentException("Category '{$category}' not found.");
+        }
+
+        $this->query->withCount(['entities' => function (Builder $query) use ($category) {
+            $query->whereHas('categories', function (Builder $subQuery) use ($category) {
+                $subQuery->where('category_id', $category->id);
+            });
+        }]);
+
+        return $this;
     }
 }

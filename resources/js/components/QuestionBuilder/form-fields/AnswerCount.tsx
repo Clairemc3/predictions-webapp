@@ -24,7 +24,7 @@ interface AnswerCountProps {
 const AnswerCount: React.FC<AnswerCountProps> = ({
   label = 'Number to predict',
   helperText = "Choose either 'all' to predict all rankings, or specify a number.",
-  maxValue = 20,
+  maxValue,
   required = false,
   error = false,
   errorText,
@@ -51,7 +51,7 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
     const value = event.target.value;
     const numValue = parseInt(value);
     
-    if (value === '' || (numValue >= 1 && numValue <= maxValue)) {
+    if (value === '' || (maxValue && numValue >= 1 && numValue <= maxValue)) {
       if (setData) {
         // Use setData to update form state directly
         setData((prevData: any) => ({
@@ -79,23 +79,26 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
                 checked={currentIsAll}
                 onChange={handleAllChange}
                 name="answer_count_all"
+                disabled={!maxValue}
               />
             }
-            label="All"
+            label={maxValue ? `All (${maxValue})` : "All"}
           />
           
           <TextField
-            label={`Number (1-${maxValue})`}
+            label={`Number (1-${maxValue || '?'})`}
             name="answer_count"
             type="number"
             value={currentNumberValue}
             onChange={handleNumberChange}
-            disabled={currentIsAll}
+            disabled={currentIsAll || !maxValue}
             required={required && !currentIsAll}
             error={error && !currentIsAll && !currentNumberValue}
-            inputProps={{
-              min: 1,
-              max: maxValue
+            slotProps={{
+              htmlInput: {
+                min: 1,
+                max: maxValue || undefined
+              }
             }}
             sx={{ mt: 2, maxWidth: 200 }}
             size="small"

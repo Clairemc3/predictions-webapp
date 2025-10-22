@@ -16,6 +16,9 @@ beforeEach(function () {
     Mail::fake();
     Notification::fake();
     Event::fake();
+    
+    // Seed permissions for testing
+    $this->seed(\Database\Seeders\PermissionSeeder::class);
 });
 
 test('a user can register', function () {
