@@ -25,6 +25,7 @@ export interface Question {
   type?: string;
   base_type?: string;
   answer_count?: number;
+  answer_category?: string;
   entities?: Array<{
     id: number;
     entity_id: number;

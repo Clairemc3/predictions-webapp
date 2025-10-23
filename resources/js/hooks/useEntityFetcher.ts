@@ -3,27 +3,32 @@ import { useState } from 'react';
 interface EntityOption {
   id: number;
   value: string;
+  count?: {
+    category: string;
+    value: number;
+  };
 }
 
 interface UseEntityFetcherReturn {
   entityOptions: { [key: string]: EntityOption[] };
-  entityTotal: { [key: string]: number };
+  entityCounts: { [key: string]: { [entityId: number]: number } };
   loading: { [key: string]: boolean };
-  fetchEntitiesForCategory: (categoryName: string, filterIndex: number, filters?: Record<string, any>) => Promise<void>;
+  fetchEntitiesForCategory: (categoryName: string, filterIndex: number, filters?: Record<string, any>, answerCategory?: string) => Promise<void>;
 }
 
 export const useEntityFetcher = (): UseEntityFetcherReturn => {
   const [entityOptions, setEntityOptions] = useState<{ [key: string]: EntityOption[] }>({});
-  const [entityTotal, setEntityTotal] = useState<{ [key: string]: number }>({});
+  const [entityCounts, setEntityCounts] = useState<{ [key: string]: { [entityId: number]: number } }>({});
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
 
   const fetchEntitiesForCategory = async (
     categoryName: string, 
     filterIndex: number, 
-    filters: Record<string, any> = {}
+    filters: Record<string, any> = {},
+    answerCategory?: string
   ) => {
-    const cacheKey = `${categoryName}-${filterIndex}`;
-    setLoading(prev => ({ ...prev, [cacheKey]: true }));
+    const stateKey = `${categoryName}-${filterIndex}`;
+    setLoading(prev => ({ ...prev, [stateKey]: true }));
     
     try {
       // Build query parameters from filters
@@ -33,6 +38,11 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
           queryParams.append(key, String(value));
         }
       });
+      
+      // Add count parameter if answerCategory is provided
+      if (answerCategory) {
+        queryParams.append('count', answerCategory);
+      }
       
       const queryString = queryParams.toString();
       const url = `/api/entities/${categoryName}${queryString ? `?${queryString}` : ''}`;
@@ -49,35 +59,44 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
         const entities = Array.isArray(data.entities) ? data.entities : [];
         setEntityOptions(prev => ({ 
           ...prev, 
-          [cacheKey]: entities 
+          [stateKey]: entities 
         }));
         
-        // Store the count from the API response
-        setEntityTotal(prev => ({
-          ...prev,
-          [cacheKey]: data.count || entities.length
-        }));
+        // Store individual entity counts if they exist
+        if (entities.length > 0 && entities[0].count) {
+          const entityCountMap: { [entityId: number]: number } = {};
+          entities.forEach((entity: EntityOption) => {
+            if (entity.count) {
+              entityCountMap[entity.id] = entity.count.value;
+            }
+          });
+          console.log('Entity Count Map for', stateKey, ':', entityCountMap);
+          setEntityCounts(prev => ({
+            ...prev,
+            [stateKey]: entityCountMap
+          }));
+        }
       } else {
         console.error('Failed to fetch entities - response not ok:', response.status);
         setEntityOptions(prev => ({ 
           ...prev, 
-          [cacheKey]: [] 
+          [stateKey]: [] 
         }));
       }
     } catch (error) {
       console.error('Failed to fetch entities:', error);
       setEntityOptions(prev => ({ 
         ...prev, 
-        [cacheKey]: [] 
+        [stateKey]: [] 
       }));
     } finally {
-      setLoading(prev => ({ ...prev, [cacheKey]: false }));
+      setLoading(prev => ({ ...prev, [stateKey]: false }));
     }
   };
 
   return {
     entityOptions,
-    entityTotal,
+    entityCounts,
     loading,
     fetchEntitiesForCategory
   };

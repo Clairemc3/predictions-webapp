@@ -100,6 +100,136 @@
     ]
   },
   {
+    "value": "Newcastle United",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Aston Villa",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Brighton & Hove Albion",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "West Ham United",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Crystal Palace",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Fulham",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Wolves",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Everton",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Brentford",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Nottingham Forest",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Bournemouth",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Southampton",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
+    "value": "Ipswich Town",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Premier League"
+      }
+    ]
+  },
+  {
     "value": "Juventus",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
@@ -233,5 +363,315 @@
     "value": "Italy",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
+  },
+  {
+    "value": "Leicester City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Leeds United",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Burnley",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Sheffield United",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "West Bromwich Albion",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Middlesbrough",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Norwich City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Coventry City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Sunderland",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Hull City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "Championship"
+      }
+    ]
+  },
+  {
+    "value": "Birmingham City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Wrexham",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Wigan Athletic",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Stockport County",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Barnsley",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Lincoln City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Bolton Wanderers",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Mansfield Town",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Charlton Athletic",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Exeter City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League One"
+      }
+    ]
+  },
+  {
+    "value": "Port Vale",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Walsall",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Crewe Alexandra",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Notts County",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Bradford City",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Doncaster Rovers",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Grimsby Town",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "MK Dons",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "AFC Wimbledon",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Gillingham",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
+  },
+  {
+    "value": "Chesterfield",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "League Two"
+      }
+    ]
   }
 ]

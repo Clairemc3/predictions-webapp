@@ -32,6 +32,7 @@ const EditQuestion = () => {
     })) || [],
     answer_count: question.answer_count?.toString() || '',
     answer_count_all: false,
+    answer_category: question.answer_category || '',
   };
 
   const {

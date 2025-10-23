@@ -49,6 +49,7 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
               setData={setData}
               currentEntities={currentEntities}
               onChange={handleEntityChange}
+              answerCategory={selectedQuestionType?.answerCategory || undefined}
             />
           ))}
         </Box>

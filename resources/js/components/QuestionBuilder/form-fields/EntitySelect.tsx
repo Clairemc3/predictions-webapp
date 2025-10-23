@@ -24,6 +24,7 @@ interface EntitySelectProps {
   setData?: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   onChange?: (count: number) => void;
+  answerCategory?: string;
 }
 
 const EntitySelect: React.FC<EntitySelectProps> = ({
@@ -41,9 +42,10 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   helperText,
   setData,
   currentEntities = [],
-  onChange
+  onChange,
+  answerCategory
 }) => {
-  const { entityOptions, entityTotal, loading, fetchEntitiesForCategory } = useEntityFetcher();
+  const { entityOptions, entityCounts, loading, fetchEntitiesForCategory } = useEntityFetcher();
   
   // Use currentEntities value if setData is provided
   const value = currentEntities[index]?.entity_id || '';
@@ -52,13 +54,16 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   const labelId = `entity-select-label-${index}`;
   const selectId = `entity-select-${index}`;
 
-  // Notify parent component when number of entities changes
+  // Notify parent component when the selected entity changes
   React.useEffect(() => {
-    const count = entityTotal[entityKey];
-    if (count !== undefined && onChange) {
-      onChange(count);
+    if (onChange && value) {
+      const entityId = typeof value === 'string' ? parseInt(value) : value;
+      const selectedEntityCount = entityCounts[entityKey]?.[entityId];
+      if (selectedEntityCount !== undefined) {
+        onChange(selectedEntityCount);
+      }
     }
-  }, [entityTotal, entityKey, onChange]);
+  }, [value, entityCounts, entityKey, onChange]);
 
   const handleChange = (event: any) => {
     const newValue = event.target.value;
@@ -94,6 +99,14 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
         };
       });
     }
+    
+    // Pass the count for the selected entity to the parent
+    if (onChange && newValue) {
+      const selectedEntityCount = entityCounts[entityKey]?.[parseInt(newValue)];
+      if (selectedEntityCount !== undefined) {
+        onChange(selectedEntityCount);
+      }
+    }
   };
 
   return (
@@ -112,8 +125,7 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
         onOpen={() => {
           console.log('Select onOpen triggered:', { category, entityKey, hasOptions: !!entityOptions[entityKey], isLoading: !!loading[entityKey] });
           if (category && !entityOptions[entityKey] && !loading[entityKey]) {
-            console.log('Fetching entities for category:', category);
-            fetchEntitiesForCategory(category, index, filters);
+            fetchEntitiesForCategory(category, index, filters, answerCategory);
           }
         }}
       >
