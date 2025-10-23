@@ -7,6 +7,7 @@ import {
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Question from '../../components/Answering/Question';
+import Group from '../../components/Answering/Group';
 
 interface Question {
   id: number;
@@ -24,15 +25,16 @@ interface Question {
 
 interface PageProps extends Record<string, any> {
   membershipId: number;
-  questions: Question[];
+  questions: Record<string, Question[]>; // Grouped questions by key (e.g., "Championship", "Premier League")
 }
 
 const PredictionsEdit = () => {
   const { membershipId, questions } = usePage<PageProps>().props;
 
+  console.log('Questions:', questions);
   return (
     <AuthLayout>
-      <Head title="Edit Predictions" />
+      <Head title="Make your Predictions" />
       <Box
         className="mobile-scroll-container"
         sx={{ 
@@ -56,11 +58,15 @@ const PredictionsEdit = () => {
           </Typography>
         </Box>
 
-        {/* Questions List */}
-        {questions && questions.length > 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            {questions.map((question) => (
-              <Question key={question.id} question={question} />
+        {/* Grouped Questions */}
+        {questions && Object.keys(questions).length > 0 ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {Object.entries(questions).map(([groupHeading, groupQuestions]) => (
+              <Group 
+                key={groupHeading} 
+                groupHeading={groupHeading} 
+                questions={groupQuestions} 
+              />
             ))}
           </Box>
         ) : (
@@ -70,6 +76,7 @@ const PredictionsEdit = () => {
             </Typography>
           </Paper>
         )}
+
       </Box>
     </AuthLayout>
   );

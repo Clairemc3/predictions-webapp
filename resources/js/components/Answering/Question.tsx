@@ -51,6 +51,10 @@ const Question: React.FC<QuestionProps> = ({ question }) => {
       sx={{ 
         width: '100%', 
         maxWidth: 'none',
+        bgcolor: 'primary.main',
+        borderRadius: 0,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
         // Ensure proper mobile scrolling
         overflow: 'visible', // Allow content to be scrollable
         touchAction: 'auto', // Enable touch scrolling

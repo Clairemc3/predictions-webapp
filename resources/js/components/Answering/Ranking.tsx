@@ -190,29 +190,19 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
     await Promise.all(promises);
   };
   return (
-    <Paper 
-      elevation={1} 
-      sx={{ 
-        width: '100%', 
-        maxWidth: 'none',
-        bgcolor: 'primary.main'
-      }}
-    >
-      <Card sx={{ bgcolor: 'transparent' }}>
-        <PredictionsHeading title={primary_entity_name} />
-
-        <Typography
-          variant="h6"
-          sx={{
-            textAlign: 'center',
-            color: 'primary.contrastText',
-            textTransform: 'uppercase',
-            mt: 1,
-            mb: 2,
-          }}
-        >
-          League table
-        </Typography>   
+    <Card sx={{ bgcolor: 'transparent', borderRadius: 0 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          textAlign: 'center',
+          color: 'primary.contrastText',
+          textTransform: 'uppercase',
+          mt: 1,
+          mb: 2,
+        }}
+      >
+        League table
+      </Typography>   
         
         <CardContent sx={{ p: 3 }}>
           {/* Loading state */}
@@ -267,7 +257,6 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
         </CardContent>
 
       </Card>
-    </Paper>
   );
 };
 

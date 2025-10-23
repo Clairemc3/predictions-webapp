@@ -14,7 +14,9 @@ const PredictionsHeading: React.FC<HeadingProps> = ({ title }) => {
             sx={{ 
               bgcolor: 'secondary.main', 
               p: 2, 
-              textAlign: 'center' 
+              textAlign: 'center',
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8
             }}
           >
             <Typography 

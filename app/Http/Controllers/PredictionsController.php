@@ -13,13 +13,19 @@ class PredictionsController extends Controller
     {
         $membership = SeasonMember::findOrFail($membershipId);
 
-        $season = $membership->season;
+        $season = $membership->season()->with('questions.entities')->first();
 
-        $questions = $season->questions()->with('entities')->get();
+        $questions = $season->questions;
+        $questionsResource = PredictionQuestionsResource::collection($questions);
+
+        // Group by entity value if we have one
+        $groupedQuestions = $questionsResource->groupBy(function ($question) {
+            return data_get($question, 'entities.0.value');
+        });
 
         return Inertia::render('predictions/edit', [
             'membershipId' => $membershipId,
-            'questions' => PredictionQuestionsResource::collection($questions)
+            'questions' => $groupedQuestions
         ]);
     }
 
