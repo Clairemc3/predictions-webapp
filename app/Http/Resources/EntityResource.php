@@ -21,7 +21,7 @@ class EntityResource extends JsonResource
                 $request->has('count'),
                 fn () => [
                     'category' => $request->input('count'),
-                    'value' => $this->entities_count ?? 0
+                    'value' => $this->entity_relationship_count ?? 0
                 ]
             ),
         ];

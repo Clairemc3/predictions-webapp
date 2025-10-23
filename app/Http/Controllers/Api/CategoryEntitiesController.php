@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryEntitiesRequest;
 use App\Http\Resources\EntityResource;
 use App\Models\Category;
+use App\Models\Entity;
 use Illuminate\Http\JsonResponse;
 
 class CategoryEntitiesController extends Controller

@@ -32,6 +32,7 @@ class Entity extends Model
             Entity::class, 
             'entity_relationships', 
             'child_entity_id',
-            'parent_entity_id')->withPivot('relation_type');
+            'parent_entity_id',
+        )->withPivot('relation_type');
     }   
 }

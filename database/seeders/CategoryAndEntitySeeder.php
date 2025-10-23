@@ -120,13 +120,13 @@ class CategoryAndEntitySeeder extends Seeder
     private function seedEntityRelationships(): void
     {
         foreach ($this->allEntities as $entityData) {
-            $parentEntityId = DB::table('entities')
+            $childEntityId = DB::table('entities')
                 ->where('value', $entityData['value'])
                 ->value('id');
 
             // Attach the entity to its relationships
             foreach ($entityData['entityRelationships'] ?? [] as $relationship) {
-                $childEntityId = DB::table('entities')
+                $parentEntityId = DB::table('entities')
                     ->where('value', $relationship['entity'])
                     ->value('id');
 
