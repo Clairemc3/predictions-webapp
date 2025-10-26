@@ -36,6 +36,7 @@ const PredictionsEdit = () => {
     <AuthLayout>
       <Head title="Make your Predictions" />
       <Box
+        data-identifier="predictions-edit-box"
         className="mobile-scroll-container"
         sx={{ 
           maxWidth: 1200, 

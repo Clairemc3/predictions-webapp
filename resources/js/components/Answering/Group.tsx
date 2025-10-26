@@ -30,11 +30,26 @@ const Group: React.FC<GroupProps> = ({ groupHeading, questions }) => {
       
       {/* Questions List */}
       {questions && questions.length > 0 ? (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          {questions.map((question) => (
-            <Question key={question.id} question={question} />
-          ))}
-        </Box>
+        <Paper 
+          elevation={1} 
+          sx={{ 
+            width: '100%', 
+            maxWidth: 'none',
+            bgcolor: 'primary.main',
+            borderRadius: 0,
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
+            // Ensure proper mobile scrolling
+            overflow: 'visible', // Allow content to be scrollable
+            touchAction: 'auto', // Enable touch scrolling
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            {questions.map((question) => (
+              <Question key={question.id} question={question} />
+            ))}
+          </Box>
+        </Paper>
       ) : (
         <Paper elevation={1} sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" color="text.secondary">

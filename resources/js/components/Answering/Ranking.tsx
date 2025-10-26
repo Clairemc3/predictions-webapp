@@ -8,8 +8,6 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { usePage } from '@inertiajs/react';
-import PredictionsHeading from '../Predictions/PredictionsHeading';
 import SortableItem from './SortableItem';
 import { apiPost, apiGet } from '../../lib/api';
 import {
@@ -34,13 +32,13 @@ interface Entity {
 }
 
 interface RankingProps {
-  primary_entity_name: string;
+  heading: string
   answer_count: number;
   question_id: number;
   answer_entities_route: string;
 }
 
-const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, question_id, answer_entities_route }) => {
+const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, answer_entities_route }) => {
   // State to track entities from the backend
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -201,7 +199,7 @@ const Ranking: React.FC<RankingProps> = ({ primary_entity_name, answer_count, qu
           mb: 2,
         }}
       >
-        League table
+        {heading}
       </Typography>   
         
         <CardContent sx={{ p: 3 }}>

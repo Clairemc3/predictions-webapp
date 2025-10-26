@@ -71,12 +71,13 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
           maxWidth="lg"
         >
           <Box
+            data-identifier="auth-layout-content-box"
             sx={{
               minHeight: 'calc(100vh - 64px)', // Subtract AppBar height
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
-              pt: 6, // Reduced top padding
+              pt: 3, // Reduced top padding
               pb: 3,
             }}
           >
