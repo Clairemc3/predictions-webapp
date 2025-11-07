@@ -9,7 +9,7 @@ import {
   Alert,
 } from '@mui/material';
 import SortableItem from './SortableItem';
-import { apiPost, apiGet } from '../../lib/api';
+import { apiPost, apiGet, answersRequest } from '../../lib/api';
 import {
   DndContext,
   closestCenter,
@@ -25,6 +25,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { usePage } from '@inertiajs/react';
 
 interface Entity {
   id: number;
@@ -43,6 +44,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const membershipId = usePage().props.membershipId;
 
   // State to track selected entities for each position
   const [selectedEntities, setSelectedEntities] = useState<(Entity | null)[]>(
@@ -126,9 +128,10 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     // Make POST request to /answers when an entity is selected
     if (newValue) {
       try {
-        const response = await apiPost('/answers', {
+        const response = await answersRequest({
+          membership_id: membershipId as number,
           question_id: question_id,
-          selected_entity_id: newValue.id,
+          entity_id: newValue.id,
           order: index + 1, // Position starts from 1
         });
 
@@ -168,10 +171,11 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     const promises = reorderedEntities.map(async (entity, index) => {
       if (entity) {
         try {
-          const response = await apiPost('/answers', {
+          const response = await answersRequest({
             question_id: question_id,
-            selected_entity_id: entity.id,
+            entity_id: entity.id,
             order: index + 1, // Position starts from 1
+            membership_id: membershipId as number,
           });
 
           if (response.ok) {

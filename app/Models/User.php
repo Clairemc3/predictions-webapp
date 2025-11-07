@@ -69,4 +69,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Season::class)->using(SeasonMember::class)->wherePivot('is_host', true)->withPivot('nickname', 'joined_at')->withTimestamps();
     }
+
+    public function isMemberOfSeason(Season $season): bool
+    {
+        return SeasonMember::where('season_id', $season->id)
+            ->where('user_id', $this->id)
+            ->exists();
+    }
 }
