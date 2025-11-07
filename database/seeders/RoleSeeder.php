@@ -8,6 +8,8 @@ use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Run the database seeds.
      */

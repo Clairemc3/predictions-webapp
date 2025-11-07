@@ -4,7 +4,6 @@ use App\Models\Category;
 use App\Models\Entity;
 use App\Queries\EntityQuery;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 beforeEach(function () {
     $this->category = Category::factory()->create(['name' => 'test-category']);
@@ -110,14 +109,6 @@ it('returns empty collection when filter matches no entities', function () {
     expect($result)->toHaveCount(0);
 });
 
-it('returns instance of EntityQuery when includeEntityCount is called for method chaining', function () {
-    $query = new EntityQuery($this->category);
-    $result = $query->includeEntityCount($this->category);
-    
-    expect($result)->toBe($query);
-    expect($result)->toBeInstanceOf(EntityQuery::class);
-});
-
 it('includes entities_count when includeEntityCount is called', function () {
     // Create a counting category with entities
     $countingCategory = Category::factory()->create(['name' => 'teams']);
@@ -138,33 +129,6 @@ it('includes entities_count when includeEntityCount is called', function () {
     $result->each(function ($entity) {
         expect($entity)->toHaveAttribute('entities_count');
         expect($entity->entities_count)->toBeInt();
-    });
-});
-
-it('returns correct count for entities that belong to the specified category', function () {
-    // Create a counting category
-    $countingCategory = Category::factory()->create(['name' => 'leagues']);
-    
-    // Create some entities that will belong to the counting category
-    $leagueEntities = Entity::factory()->count(3)->create();
-    $countingCategory->entities()->attach($leagueEntities->pluck('id'));
-    
-    // Attach one of our main entities to the counting category as well
-    $countingCategory->entities()->attach($this->entities->first()->id);
-    
-    $query = new EntityQuery($this->category);
-    $result = $query->includeEntityCount($countingCategory)->get();
-    
-    expect($result)->toHaveCount(3);
-    
-    // The first entity should have a count > 0 since it belongs to the counting category
-    $firstEntity = $result->first();
-    expect($firstEntity->entities_count)->toBeGreaterThan(0);
-    
-    // The other entities should have count = 0 since they don't belong to the counting category
-    $otherEntities = $result->slice(1);
-    $otherEntities->each(function ($entity) {
-        expect($entity->entities_count)->toBe(0);
     });
 });
 

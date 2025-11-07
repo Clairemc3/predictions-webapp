@@ -22,7 +22,6 @@ const QuestionFormLayout: React.FC<QuestionFormLayoutProps> = ({
   title,
   description,
   seasonName,
-  pageTitle,
   onCancel,
   children,
 }) => {

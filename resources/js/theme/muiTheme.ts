@@ -1,4 +1,3 @@
-import { blue } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 // Define your custom color palette

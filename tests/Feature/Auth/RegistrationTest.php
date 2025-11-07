@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use App\Notifications\VerifyEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;

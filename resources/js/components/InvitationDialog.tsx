@@ -22,7 +22,6 @@ interface InvitationDialogProps {
 }
 
 const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) => {
-  const { props } = usePage();
   const [invitationUrl, setInvitationUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -41,7 +40,7 @@ const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) =>
 
       const data = await response.json();
       setInvitationUrl(data.invitation_link.url);
-    } catch (err) {
+    } catch {
       setError('Failed to create invitation link.');
     } finally {
       setLoading(false);
@@ -83,7 +82,7 @@ const InvitationDialog = ({ open, onClose, seasonId }: InvitationDialogProps) =>
           throw new Error('Fallback copy failed');
         }
       }
-    } catch (err) {
+    } catch {
       setError('Copy failed. Please select and copy the URL manually.');
     }
   };

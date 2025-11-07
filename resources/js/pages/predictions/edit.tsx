@@ -2,7 +2,6 @@ import {
   Box,
   Typography,
   Paper,
-  Button,
 } from '@mui/material';
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
@@ -29,7 +28,7 @@ interface PageProps extends Record<string, any> {
 }
 
 const PredictionsEdit = () => {
-  const { membershipId, questions } = usePage<PageProps>().props;
+  const { questions } = usePage<PageProps>().props;
 
   console.log('Questions:', questions);
   return (

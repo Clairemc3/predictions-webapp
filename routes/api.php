@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryEntitiesController;
-use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 /*

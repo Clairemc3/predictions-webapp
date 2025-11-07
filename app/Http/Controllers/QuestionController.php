@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
-use App\Models\Category;
 use App\Models\Question;
 use App\Models\Season;
 use App\Services\ContextualQuestionType\ContextualQuestionTypeService;

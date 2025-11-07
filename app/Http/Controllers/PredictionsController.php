@@ -36,8 +36,6 @@ class PredictionsController extends Controller
 
         $season = $membership->season;
 
-        $member = $membership->user;
-
         $questions = $season->questions()->with('entities')->get();
 
         return Inertia::render('predictions/show', [
