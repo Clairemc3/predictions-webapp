@@ -20,6 +20,7 @@ class Answer extends Model
         'question_id',
         'entity_id',
         'order',
+        'season_user_id',
     ];
 
     /**

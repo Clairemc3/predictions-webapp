@@ -12,14 +12,17 @@ class AnswerController extends Controller
 {
    public function store(StoreAnswerRequest $request)
    {
-      $membership = SeasonMember::find($request->season_member_id);
+      $membership = SeasonMember::find($request->membership_id);
+
+      dump($membership);
+
       Gate::authorize('create', [Answer::class, $membership]);
 
       $validated = $request->validated();
 
       Answer::updateOrCreate(
           [
-              'season_user_id' => $validated['membership_id'],
+              'season_user_id' => $membership->id,
               'question_id' => $validated['question_id'],
               'order' => $validated['order'] ?? null,
           ],

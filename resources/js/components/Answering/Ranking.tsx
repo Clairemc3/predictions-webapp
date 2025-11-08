@@ -9,7 +9,7 @@ import {
   Alert,
 } from '@mui/material';
 import SortableItem from './SortableItem';
-import { apiPost, apiGet, answersRequest } from '../../lib/api';
+import { apiGet, answersRequest } from '../../lib/api';
 import {
   DndContext,
   closestCenter,
@@ -133,6 +133,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
           question_id: question_id,
           entity_id: newValue.id,
           order: index + 1, // Position starts from 1
+          value: newValue.name
         });
 
         if (response.ok) {
@@ -176,6 +177,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
             entity_id: entity.id,
             order: index + 1, // Position starts from 1
             membership_id: membershipId as number,
+            value: entity.name,
           });
 
           if (response.ok) {

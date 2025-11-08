@@ -28,6 +28,7 @@ class StoreAnswerRequest extends FormRequest
             'membership_id' => 'required|integer|exists:season_user,id',
             'question_id' => 'bail|required|integer|exists:questions,id',
             'entity_id' => 'required|integer|exists:entities,id',
+            'value' => 'required|string|max:255',
         ];
 
         // Only require order if the question base_type is 'ranking'
