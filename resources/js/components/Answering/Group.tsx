@@ -3,6 +3,13 @@ import { Box, Typography, Paper } from '@mui/material';
 import Question from './Question';
 import PredictionsHeading from '../Predictions/PredictionsHeading';
 
+interface Answer {
+  id: number;
+  entity_id: number;
+  order: number;
+  value?: string;
+}
+
 interface Question {
   id: number;
   title: string;
@@ -11,6 +18,7 @@ interface Question {
   base_type: string;
   answer_count: number;
   answer_entities_route: string;
+  answers?: Answer[];
   entities?: Array<{
     id: number;
     name: string;

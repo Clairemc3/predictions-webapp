@@ -15,7 +15,8 @@ class PredictionsController extends Controller
 
         $season = $membership->season()->with('questions.entities')->first();
 
-        $questions = $season->questions;
+        $questions = $season->questions()->with('answers')->get();
+
         $questionsResource = PredictionQuestionsResource::collection($questions);
 
         // Group by entity value if we have one

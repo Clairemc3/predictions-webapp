@@ -32,14 +32,22 @@ interface Entity {
   name: string; // Keep as 'name' to match SortableItem expectations
 }
 
+interface Answer {
+  id: number;
+  entity_id: number;
+  order: number;
+  value?: string;
+}
+
 interface RankingProps {
   heading: string
   answer_count: number;
   question_id: number;
   answer_entities_route: string;
+  answers?: Answer[];
 }
 
-const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, answer_entities_route }) => {
+const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, answer_entities_route, answers }) => {
   // State to track entities from the backend
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,6 +118,24 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     fetchEntities();
   }, [answer_entities_route]);
 
+  // Populate selected entities from answers when entities are loaded
+  useEffect(() => {
+    if (entities.length > 0 && answers && answers.length > 0) {
+      const newSelectedEntities = Array(answer_count).fill(null);
+      
+      answers.forEach((answer) => {
+        // Find the entity that matches this answer's entity_id
+        const entity = entities.find(e => e.id === answer.entity_id);
+        if (entity && answer.order && answer.order > 0 && answer.order <= answer_count) {
+          // Place the entity at the correct position (order is 1-indexed)
+          newSelectedEntities[answer.order - 1] = entity;
+        }
+      });
+      
+      setSelectedEntities(newSelectedEntities);
+    }
+  }, [entities, answers, answer_count]);
+
   // Function to get available entities for a specific position
   const getAvailableAnswerEntities = (currentIndex: number) => {
     const selectedIds = selectedEntities
@@ -135,12 +161,6 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
           order: index + 1, // Position starts from 1
           value: newValue.name
         });
-
-        if (response.ok) {
-          const data = await response.json();
-        } else {
-          const errorData = await response.json();
-        }
       } catch (error) {
         console.error('Error making request:', error);
       }
