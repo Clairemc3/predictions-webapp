@@ -24,7 +24,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { usePage } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 
 interface Entity {
   id: number;
@@ -160,6 +160,11 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
           order: index + 1, // Position starts from 1
           value: newValue.name
         });
+
+        if (response.ok) {
+          // Reload only the questions and completedPercentage props
+          router.reload({ only: ['questions', 'completedPercentage'] });
+        }
       } catch (error) {
         console.error('Error making request:', error);
       }
@@ -211,6 +216,9 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     });
 
     await Promise.all(promises);
+    
+    // Reload only the questions and completedPercentage props after all reorders complete
+    router.reload({ only: ['questions', 'completedPercentage'] });
   };
   return (
     <Card sx={{ bgcolor: 'transparent', borderRadius: 0 }}>

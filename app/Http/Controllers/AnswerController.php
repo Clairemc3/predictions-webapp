@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AnswerSaved;
 use App\Http\Requests\StoreAnswerRequest;
 use App\Models\Answer;
 use App\Models\SeasonMember;
@@ -18,7 +19,7 @@ class AnswerController extends Controller
 
       $validated = $request->validated();
 
-      Answer::updateOrCreate(
+     $answer = Answer::updateOrCreate(
           [
               'season_user_id' => $membership->id,
               'question_id' => $validated['question_id'],
@@ -29,10 +30,13 @@ class AnswerController extends Controller
               'value' => $validated['value'] ?? null,
           ]);
 
+        event(new AnswerSaved($answer, $membership));
+
        return response()->json([
            'success' => true,
            'data' => $validated,
            'message' => 'Answer saved successfully'
        ], Response::HTTP_CREATED);
    }
+
 }

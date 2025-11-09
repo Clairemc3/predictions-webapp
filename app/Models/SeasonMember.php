@@ -86,4 +86,20 @@ class SeasonMember extends Pivot
         $this->joined_at = now();
         $this->save();
     }
+
+    public function answers()   
+    {
+        return $this->hasMany(Answer::class, 'season_user_id');
+    }
+
+    public function completedQuestionsPercentage(): float
+    {
+        $totalQuestions = $this->season->questions()->count();
+
+        if ($totalQuestions === 0) {
+            return 100.0;
+        }
+
+        return ($this->completed_questions_count / $totalQuestions) * 100;
+    }
 }

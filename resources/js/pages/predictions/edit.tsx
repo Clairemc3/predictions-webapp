@@ -2,6 +2,7 @@ import {
   Box,
   Typography,
   Paper,
+  LinearProgress,
 } from '@mui/material';
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
@@ -33,10 +34,11 @@ interface Question {
 interface PageProps extends Record<string, any> {
   membershipId: number;
   questions: Record<string, Question[]>; // Grouped questions by key (e.g., "Championship", "Premier League")
+  completedPercentage: number;
 }
 
 const PredictionsEdit = () => {
-  const { questions } = usePage<PageProps>().props;
+  const { questions, completedPercentage } = usePage<PageProps>().props;
 
   console.log('Questions:', questions);
   return (
@@ -59,11 +61,35 @@ const PredictionsEdit = () => {
         {/* Header */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Edit Your Predictions
+            Your Predictions
           </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Complete your predictions for this season
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+            Complete your predictions
           </Typography>
+          
+          {/* Progress Bar */}
+          <Box sx={{ width: '100%', mt: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Box sx={{ flex: 1, mr: 2 }}>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={completedPercentage} 
+                  sx={{ 
+                    height: 10, 
+                    borderRadius: 5,
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    '& .MuiLinearProgress-bar': {
+                      borderRadius: 5,
+                      backgroundColor: completedPercentage === 100 ? 'success.main' : 'primary.main',
+                    }
+                  }}
+                />
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ minWidth: 45 }}>
+                {Math.round(completedPercentage)}%
+              </Typography>
+            </Box>
+          </Box>
         </Box>
 
         {/* Grouped Questions */}

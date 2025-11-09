@@ -47,4 +47,12 @@ class Answer extends Model
     {
         return $this->belongsTo(Entity::class);
     }
+
+    /**
+     * Get the season member that this answer belongs to.
+     */
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(SeasonMember::class, 'season_user_id');
+    }
 }

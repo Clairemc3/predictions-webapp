@@ -27,6 +27,7 @@ class PredictionsController extends Controller
         return Inertia::render('predictions/edit', [
             'membershipId' => $membershipId,
             'questions' => $groupedQuestions,
+            'completedPercentage' => $membership->completedQuestionsPercentage(),
         ]);
     }
 
