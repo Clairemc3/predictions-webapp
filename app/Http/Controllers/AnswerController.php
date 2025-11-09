@@ -14,8 +14,6 @@ class AnswerController extends Controller
    {
       $membership = SeasonMember::find($request->membership_id);
 
-      dump($membership);
-
       Gate::authorize('create', [Answer::class, $membership]);
 
       $validated = $request->validated();
