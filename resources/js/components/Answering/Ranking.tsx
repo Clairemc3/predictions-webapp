@@ -26,6 +26,8 @@ import {
 } from '@dnd-kit/sortable';
 import { usePage, router } from '@inertiajs/react';
 
+const RELOAD_DEBOUNCE_DELAY = 2000;
+
 interface Entity {
   id: number;
   name: string; // Keep as 'name' to match SortableItem expectations
@@ -136,14 +138,14 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     fetchEntities();
   }, []); // Only run once on mount
 
-  // Debounced reload effect - waits 2 seconds after the last change
+  // Debounced reload effect - waits after the last change
   useEffect(() => {
     if (!needsReload) return;
 
     const timeoutId = setTimeout(() => {
       router.reload({ only: ['questions', 'completedPercentage'] });
       setNeedsReload(false);
-    }, 2000);
+    }, RELOAD_DEBOUNCE_DELAY);
 
     return () => clearTimeout(timeoutId);
   }, [needsReload]);
