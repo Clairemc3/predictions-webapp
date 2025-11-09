@@ -74,7 +74,7 @@ class SeasonController extends Controller
             'seasonStatus' => $season->status->name(),
             'questions' => SeasonQuestionResource::collection($season->questions()->with('entities')->get()),
             'canInviteMembers' => Gate::allows('inviteMembers', $season),
-            'totalQuestions' => $season->questionCount(),
+            'totalQuestions' => $season->questions_count,
         ]);
     }
 }

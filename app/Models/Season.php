@@ -20,6 +20,10 @@ class Season extends Model
         'status' => SeasonStatus::class,
     ];
 
+    protected $withCount = [
+        'questions',
+    ];
+
     /**
      * The users that belong to the season.
      */
@@ -69,9 +73,4 @@ class Season extends Model
             ->withTimestamps();
     }
 
-    public function questionCount(): int
-    { 
-        // @TODO: cache and clear in observer
-        return $this->questions()->count();
-    }
 }
