@@ -11,36 +11,7 @@ import {
 import AuthLayout from '../../layouts/AuthLayout';
 import { QuestionsTab, MembersTab } from '../../components/Season';
 import StatusChip from '../../components/StatusChip';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  pivot: {
-    is_host: boolean;
-  };
-}
-
-interface Season {
-  id: number;
-  name: string;
-  description: string | null;
-  members?: User[];
-}
-
-interface EditSeasonProps {
-  season: Season;
-  seasonStatus: string;
-  questions: Question[];
-}
-
-interface Question {
-  id: number;
-  title: string;
-  // Backend currently returns either `type` or `base_type`; include both for safety
-  type?: string;
-  base_type?: string;
-}
+import { Member, Season, EditSeasonProps, Question } from '../../types/season';
 
 const EditSeason = ({ season, seasonStatus, questions }: EditSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -51,7 +22,7 @@ const EditSeason = ({ season, seasonStatus, questions }: EditSeasonProps) => {
 
   return (
     <AuthLayout>
-      <Head title={`Edit ${season.name}`} />
+      <Head title={`Manage ${season.name}`} />
       
       <Card sx={{ width: '100%', maxWidth: 900 }}>
         <CardContent sx={{ p: 4 }}>

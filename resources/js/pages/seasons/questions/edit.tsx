@@ -48,12 +48,12 @@ const EditQuestion = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     submitUpdate(season.id, question.id, () => {
-      router.visit(route('seasons.edit', { season: season.id }));
+      router.visit(route('seasons.manage', { season: season.id }));
     });
   };
 
   const handleCancel = () => {
-    router.visit(route('seasons.edit', { season: season.id }));
+    router.visit(route('seasons.manage', { season: season.id }));
   };
 
   return (

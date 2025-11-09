@@ -58,14 +58,14 @@ class SeasonController extends Controller
             'is_host' => true,
         ]);
 
-        return redirect()->route('seasons.edit', $season)
+        return redirect()->route('seasons.manage', $season)
             ->with('success', 'Season created successfully!');
     }
 
     /**
-     * Show the form for editing the specified season.
+     * Show the form for managing the specified season.
      */
-    public function edit(Season $season): Response
+    public function manage(Season $season): Response
     {
         Gate::authorize('update', $season);
 
@@ -74,6 +74,7 @@ class SeasonController extends Controller
             'seasonStatus' => $season->status->name(),
             'questions' => SeasonQuestionResource::collection($season->questions()->with('entities')->get()),
             'canInviteMembers' => Gate::allows('inviteMembers', $season),
+            'questionCount' => $season->questionCount(),
         ]);
     }
 }

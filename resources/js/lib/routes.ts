@@ -21,7 +21,7 @@ export const buildRoute = (name: string, params: RouteParams = {}): string => {
     case 'users.index':
       return '/users';
     
-    case 'seasons.edit':
+    case 'seasons.manage':
       return `/seasons/${params.season}`;
     
     case 'seasons.show':
@@ -41,7 +41,7 @@ export type RouteName =
   | 'users.permissions.grant' 
   | 'users.permissions.revoke'
   | 'users.index'
-  | 'seasons.edit'
+  | 'seasons.manage'
   | 'seasons.show';
 
 /**

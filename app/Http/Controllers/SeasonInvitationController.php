@@ -51,7 +51,7 @@ class SeasonInvitationController extends Controller
 
         // Check if user is already a member
         if ($season->members()->where('user_id', $user->id)->exists()) {
-            return redirect()->route('seasons.edit', $season)->with('warning', 'You are already a member of this season.');
+            return redirect()->route('seasons.manage', $season)->with('warning', 'You are already a member of this season.');
         }
 
         // Add user to season
@@ -62,6 +62,6 @@ class SeasonInvitationController extends Controller
         // Increment uses count
         $invitation->incrementUses();
 
-        return redirect()->route('seasons.edit', $season)->with('success', 'Successfully joined the season!');
+        return redirect()->route('seasons.manage', $season)->with('success', 'Successfully joined the season!');
     }
 }

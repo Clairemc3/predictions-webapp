@@ -57,7 +57,7 @@ class QuestionController extends Controller
 
         $question->entities()->attach($entities);
 
-        return response()->redirectTo(route('seasons.edit', [$season, $question]));
+        return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }
 
     /**
@@ -105,7 +105,7 @@ class QuestionController extends Controller
             $question->entities()->sync($entities);
         }
 
-        return response()->redirectTo(route('seasons.edit', [$season, $question]));
+        return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }
 
     /**
@@ -117,6 +117,6 @@ class QuestionController extends Controller
         
         $question->delete();
 
-        return response()->redirectTo(route('seasons.edit', $season));
+        return response()->redirectTo(route('seasons.manage', $season));
     }
 }
