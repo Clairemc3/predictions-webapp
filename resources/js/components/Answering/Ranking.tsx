@@ -58,6 +58,9 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     Array(answer_count).fill(null)
   );
 
+  // State to track if we need to reload (for debouncing)
+  const [needsReload, setNeedsReload] = useState(false);
+
   // State to track the order of items
   const [items, setItems] = useState<string[]>(
     Array.from({ length: answer_count }, (_, index) => `item-${index}`)
@@ -135,6 +138,18 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     }
   }, [entities, answers, answer_count]);
 
+  // Debounced reload effect - waits 2 seconds after the last change
+  useEffect(() => {
+    if (!needsReload) return;
+
+    const timeoutId = setTimeout(() => {
+      router.reload({ only: ['questions', 'completedPercentage'] });
+      setNeedsReload(false);
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [needsReload]);
+
   // Function to get available entities for a specific position
   const getAvailableAnswerEntities = (currentIndex: number) => {
     const selectedIds = selectedEntities
@@ -153,18 +168,16 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     // Make POST request to /answers when an entity is selected
     if (newValue) {
       try {
-        const response = await answersRequest({
+        await answersRequest({
           membership_id: membershipId as number,
           question_id: question_id,
           entity_id: newValue.id,
           order: index + 1, // Position starts from 1
           value: newValue.name
         });
-
-        if (response.ok) {
-          // Reload only the questions and completedPercentage props
-          router.reload({ only: ['questions', 'completedPercentage'] });
-        }
+        
+        // Trigger debounced reload
+        setNeedsReload(true);
       } catch (error) {
         console.error('Error making request:', error);
       }
@@ -196,19 +209,13 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     const promises = reorderedEntities.map(async (entity, index) => {
       if (entity) {
         try {
-          const response = await answersRequest({
+          await answersRequest({
             question_id: question_id,
             entity_id: entity.id,
             order: index + 1, // Position starts from 1
             membership_id: membershipId as number,
             value: entity.name,
           });
-
-          if (response.ok) {
-            const data = await response.json();
-          } else {
-            const errorData = await response.json();
-          }
         } catch (error) {
           console.error(`Error making reorder request for position ${index + 1}:`, error);
         }
@@ -217,8 +224,8 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
 
     await Promise.all(promises);
     
-    // Reload only the questions and completedPercentage props after all reorders complete
-    router.reload({ only: ['questions', 'completedPercentage'] });
+    // Trigger debounced reload after all reorders complete
+    setNeedsReload(true);
   };
   return (
     <Card sx={{ bgcolor: 'transparent', borderRadius: 0 }}>
