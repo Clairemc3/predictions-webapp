@@ -28,7 +28,12 @@ class Season extends Model
         return $this->belongsToMany(User::class)
             ->as('membership')
             ->using(SeasonMember::class)
-            ->withPivot('is_host', 'nickname', 'joined_at')
+            ->withPivot(
+                'is_host', 
+                'nickname', 
+                'joined_at', 
+                'completed_questions_count'
+            )
             ->withTimestamps();
     }
 
@@ -62,5 +67,11 @@ class Season extends Model
     {
         return $this->belongsToMany(Question::class, 'question_season')
             ->withTimestamps();
+    }
+
+    public function questionCount(): int
+    { 
+        // @TODO: cache and clear in observer
+        return $this->questions()->count();
     }
 }

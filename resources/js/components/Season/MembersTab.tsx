@@ -15,25 +15,17 @@ import {
 } from '@mui/material';
 import InvitationDialog from '../InvitationDialog';
 import { usePage } from '@inertiajs/react';
+import { MembersTabProps } from '../../types/season';
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  pivot: {
-    is_host: boolean;
-  };
-}
-
-interface MembersTabProps {
-  members?: User[];
-  seasonId: number;
-}
-
-const MembersTab = ({ members = [], seasonId }: MembersTabProps) => {
+const MembersTab = ({ members = [], seasonId, totalQuestions }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const membersCanBeInvited = usePage().props.canInviteMembers as boolean;
+
+  const calculatePercentage = (completedQuestions: number): number => {
+    if (totalQuestions === 0 || completedQuestions === 0) return 0;
+    return Math.round((completedQuestions / totalQuestions) * 100);
+  };
 
   const handleInviteMembers = () => {
     setDialogOpen(true);
@@ -100,6 +92,7 @@ const MembersTab = ({ members = [], seasonId }: MembersTabProps) => {
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
+            <TableCell align="center">Complete</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -111,7 +104,7 @@ const MembersTab = ({ members = [], seasonId }: MembersTabProps) => {
                   <Typography variant="body2">
                     {member.name}
                   </Typography>
-                  {member.pivot?.is_host && (
+                  {member.membership?.is_host && (
                     <Chip 
                       label="Host" 
                       color="primary" 
@@ -120,8 +113,19 @@ const MembersTab = ({ members = [], seasonId }: MembersTabProps) => {
                     />
                   )}
                 </TableCell>
+                <TableCell align="center">
+                  {(() => {
+                    const percentage = calculatePercentage(member.membership.completed_questions_count);
+                    return (
+                      <Chip 
+                        label={`${percentage}%`}
+                        color={percentage === 100 ? 'success' : 'error'}
+                        size="small"
+                      />
+                    );
+                  })()}
+                </TableCell>
                 <TableCell>
-                  {/* Actions will be added later */}
                   <Typography variant="body2" color="text.secondary">
                     -
                   </Typography>
@@ -130,7 +134,7 @@ const MembersTab = ({ members = [], seasonId }: MembersTabProps) => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={2} align="center" sx={{ py: 4 }}>
+              <TableCell colSpan={3} align="center" sx={{ py: 4 }}>
                 <Typography variant="body2" color="text.secondary">
                   No members in this season yet
                 </Typography>

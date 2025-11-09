@@ -6,7 +6,7 @@ export interface Season {
   description?: string | null;
   status?: string;
   is_host?: boolean;
-  members?: User[];
+  members?: Member[];
 }
 
 export interface User {
@@ -15,6 +15,16 @@ export interface User {
   email: string;
   pivot?: {
     is_host: boolean;
+  };
+}
+
+export interface Member {
+  id: number;
+  name: string;
+  email: string;
+  membership: {
+    is_host: boolean;
+      completed_questions_count: number;
   };
 }
 
@@ -41,10 +51,11 @@ export interface QuestionRow {
 }
 
 // Page Props interfaces
-export interface EditSeasonProps {
+export interface ManageSeasonProps {
   season: Season;
   seasonStatus: string;
   questions: Question[];
+  totalQuestions: number;
 }
 
 export interface QuestionsTabProps {
@@ -53,7 +64,9 @@ export interface QuestionsTabProps {
 }
 
 export interface MembersTabProps {
-  season: Season;
+  members?: Member[];
+  seasonId: number;
+  totalQuestions: number;
 }
 
 export interface SeasonCardProps {

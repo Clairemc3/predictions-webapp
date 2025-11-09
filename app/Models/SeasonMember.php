@@ -30,6 +30,7 @@ class SeasonMember extends Pivot
         'is_host',
         'nickname',
         'joined_at',
+        'completed_questions_count',
     ];
 
     /**

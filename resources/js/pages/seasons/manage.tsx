@@ -11,9 +11,9 @@ import {
 import AuthLayout from '../../layouts/AuthLayout';
 import { QuestionsTab, MembersTab } from '../../components/Season';
 import StatusChip from '../../components/StatusChip';
-import { Member, Season, EditSeasonProps, Question } from '../../types/season';
+import {ManageSeasonProps } from '../../types/season';
 
-const EditSeason = ({ season, seasonStatus, questions }: EditSeasonProps) => {
+const EditSeason = ({ season, seasonStatus, questions, totalQuestions }: ManageSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -84,7 +84,7 @@ const EditSeason = ({ season, seasonStatus, questions }: EditSeasonProps) => {
             {/* Members Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <MembersTab members={season.members} seasonId={season.id} />
+                <MembersTab members={season.members} seasonId={season.id} totalQuestions={totalQuestions} />
               </Box>
             )}
           </Box>
