@@ -78,7 +78,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     })
   );
 
-  // Fetch entities from the backend route
+  // Fetch entities from the backend route and initialize selected entities
   useEffect(() => {
     const fetchEntities = async () => {
       if (!answer_entities_route) {
@@ -103,6 +103,22 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
               name: entity.value // Transform 'value' to 'name'
             }));
             setEntities(transformedEntities);
+            
+            // Initialize selected entities from answers (only runs once when entities load)
+            if (answers && answers.length > 0) {
+              const newSelectedEntities = Array(answer_count).fill(null);
+              
+              answers.forEach((answer) => {
+                // Find the entity that matches this answer's entity_id
+                const entity = transformedEntities.find((e: Entity) => e.id === answer.entity_id);
+                if (entity && answer.order && answer.order > 0 && answer.order <= answer_count) {
+                  // Place the entity at the correct position (order is 1-indexed)
+                  newSelectedEntities[answer.order - 1] = entity;
+                }
+              });
+              
+              setSelectedEntities(newSelectedEntities);
+            }
           } else {
             setError('Invalid entities data received');
           }
@@ -118,25 +134,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     };
 
     fetchEntities();
-  }, [answer_entities_route]);
-
-  // Populate selected entities from answers when entities are loaded
-  useEffect(() => {
-    if (entities.length > 0 && answers && answers.length > 0) {
-      const newSelectedEntities = Array(answer_count).fill(null);
-      
-      answers.forEach((answer) => {
-        // Find the entity that matches this answer's entity_id
-        const entity = entities.find(e => e.id === answer.entity_id);
-        if (entity && answer.order && answer.order > 0 && answer.order <= answer_count) {
-          // Place the entity at the correct position (order is 1-indexed)
-          newSelectedEntities[answer.order - 1] = entity;
-        }
-      });
-      
-      setSelectedEntities(newSelectedEntities);
-    }
-  }, [entities, answers, answer_count]);
+  }, []); // Only run once on mount
 
   // Debounced reload effect - waits 2 seconds after the last change
   useEffect(() => {
