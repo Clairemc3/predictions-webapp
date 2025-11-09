@@ -8,6 +8,13 @@ import AuthLayout from '../../layouts/AuthLayout';
 import Question from '../../components/Answering/Question';
 import Group from '../../components/Answering/Group';
 
+interface Answer {
+  id: number;
+  entity_id: number;
+  order: number;
+  value?: string;
+}
+
 interface Question {
   id: number;
   title: string;
@@ -16,6 +23,7 @@ interface Question {
   base_type: string;
   answer_count: number;
   answer_entities_route: string;
+  answers?: Answer[];
   entities?: Array<{
     id: number;
     name: string;

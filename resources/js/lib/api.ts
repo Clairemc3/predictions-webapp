@@ -3,6 +3,15 @@ const getCsrfToken = (): string => {
   return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 };
 
+// Interface for Answer requests
+interface Answer {
+  question_id: number;
+  membership_id: number;
+  value?: string;
+  entity_id?: number;
+  order?: number;
+}
+
 // Custom fetch wrapper that includes CSRF token
 export const apiFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
   const csrfToken = getCsrfToken();
@@ -53,4 +62,9 @@ export const apiGet = (url: string, options: RequestInit = {}) => {
     method: 'GET',
     ...options,
   });
+};
+
+// Specific API methods
+export const answersRequest = (data: Answer) => {
+  return apiPost('/answers', data);
 };
