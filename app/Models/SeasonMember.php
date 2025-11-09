@@ -95,7 +95,7 @@ class SeasonMember extends Pivot
 
     public function completedQuestionsPercentage(): float
     {
-        $totalQuestions = $this->season->questions()->count();
+        $totalQuestions = $this->season->questions_count;
 
         if ($totalQuestions === 0) {
             return 100.0;
