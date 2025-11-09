@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class SeasonMember extends Pivot
@@ -87,7 +88,7 @@ class SeasonMember extends Pivot
         $this->save();
     }
 
-    public function answers()   
+    public function answers(): HasMany 
     {
         return $this->hasMany(Answer::class, 'season_user_id');
     }
