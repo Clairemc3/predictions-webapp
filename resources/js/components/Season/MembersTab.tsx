@@ -23,7 +23,7 @@ const MembersTab = ({ members = [], seasonId, totalQuestions }: MembersTabProps)
   const membersCanBeInvited = usePage().props.canInviteMembers as boolean;
 
   const calculatePercentage = (completedQuestions: number): number => {
-    if (totalQuestions === 0 || completedQuestions === 0) return 0;
+    if (totalQuestions === 0) return 0;
     return Math.round((completedQuestions / totalQuestions) * 100);
   };
 
