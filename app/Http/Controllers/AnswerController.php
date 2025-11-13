@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\AnswerCreated;
 use App\Events\AnswerDeleted;
-use App\Events\AnswerSaved;
 use App\Events\AnswerUpdated;
 use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Resources\PredictionAnswerResource;
