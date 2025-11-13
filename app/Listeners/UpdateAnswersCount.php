@@ -24,10 +24,11 @@ class UpdateAnswersCount
         $membership = $event->member;
 
         if ($event instanceof AnswerDeleted) {
+            // Use CASE WHEN for database-agnostic atomic decrement with floor of 0
             $membership->newQuery()
                 ->where('id', $membership->id)
                 ->update([
-                    'number_of_answers' => DB::raw('GREATEST(0, number_of_answers - 1)')
+                    'number_of_answers' => DB::raw('CASE WHEN number_of_answers > 0 THEN number_of_answers - 1 ELSE 0 END')
                 ]);
             
             $membership->refresh();
