@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SeasonStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,6 +23,10 @@ class Season extends Model
 
     protected $withCount = [
         'questions',
+    ];
+
+    protected $appends = [
+        'required_answers_sum',
     ];
 
     /**
@@ -73,8 +78,38 @@ class Season extends Model
             ->withTimestamps();
     }
 
-    public function requiredAnswersSum(): int
+    /**
+     * Get the sum of required answers for all questions in this season.
+     * This is cached on the model instance after first access.
+     */
+    protected function requiredAnswersSum(): Attribute
     {
-        return $this->questions()->sum('answer_count');
+        return Attribute::make(
+            get: function () {
+                // If withSum was used (via withRequiredAnswersSum scope), use that value
+                if (isset($this->attributes['questions_sum_answer_count'])) {
+                    return (int) $this->attributes['questions_sum_answer_count'];
+                }
+
+                // If questions are already loaded, sum from the collection
+                if ($this->relationLoaded('questions')) {
+                    return $this->questions->sum('answer_count');
+                }
+
+                // Otherwise, query the database
+                return $this->questions()->sum('answer_count');
+            }
+        );
+    }
+
+    /**
+     * Scope to eager load the sum of answer_count for all related questions.
+     * This is more efficient than calling requiredAnswersSum() in a loop.
+     * 
+     * Usage: Season::withRequiredAnswersSum()->get()
+     */
+    public function scopeWithRequiredAnswersSum($query)
+    {
+        return $query->withSum('questions', 'answer_count');
     }
 }
