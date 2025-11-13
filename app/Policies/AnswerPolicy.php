@@ -22,12 +22,13 @@ class AnswerPolicy
      */
     public function create(User $user, SeasonMember $seasonMember): bool
     {
-       return $seasonMember->user_id === $user->id;
+       return $seasonMember->user_id === $user->id && 
+        $seasonMember->season->status == SeasonStatus::Draft;
     }
 
     public function delete(User $user, Answer $answer): bool
     {
         return $answer->member->user_id === $user->id && 
-            $answer->member->season->status->is(SeasonStatus::Draft);
+            $answer->member->season->status == SeasonStatus::Draft;
     }
 }
