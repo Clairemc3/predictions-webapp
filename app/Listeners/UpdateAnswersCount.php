@@ -8,7 +8,7 @@ use App\Events\AnswerSaved;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateCompletedQuestionsCount
+class UpdateAnswersCount
 {
     /**
      * Create the event listener.
@@ -26,14 +26,14 @@ class UpdateCompletedQuestionsCount
         $membership = $event->member;
 
         if ($event instanceof AnswerDeleted) {
-            $membership->number_answers -= 1;
+            $membership->number_of_answers = max(0, $membership->number_of_answers - 1);
             $membership->save();
 
             return;
         }
 
         if ($event instanceof AnswerCreated) {
-            $membership->number_answers += 1;
+            $membership->number_of_answers += 1;
             $membership->save();
             return;
         }

@@ -36,7 +36,7 @@ class Season extends Model
                 'is_host', 
                 'nickname', 
                 'joined_at', 
-                'number_answers'
+                'number_of_answers'
             )
             ->withTimestamps();
     }

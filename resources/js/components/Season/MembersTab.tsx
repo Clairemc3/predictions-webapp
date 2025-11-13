@@ -115,7 +115,7 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers }: MembersTab
                 </TableCell>
                 <TableCell align="center">
                   {(() => {
-                    const percentage = calculatePercentage(member.membership.number_answers);
+                    const percentage = calculatePercentage(member.membership.number_of_answers);
                     return (
                       <Chip 
                         label={`${percentage}%`}

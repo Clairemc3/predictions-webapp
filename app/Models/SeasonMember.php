@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class SeasonMember extends Pivot
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      */
@@ -31,7 +34,7 @@ class SeasonMember extends Pivot
         'is_host',
         'nickname',
         'joined_at',
-        'number_answers',
+        'number_of_answers',
     ];
 
     /**
@@ -101,6 +104,6 @@ class SeasonMember extends Pivot
             return 100.0;
         }
 
-        return ($this->number_answers / $totalRequiredAnswers) * 100;
+        return ($this->number_of_answers / $totalRequiredAnswers) * 100;
     }
 }
