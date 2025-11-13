@@ -130,7 +130,7 @@ test('guest cannot access logout', function () {
     $response = $this->post('/logout');
 
     // Assert - should be redirected to login (due to auth middleware)
-    $response->assertRedirect('/');
+    $response->assertRedirect('/login');
 });
 
 test('login with unverified email redirects to verification notice', function () {
