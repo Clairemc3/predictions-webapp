@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Season;
+use App\Models\SeasonMember;
 use App\Repositories\SeasonInvitationRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -50,18 +51,20 @@ class SeasonInvitationController extends Controller
         $season = $invitation->season;
 
         // Check if user is already a member
-        if ($season->members()->where('user_id', $user->id)->exists()) {
-            return redirect()->route('seasons.manage', $season)->with('warning', 'You are already a member of this season.');
+        if ($membership = $season->members()->where('user_id', $user->id)->first()) {
+            return redirect()->route('predictions.edit', $membership)->with('warning', 'You are already a member of this season.');
         }
 
         // Add user to season
-        $season->members()->attach($user->id, [
+       $membership = SeasonMember::create([
+            'season_id' => $season->id,
+            'user_id' => $user->id,
             'nickname' => $user->name, // Default nickname to user's name
         ]);
 
         // Increment uses count
         $invitation->incrementUses();
 
-        return redirect()->route('seasons.manage', $season)->with('success', 'Successfully joined the season!');
+        return redirect()->route('predictions.edit', $membership)->with('success', 'Successfully joined the season!');
     }
 }
