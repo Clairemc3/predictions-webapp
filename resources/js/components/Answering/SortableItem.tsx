@@ -85,6 +85,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
               options={availableEntities}
               getOptionLabel={(option) => option.name}
               value={selectedEntity}
+              disableClearable={false}
               renderInput={(params) => (
                 <TextField
                   {...params}

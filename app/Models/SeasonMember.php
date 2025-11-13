@@ -31,7 +31,7 @@ class SeasonMember extends Pivot
         'is_host',
         'nickname',
         'joined_at',
-        'completed_questions_count',
+        'number_answers',
     ];
 
     /**
@@ -93,14 +93,14 @@ class SeasonMember extends Pivot
         return $this->hasMany(Answer::class, 'season_user_id');
     }
 
-    public function completedQuestionsPercentage(): float
+    public function completedPercentage(): float
     {
-        $totalQuestions = $this->season->questions_count;
+        $totalRequiredAnswers = $this->season->requiredAnswersSum();
 
-        if ($totalQuestions === 0) {
+        if ($totalRequiredAnswers === 0) {
             return 100.0;
         }
 
-        return ($this->completed_questions_count / $totalQuestions) * 100;
+        return ($this->number_answers / $totalRequiredAnswers) * 100;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use App\Events\AnswerCreated;
+use App\Events\AnswerDeleted;
 use App\Events\AnswerSaved;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -19,26 +21,21 @@ class UpdateCompletedQuestionsCount
     /**
      * Handle the event.
      */
-    public function handle(AnswerSaved $event): void
+    public function handle(AnswerCreated|AnswerDeleted $event): void
     {
-        $answer = $event->answer;
+        $membership = $event->member;
 
-        if ($answer->wasRecentlyCreated === false) {
+        if ($event instanceof AnswerDeleted) {
+            $membership->number_answers -= 1;
+            $membership->save();
+
             return;
         }
 
-        $membership = $event->member;
-
-        $question = $answer->question;
-
-        $questionAnswerCount = $membership
-            ->answers()
-            ->where('question_id', $question->id)
-            ->count();
-
-        if ($question->answer_count === $questionAnswerCount) {
-            $membership->completed_questions_count += 1;
+        if ($event instanceof AnswerCreated) {
+            $membership->number_answers += 1;
             $membership->save();
+            return;
         }
     }
 }

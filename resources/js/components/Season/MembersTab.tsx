@@ -17,14 +17,14 @@ import InvitationDialog from '../InvitationDialog';
 import { usePage } from '@inertiajs/react';
 import { MembersTabProps } from '../../types/season';
 
-const MembersTab = ({ members = [], seasonId, totalQuestions }: MembersTabProps) => {
+const MembersTab = ({ members = [], seasonId, totalRequiredAnswers }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const membersCanBeInvited = usePage().props.canInviteMembers as boolean;
 
   const calculatePercentage = (completedQuestions: number): number => {
-    if (totalQuestions === 0) return 0;
-    return Math.round((completedQuestions / totalQuestions) * 100);
+    if (totalRequiredAnswers === 0) return 0;
+    return Math.round((completedQuestions / totalRequiredAnswers) * 100);
   };
 
   const handleInviteMembers = () => {
@@ -115,7 +115,7 @@ const MembersTab = ({ members = [], seasonId, totalQuestions }: MembersTabProps)
                 </TableCell>
                 <TableCell align="center">
                   {(() => {
-                    const percentage = calculatePercentage(member.membership.completed_questions_count);
+                    const percentage = calculatePercentage(member.membership.number_answers);
                     return (
                       <Chip 
                         label={`${percentage}%`}

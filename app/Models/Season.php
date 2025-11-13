@@ -36,7 +36,7 @@ class Season extends Model
                 'is_host', 
                 'nickname', 
                 'joined_at', 
-                'completed_questions_count'
+                'number_answers'
             )
             ->withTimestamps();
     }
@@ -73,4 +73,8 @@ class Season extends Model
             ->withTimestamps();
     }
 
+    public function requiredAnswersSum(): int
+    {
+        return $this->questions()->sum('answer_count');
+    }
 }
