@@ -207,7 +207,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
           console.log('Answer created/updated:', data);
           
           if (data.answer?.id) {
-            const updatedSelectedEntities = [...selectedEntities];
+            const updatedSelectedEntities = [...newSelectedEntities];
             updatedSelectedEntities[index] = {
               ...newValue,
               answerId: data.answer.id
