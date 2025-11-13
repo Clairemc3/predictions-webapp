@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\AnswerCreated;
 use App\Events\AnswerDeleted;
-use App\Events\AnswerSaved;
+use Illuminate\Support\Facades\DB;
 
 class UpdateAnswersCount
 {
@@ -24,15 +24,24 @@ class UpdateAnswersCount
         $membership = $event->member;
 
         if ($event instanceof AnswerDeleted) {
-            $membership->number_of_answers = max(0, $membership->number_of_answers - 1);
-            $membership->save();
+            $membership->newQuery()
+                ->where('id', $membership->id)
+                ->update([
+                    'number_of_answers' => DB::raw('GREATEST(0, number_of_answers - 1)')
+                ]);
+            
+            $membership->refresh();
 
             return;
         }
 
         if ($event instanceof AnswerCreated) {
-            $membership->number_of_answers += 1;
-            $membership->save();
+            $membership->newQuery()
+                ->where('id', $membership->id)
+                ->increment('number_of_answers');
+
+            $membership->refresh();
+            
             return;
         }
     }
