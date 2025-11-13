@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Events\AnswerCreated;
 use App\Events\AnswerDeleted;
 use App\Events\AnswerSaved;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class UpdateAnswersCount
 {
