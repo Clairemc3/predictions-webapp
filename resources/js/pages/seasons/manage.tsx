@@ -13,7 +13,7 @@ import { QuestionsTab, MembersTab } from '../../components/Season';
 import StatusChip from '../../components/StatusChip';
 import {ManageSeasonProps } from '../../types/season';
 
-const EditSeason = ({ season, seasonStatus, questions, totalQuestions }: ManageSeasonProps) => {
+const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers }: ManageSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -84,7 +84,7 @@ const EditSeason = ({ season, seasonStatus, questions, totalQuestions }: ManageS
             {/* Members Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <MembersTab members={season.members} seasonId={season.id} totalQuestions={totalQuestions} />
+                <MembersTab members={season.members} seasonId={season.id} totalRequiredAnswers={totalRequiredAnswers} />
               </Box>
             )}
           </Box>

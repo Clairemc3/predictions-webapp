@@ -36,7 +36,7 @@ const SeasonCard: React.FC<SeasonCardProps> = ({ season }) => {
         cursor: 'pointer'
       }}
       component={Link}
-      href={`/seasons/${season.id}/edit`}
+      href={`/seasons/${season.id}`}
       style={{ textDecoration: 'none' }}
     >
       <CardContent sx={{ flexGrow: 1, p: 3 }}>

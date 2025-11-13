@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('season_user', function (Blueprint $table) {
-            $table->integer('completed_questions_count')->default(0)->after('user_id');
+            $table->unsignedInteger('number_of_answers')->default(0)->after('user_id');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('season_user', function (Blueprint $table) {
-            $table->dropColumn('completed_questions_count');
+            $table->dropColumn('number_of_answers');
         });
     }
 };

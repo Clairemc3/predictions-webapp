@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SeasonStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -36,7 +37,7 @@ class Season extends Model
                 'is_host', 
                 'nickname', 
                 'joined_at', 
-                'completed_questions_count'
+                'number_of_answers'
             )
             ->withTimestamps();
     }
@@ -73,4 +74,48 @@ class Season extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Get the sum of required answers for all questions in this season.
+     * 
+     * WARNING: This will execute a database query if not eager loaded.
+     * To avoid N+1 queries, use one of these approaches:
+     * 
+     * Single model: $season->loadSum('questions', 'answer_count');
+     * Multiple models: Season::withRequiredAnswersSum()->get();
+     * Already loaded: Automatic if questions relationship is loaded
+     * 
+     * @return Attribute
+     */
+    protected function requiredAnswersSum(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                // If withSum was used (via withRequiredAnswersSum scope), use that value
+                if (isset($this->attributes['questions_sum_answer_count'])) {
+                    return (int) $this->attributes['questions_sum_answer_count'];
+                }
+
+                // If questions are already loaded, sum from the collection
+                if ($this->relationLoaded('questions')) {
+                    return $this->questions->sum('answer_count');
+                }
+
+                // Otherwise, query the database (will cause N+1 if used in loops)
+                return $this->questions()->sum('answer_count');
+            }
+        );
+    }
+
+    /**
+     * Scope to eager load the sum of answer_count for all related questions.
+     * Use this when querying multiple seasons to prevent N+1 queries.
+     * 
+     * @example Season::withRequiredAnswersSum()->get()
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithRequiredAnswersSum($query)
+    {
+        return $query->withSum('questions', 'answer_count');
+    }
 }

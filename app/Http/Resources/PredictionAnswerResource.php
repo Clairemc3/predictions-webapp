@@ -15,6 +15,7 @@ class PredictionAnswerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'order' => $this->order,
             'entity_id' => $this->entity_id,
             'value' => $this->value,

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class SeasonMember extends Pivot
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      */
@@ -31,7 +34,7 @@ class SeasonMember extends Pivot
         'is_host',
         'nickname',
         'joined_at',
-        'completed_questions_count',
+        'number_of_answers',
     ];
 
     /**
@@ -40,6 +43,13 @@ class SeasonMember extends Pivot
     protected $casts = [
         'is_host' => 'boolean',
         'joined_at' => 'datetime',
+    ];
+
+    /**
+     * The relationships that should always be loaded.
+     */
+    protected $with = [
+        'season',
     ];
 
     /**
@@ -93,14 +103,14 @@ class SeasonMember extends Pivot
         return $this->hasMany(Answer::class, 'season_user_id');
     }
 
-    public function completedQuestionsPercentage(): float
+    public function completedPercentage(): float
     {
-        $totalQuestions = $this->season->questions_count;
+        $totalRequiredAnswers = $this->season->required_answers_sum;
 
-        if ($totalQuestions === 0) {
+        if ($totalRequiredAnswers === 0) {
             return 100.0;
         }
 
-        return ($this->completed_questions_count / $totalQuestions) * 100;
+        return ($this->number_of_answers / $totalRequiredAnswers) * 100;
     }
 }

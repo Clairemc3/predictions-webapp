@@ -24,7 +24,7 @@ export interface Member {
   email: string;
   membership: {
     is_host: boolean;
-    completed_questions_count: number;
+    number_of_answers: number;
   };
 }
 
@@ -55,7 +55,7 @@ export interface ManageSeasonProps {
   season: Season;
   seasonStatus: string;
   questions: Question[];
-  totalQuestions: number;
+  totalRequiredAnswers: number;
 }
 
 export interface QuestionsTabProps {
@@ -66,7 +66,7 @@ export interface QuestionsTabProps {
 export interface MembersTabProps {
   members?: Member[];
   seasonId: number;
-  totalQuestions: number;
+  totalRequiredAnswers: number;
 }
 
 export interface SeasonCardProps {

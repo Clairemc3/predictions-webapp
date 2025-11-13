@@ -8,7 +8,7 @@ import {
   Alert,
 } from '@mui/material';
 import SortableItem from './SortableItem';
-import { apiGet, answersRequest } from '../../lib/api';
+import { apiGet, apiDelete, answersRequest } from '../../lib/api';
 import {
   DndContext,
   closestCenter,
@@ -26,11 +26,15 @@ import {
 } from '@dnd-kit/sortable';
 import { usePage, router } from '@inertiajs/react';
 
-const RELOAD_DEBOUNCE_DELAY = 2000;
+const RELOAD_DEBOUNCE_DELAY = 1000;
 
 interface Entity {
   id: number;
   name: string; // Keep as 'name' to match SortableItem expectations
+}
+
+interface SelectedEntity extends Entity {
+  answerId?: number; // Store the answer ID for deletion
 }
 
 interface Answer {
@@ -56,7 +60,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   const membershipId = usePage().props.membershipId;
 
   // State to track selected entities for each position
-  const [selectedEntities, setSelectedEntities] = useState<(Entity | null)[]>(
+  const [selectedEntities, setSelectedEntities] = useState<(SelectedEntity | null)[]>(
     Array(answer_count).fill(null)
   );
 
@@ -114,8 +118,11 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
                 // Find the entity that matches this answer's entity_id
                 const entity = transformedEntities.find((e: Entity) => e.id === answer.entity_id);
                 if (entity && answer.order && answer.order > 0 && answer.order <= answer_count) {
-                  // Place the entity at the correct position (order is 1-indexed)
-                  newSelectedEntities[answer.order - 1] = entity;
+                  // Place the entity at the correct position (order is 1-indexed) and store answer ID
+                  newSelectedEntities[answer.order - 1] = {
+                    ...entity,
+                    answerId: answer.id
+                  };
                 }
               });
               
@@ -161,20 +168,53 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
 
   // Function to handle entity select
   const handleEntitySelect = async (index: number, newValue: Entity | null) => {
+    const previousEntity = selectedEntities[index];
+    console.log('handleEntitySelect called:', { index, newValue, previousEntity });
+    
     const newSelectedEntities = [...selectedEntities];
     newSelectedEntities[index] = newValue;
     setSelectedEntities(newSelectedEntities);
     
+    // If clearing a selection (newValue is null), delete the answer
+    if (!newValue && previousEntity?.answerId) {
+      console.log('Deleting answer with ID:', previousEntity.answerId);
+      try {
+        const response = await apiDelete(`/answers/${previousEntity.answerId}`);
+        console.log('Delete response:', response);
+        
+        // Trigger debounced reload
+        setNeedsReload(true);
+      } catch (error) {
+        console.error('Error deleting answer:', error);
+      }
+      return;
+    }
+    
     // Make POST request to /answers when an entity is selected
     if (newValue) {
       try {
-        await answersRequest({
+        const response = await answersRequest({
           membership_id: membershipId as number,
           question_id: question_id,
           entity_id: newValue.id,
           order: index + 1, // Position starts from 1
           value: newValue.name
         });
+        
+        // Update the selected entity with the answer ID from the response
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Answer created/updated:', data);
+          
+          if (data.answer?.id) {
+            const updatedSelectedEntities = [...newSelectedEntities];
+            updatedSelectedEntities[index] = {
+              ...newValue,
+              answerId: data.answer.id
+            };
+            setSelectedEntities(updatedSelectedEntities);
+          }
+        }
         
         // Trigger debounced reload
         setNeedsReload(true);

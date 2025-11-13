@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AnswerSaved;
+use App\Events\AnswerCreated;
+use App\Events\AnswerDeleted;
+use App\Events\AnswerUpdated;
 use App\Http\Requests\StoreAnswerRequest;
+use App\Http\Resources\PredictionAnswerResource;
 use App\Models\Answer;
 use App\Models\SeasonMember;
 use Illuminate\Http\Response;
@@ -30,13 +33,31 @@ class AnswerController extends Controller
               'value' => $validated['value'] ?? null,
           ]);
 
-        event(new AnswerSaved($answer, $membership));
+        $answerEvent = $answer->wasRecentlyCreated ? AnswerCreated::class : AnswerUpdated::class;
+        event(new $answerEvent($answer, $membership));
 
        return response()->json([
            'success' => true,
-           'data' => $validated,
+           'answer' =>
+            new PredictionAnswerResource($answer),
            'message' => 'Answer saved successfully'
        ], Response::HTTP_CREATED);
+   }
+
+   public function destroy(Answer $answer)
+   {
+      $membership = $answer->member;
+
+      Gate::authorize('delete', $answer);
+
+      $answer->delete();
+
+      event(new AnswerDeleted($answer, $membership));
+
+      return response()->json([
+          'success' => true,
+          'message' => 'Answer deleted successfully'
+      ], Response::HTTP_OK);
    }
 
 }
