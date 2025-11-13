@@ -46,6 +46,13 @@ class SeasonMember extends Pivot
     ];
 
     /**
+     * The relationships that should always be loaded.
+     */
+    protected $with = [
+        'season',
+    ];
+
+    /**
      * Get the season that this pivot belongs to.
      */
     public function season()

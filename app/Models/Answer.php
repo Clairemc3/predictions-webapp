@@ -33,6 +33,13 @@ class Answer extends Model
     ];
 
     /**
+     * The relationships that should always be loaded.
+     */
+    protected $with = [
+        'member',
+    ];
+
+    /**
      * Get the question that this answer belongs to.
      */
     public function question(): BelongsTo

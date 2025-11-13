@@ -49,7 +49,7 @@ class AnswerController extends Controller
    {
       $membership = $answer->member;
 
-      Gate::authorize('create', [Answer::class, $membership]);
+      Gate::authorize('delete', $answer);
 
       $answer->delete();
 
