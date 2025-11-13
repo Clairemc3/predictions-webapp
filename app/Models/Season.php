@@ -25,10 +25,6 @@ class Season extends Model
         'questions',
     ];
 
-    protected $appends = [
-        'required_answers_sum',
-    ];
-
     /**
      * The users that belong to the season.
      */
@@ -80,7 +76,15 @@ class Season extends Model
 
     /**
      * Get the sum of required answers for all questions in this season.
-     * This is cached on the model instance after first access.
+     * 
+     * WARNING: This will execute a database query if not eager loaded.
+     * To avoid N+1 queries, use one of these approaches:
+     * 
+     * Single model: $season->loadSum('questions', 'answer_count');
+     * Multiple models: Season::withRequiredAnswersSum()->get();
+     * Already loaded: Automatic if questions relationship is loaded
+     * 
+     * @return Attribute
      */
     protected function requiredAnswersSum(): Attribute
     {
@@ -96,7 +100,7 @@ class Season extends Model
                     return $this->questions->sum('answer_count');
                 }
 
-                // Otherwise, query the database
+                // Otherwise, query the database (will cause N+1 if used in loops)
                 return $this->questions()->sum('answer_count');
             }
         );
@@ -104,9 +108,11 @@ class Season extends Model
 
     /**
      * Scope to eager load the sum of answer_count for all related questions.
-     * This is more efficient than calling requiredAnswersSum() in a loop.
+     * Use this when querying multiple seasons to prevent N+1 queries.
      * 
-     * Usage: Season::withRequiredAnswersSum()->get()
+     * @example Season::withRequiredAnswersSum()->get()
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWithRequiredAnswersSum($query)
     {
