@@ -24,7 +24,6 @@ class UpdateAnswersCount
         $membership = $event->member;
 
         if ($event instanceof AnswerDeleted) {
-            // Use CASE WHEN for database-agnostic atomic decrement with floor of 0
             $membership->newQuery()
                 ->where('id', $membership->id)
                 ->update([
