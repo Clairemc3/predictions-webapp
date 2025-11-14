@@ -17,7 +17,7 @@ class SeasonController extends Controller
     /**
      * Display a listing of all seasons the user belongs to.
      */
-    public function index(): Response
+    public function userIndex(): Response
     {
         $seasonRepository = app()->make(SeasonRepository::class);
         $seasons = $seasonRepository->getSeasonsForUser(Auth::user());
