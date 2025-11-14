@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Permission;
 use App\Enums\SeasonStatus;
 use App\Models\Category;
 use App\Models\Entity;
@@ -39,6 +40,11 @@ class SeasonSeeder extends Seeder
 
             // Attach users to season
             foreach ($seasonUsers as $index => $user) {
+                // Give the first user the host role    
+                if ($index === 0) {
+                    $user->givePermissionTo(Permission::HostASeason->value);
+                }
+
                 $season->members()->attach($user->id, [
                     'is_host' => $index === 0, // First user is the host
                     'joined_at' => now(),
