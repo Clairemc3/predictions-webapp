@@ -25,6 +25,8 @@ class Season extends Model
         'questions',
     ];
 
+    protected $appends = ['status_name'];
+
     /**
      * The users that belong to the season.
      */
@@ -76,6 +78,13 @@ class Season extends Model
     {
         return $this->belongsToMany(Question::class, 'question_season')
             ->withTimestamps();
+    }
+
+    protected function statusName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->status->name
+        );
     }
 
     /**
