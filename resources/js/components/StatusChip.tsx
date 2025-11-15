@@ -6,6 +6,8 @@ interface StatusChipProps {
 }
 
 const StatusChip = ({ status, size = 'small' }: StatusChipProps) => {
+  // Convert status to string if it's not already (handles Enum objects)
+  const statusString = typeof status === 'string' ? status : String(status);
 
   const getStatusChipColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -30,8 +32,8 @@ const StatusChip = ({ status, size = 'small' }: StatusChipProps) => {
 
   return (
     <Chip 
-      label={getStatusLabel(status)}
-      color={getStatusChipColor(status)}
+      label={getStatusLabel(statusString)}
+      color={getStatusChipColor(statusString)}
       size={size}
     />
   );

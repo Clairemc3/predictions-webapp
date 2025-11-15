@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SeasonQuestionResource;
+use App\Http\Resources\SeasonResource;
 use App\Models\Season;
 use App\Repositories\SeasonRepository;
 use Illuminate\Http\RedirectResponse;
@@ -19,8 +20,23 @@ class SeasonController extends Controller
      */
     public function userIndex(): Response
     {
-        $seasonRepository = app()->make(SeasonRepository::class);
-        $seasons = $seasonRepository->getSeasonsForUser(Auth::user());
+        $seasons = SeasonResource::collection(
+            app(SeasonRepository::class)->getSeasonsForUser(Auth::user())   
+        );
+
+        return Inertia::render('seasons/my-seasons/index', [
+            'seasons' => $seasons
+        ]);
+    }
+
+    /**
+     * For super admins
+     */
+    public function index(): Response
+    {
+        Gate::authorize('viewAny', Season::class);
+
+        $seasons = Season::withCount('members')->get();
 
         return Inertia::render('seasons/index', [
             'seasons' => $seasons

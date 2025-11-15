@@ -57,8 +57,12 @@ class Season extends Model
     /**
      * Check if the given user is a host of this season.
      */
-    public function isHost(User $user): bool
+    public function isHost(?User $user): bool
     {
+        if (is_null($user)) {
+            return false;
+        }
+
         return $this->members()
             ->wherePivot('user_id', $user->id)
             ->wherePivot('is_host', true)

@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Route;
 // Season-related routes - require authentication and verification
 Route::middleware(['auth', 'verified'])->group(function () {
     // Season routes
-    Route::get('/seasons', [SeasonController::class, 'userIndex'])->name('user.seasons.index');
+    Route::get('/my-seasons', [SeasonController::class, 'userIndex'])->name('user.seasons.index');
     Route::get('/seasons/create', [SeasonController::class, 'create'])->name('seasons.create');
     Route::post('/seasons', [SeasonController::class, 'store'])->name('seasons.store');
     Route::get('/seasons/{season}', [SeasonController::class, 'manage'])->name('seasons.manage');
+
+
+    // Superadmin season routes
+    Route::get('/seasons', [SeasonController::class, 'index'])->name('seasons.index');
     
     // Season invitation routes
     Route::post('/seasons/{season}/invitations', [SeasonInvitationController::class, 'store'])->name('season-invitations.store');

@@ -66,7 +66,7 @@ export default function ManageSeasons({ hostedSeasons }: ManageSeasonsProps) {
           
           {/* All seasons link */}
           <ListItem disablePadding>
-            <Link href="/seasons">
+            <Link href="/my-seasons">
               <ListItemButton>
                 <ListItemText primary="All seasons" />
               </ListItemButton>
