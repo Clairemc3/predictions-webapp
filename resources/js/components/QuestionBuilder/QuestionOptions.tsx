@@ -22,9 +22,6 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
   currentEntities = [],
   currentAnswerCount
 }) => {
-  // Debug: Log the base value to see what we're working with
-  console.log('selectedQuestionType.base:', selectedQuestionType?.base);
-  
   return (
     <>
       <Divider sx={{ my: 3 }} />
