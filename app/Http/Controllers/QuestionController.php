@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
+use App\Http\Resources\QuestionBuilder\QuestionResource;
 use App\Http\Resources\SeasonResource;
 use App\Models\Question;
 use App\Models\Season;
@@ -47,6 +48,7 @@ class QuestionController extends Controller
         $question->created_by = Auth::id();
 
         // @TODO: Refine this
+        // Once the question types are in the db this can be refactored
         $question->answer_category_id = $questionType->answerCategoryId;
         $season->questions()->save($question);
         
@@ -72,7 +74,7 @@ class QuestionController extends Controller
 
         return Inertia::render('seasons/questions/edit', [
             'season' => new SeasonResource($season),
-            'question' => $question->load('entities'),
+            'question' => QuestionResource::make($question->load('entities')),
             'questionTypes' => $questionTypes
         ]);
     }

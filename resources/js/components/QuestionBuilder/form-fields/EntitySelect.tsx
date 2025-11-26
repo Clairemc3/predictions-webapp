@@ -54,6 +54,13 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   const labelId = `entity-select-label-${index}`;
   const selectId = `entity-select-${index}`;
 
+  // Fetch entities on mount if we have a value (edit mode) but no options loaded yet
+  React.useEffect(() => {
+    if (category && !entityOptions[entityKey] && !loading[entityKey]) {
+      fetchEntitiesForCategory(category, index, filters, answerCategory);
+    }
+  }, [category, entityKey, filters, answerCategory, index]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Notify parent component when the selected entity changes
   React.useEffect(() => {
     if (onChange && value) {
@@ -123,7 +130,6 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
         onChange={handleChange}
         required={required}
         onOpen={() => {
-          console.log('Select onOpen triggered:', { category, entityKey, hasOptions: !!entityOptions[entityKey], isLoading: !!loading[entityKey] });
           if (category && !entityOptions[entityKey] && !loading[entityKey]) {
             fetchEntitiesForCategory(category, index, filters, answerCategory);
           }
@@ -142,14 +148,11 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
             No options available
           </MenuItem>
         )}
-        {entityOptions[entityKey]?.map((entity) => {
-          console.log('Rendering entity:', entity);
-          return (
-            <MenuItem key={entity.id} value={entity.id}>
-              {entity.value}
-            </MenuItem>
-          );
-        })}
+        {entityOptions[entityKey]?.map((entity) => (
+          <MenuItem key={entity.id} value={entity.id}>
+            {entity.value}
+          </MenuItem>
+        ))}
       </Select>
       {(helperText || description) && (
         <FormHelperText>{helperText || description}</FormHelperText>
