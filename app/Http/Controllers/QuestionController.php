@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
+use App\Http\Resources\SeasonResource;
 use App\Models\Question;
 use App\Models\Season;
 use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
@@ -27,7 +28,7 @@ class QuestionController extends Controller
         $questionTypes = $this->questionTypeService->build();
 
         return Inertia::render('seasons/questions/create', [
-            'season' => $season,
+            'season' => new SeasonResource($season),
             'questionTypes' => $questionTypes
         ]);
     }
@@ -70,7 +71,7 @@ class QuestionController extends Controller
         $questionTypes = $this->questionTypeService->build();
 
         return Inertia::render('seasons/questions/edit', [
-            'season' => $season,
+            'season' => new SeasonResource($season),
             'question' => $question->load('entities'),
             'questionTypes' => $questionTypes
         ]);
