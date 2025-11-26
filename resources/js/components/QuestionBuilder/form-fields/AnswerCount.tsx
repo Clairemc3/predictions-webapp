@@ -32,7 +32,9 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
   currentAnswerCount
 }) => {
   // Determine current values based on currentAnswerCount
-  const currentIsAll = currentAnswerCount === maxValue;
+  // Convert both to numbers for comparison to handle string vs number
+  const currentCountNum = typeof currentAnswerCount === 'string' ? parseInt(currentAnswerCount) : currentAnswerCount;
+  const currentIsAll = currentCountNum === maxValue;
   const currentNumberValue = currentAnswerCount?.toString() || '';
 
   const handleAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {

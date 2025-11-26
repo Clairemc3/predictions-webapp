@@ -23,6 +23,7 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
   const handleEntityChange = (count: number) => {
     setMaxAnswerCount(count);
   };
+  
   // Add defensive checks
   if (!selectedQuestionType) {
     return null;
