@@ -38,8 +38,10 @@ export interface Question {
   answer_category?: string;
   entities?: Array<{
     id: number;
-    entity_id: number;
-    category_id: number;
+    name?: string;
+    pivot?: {
+      category_id: number;
+    };
   }>;
 }
 

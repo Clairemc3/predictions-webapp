@@ -27,8 +27,8 @@ const EditQuestion = () => {
     short_title: question.short_title || '',
     base_type: question.base_type || '',
     entities: question.entities?.map(e => ({
-      entity_id: e.entity_id,
-      category_id: e.category_id
+      entity_id: e.id,
+      category_id: e.pivot?.category_id || 0
     })) || [],
     answer_count: question.answer_count?.toString() || '',
     answer_count_all: false,
