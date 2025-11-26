@@ -4,7 +4,10 @@ namespace Database\Factories;
 
 use App\Enums\QuestionType;
 use App\Models\Category;
+use App\Models\Question;
 use App\Models\User;
+use App\Queries\EntityQuery;
+use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -63,5 +66,51 @@ class QuestionFactory extends Factory
             'answer_count' => $this->faker->numberBetween(6, 20),
             'answer_category_id' => $footballTeamCategory?->id,
         ]);
+    }
+
+    /**
+     * Create question entity records
+     */
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Question $question) {
+            // ...
+        })->afterCreating(function (Question $question) {
+            $this->attachQuestionEntities($question);
+        });
+    }
+
+    private function attachQuestionEntities(Question $question): void
+    {
+        $contextualQuestionTypeService = app(ContextualQuestionTypeService::class);
+
+        $questionType = $contextualQuestionTypeService->byType($question->type);
+
+        $answerCategoryFilters = $questionType?->answerCategoryFilters ?? [];
+
+        if (count($answerCategoryFilters) === 0) {
+            return;
+        }
+
+        foreach ($answerCategoryFilters as $filter) {
+            $category = Category::where('name', $filter['name'])->first();
+
+            $randomEntity = $this->selectRandomEntityForFilter($category, $filter);
+
+            $question->entities()->attach($randomEntity->id, [
+                'category_id' => $category->id,
+            ]);
+        }
+    }
+
+    private function selectRandomEntityForFilter(Category $category, array $filter): ?\App\Models\Entity
+    {
+        $entityQuery = new EntityQuery($category);
+
+        foreach ($filter['filters'] as $filterCategory => $filterEntityValue) {
+            $entityQuery->filter($filterCategory, $filterEntityValue);
+        }
+
+        return $entityQuery->inRandomOrder()->first();
     }
 }

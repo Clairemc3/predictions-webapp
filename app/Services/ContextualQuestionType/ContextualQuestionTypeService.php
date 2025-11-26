@@ -63,4 +63,10 @@ class ContextualQuestionTypeService
 
         return ContextualQuestionType::fromConfig($key, $contextTypes[$key] ?? []);
     }
+
+
+    public function byType(string $type): ?ContextualQuestionType
+    {   
+        return $this->questionByKey($type);
+    }
 }

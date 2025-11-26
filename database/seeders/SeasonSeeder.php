@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\Permission;
 use App\Enums\SeasonStatus;
-use App\Models\Category;
-use App\Models\Entity;
 use App\Models\Question;
 use App\Models\Season;
 use App\Models\User;
@@ -49,24 +47,6 @@ class SeasonSeeder extends Seeder
                     'is_host' => $index === 0, // First user is the host
                     'joined_at' => now(),
                 ]);
-            }
-
-            // Create 1-4 standing questions for each season
-            $questionCount = rand(1, 4);
-            $host = $seasonUsers->first(); // The host creates the questions
-
-            for ($j = 0; $j < $questionCount; $j++) {
-                $question = Question::factory()
-                    ->standing()
-                    ->create([
-                        'created_by' => $host->id,
-                    ]);
-
-                // Attach the question to the season
-                $season->questions()->attach($question->id);
-
-                // Attach a random football team entity to the question
-                $this->attachRandomFootballTeamToQuestion($question);
             }
         }
 
@@ -119,49 +99,6 @@ class SeasonSeeder extends Seeder
                 'joined_at' => now(),
             ]);
 
-            // Create 1-4 standing questions for each season
-            $questionCount = rand(1, 4);
-
-            for ($j = 0; $j < $questionCount; $j++) {
-                $question = Question::factory()
-                    ->standing()
-                    ->create([
-                        'created_by' => $superAdmin->id,
-                    ]);
-
-                // Attach the question to the season
-                $season->questions()->attach($question->id);
-
-                // Attach a random football team entity to the question
-                $this->attachRandomFootballTeamToQuestion($question);
-            }
-        }
-    }
-
-    /**
-     * Attach a random football team entity to a question.
-     */
-    private function attachRandomFootballTeamToQuestion(Question $question): void
-    {
-        // Get the football-team category
-        $footballTeamCategory = Category::where('name', 'football-league')->first();
-
-        if (! $footballTeamCategory) {
-            $this->command->error('Football team category not found.');
-
-            return;
-        }
-
-        // Get a random football team entity
-        $footballTeam = Entity::whereHas('categories', function ($query) use ($footballTeamCategory) {
-            $query->where('category_id', $footballTeamCategory->id);
-        })->inRandomOrder()->first();
-
-        if ($footballTeam) {
-            // Attach the entity to the question with the category_id in the pivot
-            $question->entities()->attach($footballTeam->id, [
-                'category_id' => $footballTeamCategory->id,
-            ]);
         }
     }
 }

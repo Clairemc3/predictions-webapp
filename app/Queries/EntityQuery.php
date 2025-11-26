@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Queries;
 
 use App\Models\Category;
+use App\Models\Entity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,6 +34,17 @@ class EntityQuery
         });
 
         return $this;
+    }
+
+    public function inRandomOrder(): self
+    {
+        $this->query->inRandomOrder();
+        return $this;
+    }
+
+    public function first(): Entity
+    {
+        return $this->query->first();
     }
 
     public function get(): Collection

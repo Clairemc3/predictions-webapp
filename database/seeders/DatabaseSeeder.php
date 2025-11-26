@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             CategoryAndEntitySeeder::class,
             SeasonSeeder::class,
+            QuestionSeeder::class,
         ]);
     }
 }
