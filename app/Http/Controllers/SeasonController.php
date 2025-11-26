@@ -91,7 +91,7 @@ class SeasonController extends Controller
         return Inertia::render('seasons/manage', [
             'season' => $season->load('members'),
             'seasonStatus' => $season->status->name(),
-            'questions' => SeasonQuestionResource::collection($season->questions()->with('entities')->get()),
+            'questions' => SeasonQuestionResource::collection($season->questions()->get()),
             'canInviteMembers' => Gate::allows('inviteMembers', $season),
             'totalRequiredAnswers' => $season->required_answers_sum,
         ]);
