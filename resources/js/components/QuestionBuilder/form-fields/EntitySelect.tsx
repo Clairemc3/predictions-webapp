@@ -54,6 +54,13 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   const labelId = `entity-select-label-${index}`;
   const selectId = `entity-select-${index}`;
 
+  // Fetch entities on mount if there's a current value (for edit mode)
+  React.useEffect(() => {
+    if (category && value && !entityOptions[entityKey] && !loading[entityKey]) {
+      fetchEntitiesForCategory(category, index, filters, answerCategory);
+    }
+  }, [category, value, entityKey, index, filters, answerCategory]);
+
   // Notify parent component when the selected entity changes
   React.useEffect(() => {
     if (onChange && value) {

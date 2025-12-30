@@ -673,5 +673,55 @@
         "entity": "League Two"
       }
     ]
+  },
+  {
+    "value": "Wrexham",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "National League"
+      }
+    ]
+  },
+  {
+    "value": "Notts County",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "National League"
+      }
+    ]
+  },
+  {
+    "value": "Chesterfield",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "National League"
+      }
+    ]
+  },
+  {
+    "value": "Oldham Athletic",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "National League"
+      }
+    ]
+  },
+  {
+    "value": "Rochdale",
+    "categories": ["football-team", "club-football-team"],
+    "entityRelationships": [
+      {
+        "relation_type": "in_league",
+        "entity": "National League"
+      }
+    ]
   }
 ]
