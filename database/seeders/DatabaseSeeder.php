@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CategoryAndEntitySeeder::class,
             SeasonSeeder::class,
             QuestionSeeder::class,
+            AnswerSeeder::class,
         ]);
     }
 }

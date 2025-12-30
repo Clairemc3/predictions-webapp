@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Enums\QuestionType;
+use App\Queries\EntityQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Question extends Model
 {
@@ -39,7 +41,7 @@ class Question extends Model
     }
 
     /**
-     * Get the entities associated with this question.
+     * Get the entities filters associated with this question.
      */
     public function entities(): BelongsToMany
     {
@@ -51,5 +53,17 @@ class Question extends Model
     public function answerCategory(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'answer_category_id');
+    }
+
+    public function allOptions(): Collection
+    {
+         $entityQuery = new EntityQuery($this->answerCategory);
+         foreach ($this->entities as $questionEntity) {
+            $category = Category::find($questionEntity->pivot->category_id);
+            $entity = Entity::find($questionEntity->pivot->entity_id);
+            $entityQuery->filter($category->name, $entity->value);
+        }
+
+        return $entityQuery->get();
     }
 }

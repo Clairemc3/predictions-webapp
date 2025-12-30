@@ -29,6 +29,8 @@ class QuestionSeeder extends Seeder
 
                 // Attach the question to the season
                 $season->questions()->attach($question->id);
+
+                $question->update(['answer_count' => rand(1, $question->allOptions()->count()) ?? 1]);
             }
         }
     }
