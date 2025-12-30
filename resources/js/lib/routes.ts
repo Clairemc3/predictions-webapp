@@ -26,6 +26,9 @@ export const buildRoute = (name: string, params: RouteParams = {}): string => {
     
     case 'seasons.show':
       return `/seasons/${params.season}`;
+
+    case 'seasons.status.update':
+      return `/seasons/${params.season}/status`;
     
     default:
       console.warn(`Unknown route name: ${name}`);
@@ -42,7 +45,8 @@ export type RouteName =
   | 'users.permissions.revoke'
   | 'users.index'
   | 'seasons.manage'
-  | 'seasons.show';
+  | 'seasons.show'
+  | 'seasons.status.update';
 
 /**
  * Type-safe version of buildRoute

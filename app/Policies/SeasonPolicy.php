@@ -40,4 +40,9 @@ class SeasonPolicy
                $season->isHost($user) && 
                $season->status == SeasonStatus::Draft;
     }
+
+    public function updateStatus(User $user, Season $season): bool
+    {
+        return $season->isHost($user) && $season->status == SeasonStatus::Draft;
+    }
 }
