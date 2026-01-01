@@ -25,6 +25,6 @@ class SeasonStatusController extends Controller
         $season->save();
 
         return redirect()->back()
-            ->with('success', 'Season is now active!');
+            ->with('success', "Season is now {$validated['status']}.");
     }
 }
