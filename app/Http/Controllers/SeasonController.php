@@ -94,6 +94,11 @@ class SeasonController extends Controller
             'questions' => SeasonQuestionResource::collection($season->questions()->get()),
             'canInviteMembers' => Gate::allows('inviteMembers', $season),
             'totalRequiredAnswers' => $season->required_answers_sum,
+            'permissions' => [
+                'canUpdateSeasonStatus' => Gate::allows('updateStatus', $season),
+                'canInviteMembers' => Gate::allows('inviteMembers', $season),
+                'canCreateQuestions' => Gate::allows('create', [\App\Models\Question::class, $season]),
+            ],
         ]);
     }
 }

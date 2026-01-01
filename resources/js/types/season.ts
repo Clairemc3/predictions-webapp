@@ -58,17 +58,24 @@ export interface ManageSeasonProps {
   seasonStatus: string;
   questions: Question[];
   totalRequiredAnswers: number;
+  permissions: {
+    canUpdateSeasonStatus: boolean;
+    canInviteMembers: boolean;
+    canCreateQuestions: boolean;
+  };
 }
 
 export interface QuestionsTabProps {
   seasonId: number;
   questions: QuestionRow[];
+  canCreateQuestions: boolean;
 }
 
 export interface MembersTabProps {
   members?: Member[];
   seasonId: number;
   totalRequiredAnswers: number;
+  canInviteMembers: boolean;
 }
 
 export interface SeasonCardProps {

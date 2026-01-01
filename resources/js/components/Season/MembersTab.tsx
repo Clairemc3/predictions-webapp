@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -14,18 +14,17 @@ import {
   Tooltip,
 } from '@mui/material';
 import InvitationDialog from '../InvitationDialog';
-import { usePage } from '@inertiajs/react';
 import { MembersTabProps } from '../../types/season';
 
-const MembersTab = ({ members = [], seasonId, totalRequiredAnswers }: MembersTabProps) => {
+const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMembers }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const membersCanBeInvited = usePage().props.canInviteMembers as boolean;
 
   const calculatePercentage = (completedQuestions: number): number => {
     if (totalRequiredAnswers === 0) return 0;
     return Math.round((completedQuestions / totalRequiredAnswers) * 100);
   };
+
+  const cannotInviteReason = totalRequiredAnswers === 0 ? "Add questions before inviting members." : "Members can only be invited in `Draft` status";
 
   const handleInviteMembers = () => {
     setDialogOpen(true);
@@ -47,14 +46,14 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers }: MembersTab
       }}>
         <Box sx={{ order: { xs: 1, sm: 2 } }}>
           <Tooltip 
-            title={!membersCanBeInvited ? "Members can be invited once the season is in `Draft`" : ""}
+            title={!canInviteMembers ? cannotInviteReason : ""}
             arrow
           >
             <span>
               <Button
                 variant="contained"
                 onClick={handleInviteMembers}
-                disabled={!membersCanBeInvited}
+                disabled={!canInviteMembers}
                 sx={{ 
                   alignSelf: { xs: 'flex-start', sm: 'center' }
                 }}
@@ -63,7 +62,7 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers }: MembersTab
               </Button>
             </span>
           </Tooltip>
-          {!membersCanBeInvited && (
+          {!canInviteMembers && (
             <Typography 
               variant="caption" 
               color="text.secondary"
@@ -74,7 +73,7 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers }: MembersTab
                 lineHeight: 1.2
               }}
             >
-              Members can be invited once the season is in Draft
+              {cannotInviteReason}
             </Typography>
           )}
         </Box>

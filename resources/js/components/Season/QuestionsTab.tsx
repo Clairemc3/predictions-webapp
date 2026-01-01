@@ -18,7 +18,7 @@ import { router } from '@inertiajs/react';
 import ConfirmationDialog from '../ConfirmationDialog';
 import { QuestionsTabProps, QuestionRow } from '../../types/season';
 
-const QuestionsTab = ({ seasonId, questions }: QuestionsTabProps) => {
+const QuestionsTab = ({ seasonId, questions, canCreateQuestions }: QuestionsTabProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<QuestionRow | null>(null);
 
@@ -68,16 +68,18 @@ const QuestionsTab = ({ seasonId, questions }: QuestionsTabProps) => {
         gap: { xs: 2, sm: 0 },
         mb: 2 
       }}>
-        <Button
-          variant="contained"
-          onClick={handleAddQuestion}
-          sx={{ 
-            order: { xs: 1, sm: 2 },
-            alignSelf: { xs: 'flex-start', sm: 'center' }
-          }}
-        >
-          Add a question
-        </Button>
+        {canCreateQuestions && (
+          <Button
+            variant="contained"
+            onClick={handleAddQuestion}
+            sx={{ 
+              order: { xs: 1, sm: 2 },
+              alignSelf: { xs: 'flex-start', sm: 'center' }
+            }}
+          >
+            Add a question
+          </Button>
+        )}
         <Typography 
           variant="h6" 
           component="h2"
