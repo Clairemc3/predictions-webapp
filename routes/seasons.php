@@ -3,6 +3,7 @@
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeasonInvitationController;
+use App\Http\Controllers\SeasonStatusController;
 use Illuminate\Support\Facades\Route;
 
 // Season-related routes - require authentication and verification
@@ -12,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/seasons/create', [SeasonController::class, 'create'])->name('seasons.create');
     Route::post('/seasons', [SeasonController::class, 'store'])->name('seasons.store');
     Route::get('/seasons/{season}', [SeasonController::class, 'manage'])->name('seasons.manage');
+    Route::patch('/seasons/{season}/status', [SeasonStatusController::class, 'updateStatus'])->name('seasons.status.update');
 
 
     // Superadmin season routes
