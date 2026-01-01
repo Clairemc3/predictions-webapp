@@ -9,7 +9,7 @@ import {
   Tab,
 } from '@mui/material';
 import AuthLayout from '../../layouts/AuthLayout';
-import { QuestionsTab, MembersTab, SeasonStatusButton } from '../../components/Season';
+import { QuestionsTab, MembersTab, UpdateSeasonStatusButton } from '../../components/Season';
 import StatusChip from '../../components/StatusChip';
 import {ManageSeasonProps } from '../../types/season';
 
@@ -45,7 +45,7 @@ const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers }: M
             </Box>
 
             {/* Start Season Button */}
-            <SeasonStatusButton season={season} seasonStatus={seasonStatus} totalRequiredAnswers={totalRequiredAnswers} />
+            <UpdateSeasonStatusButton season={season} seasonStatus={seasonStatus} totalRequiredAnswers={totalRequiredAnswers} />
           </Box>
 
           {/* Season Description */}

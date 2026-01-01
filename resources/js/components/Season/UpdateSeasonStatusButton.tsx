@@ -5,13 +5,13 @@ import ConfirmationDialog from '../ConfirmationDialog';
 import { route } from '../../lib/routes';
 import { Season } from '../../types/season';
 
-interface SeasonStatusButtonProps {
+interface UpdateSeasonStatusButtonProps {
   season: Season;
   seasonStatus: string;
   totalRequiredAnswers: number;
 }
 
-const SeasonStatusButton: React.FC<SeasonStatusButtonProps> = ({ season, seasonStatus, totalRequiredAnswers }) => {
+const UpdateSeasonStatusButton: React.FC<UpdateSeasonStatusButtonProps> = ({ season, seasonStatus, totalRequiredAnswers }) => {
   const [showStartDialog, setShowStartDialog] = useState(false);
 
   const isDraft = seasonStatus === 'draft';
@@ -71,4 +71,4 @@ const SeasonStatusButton: React.FC<SeasonStatusButtonProps> = ({ season, seasonS
   );
 };
 
-export default SeasonStatusButton;
+export default UpdateSeasonStatusButton;
