@@ -18,7 +18,7 @@ class SeasonStatusController extends Controller
         Gate::authorize('updateStatus', $season);
 
         $validated = $request->validate([
-            'status' => 'required|string|in:active',
+            'status' => 'required|string|in:active,completed',
         ]);
 
         $season->status = SeasonStatus::fromName($validated['status']);
