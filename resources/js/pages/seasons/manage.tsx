@@ -13,8 +13,10 @@ import { QuestionsTab, MembersTab, UpdateSeasonStatusButton } from '../../compon
 import StatusChip from '../../components/StatusChip';
 import { ManageSeasonProps } from '../../types/season';
 
-const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers, permissions }: ManageSeasonProps) => {
+const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers }: ManageSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
+
+  const permissions = season.permissions;
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
@@ -82,14 +84,21 @@ const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers, per
             {/* Questions Tab Panel */}
             {selectedTab === 0 && (
               <Box sx={{ pt: 3 }}>
-                <QuestionsTab seasonId={season.id} questions={questions} canCreateQuestions={permissions.canCreateQuestions} />
+                <QuestionsTab 
+                  seasonId={season.id} 
+                  questions={questions} 
+                  canCreateQuestions={permissions.canCreateQuestions} />
               </Box>
             )}
 
             {/* Members Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <MembersTab members={season.members} seasonId={season.id} totalRequiredAnswers={totalRequiredAnswers} canInviteMembers={permissions.canInviteMembers} />
+                <MembersTab 
+                  members={season.members} 
+                  seasonId={season.id} 
+                  totalRequiredAnswers={totalRequiredAnswers} 
+                  canInviteMembers={permissions.canInviteMembers} />
               </Box>
             )}
           </Box>

@@ -3,13 +3,18 @@
 namespace App\Http\Resources;
 
 use App\Enums\QuestionType;
+use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SeasonQuestionResource extends JsonResource
 {
-
     public $withoutWrapping = true;
+
+    public function __construct($resource, private Season $season)
+    {
+        parent::__construct($resource);
+    }
 
     /**
      * Transform the resource into an array.
@@ -22,6 +27,11 @@ class SeasonQuestionResource extends JsonResource
             'id' => $this->id,
             'title' => $this->getTitle(),
             'type' => $this->type,
+            'permissions' => [
+                'canUpdateQuestion' => $request->user() ? $request->user()->can('update', [$this->resource, $this->season]) : false,
+                'canDeleteQuestion' => $request->user() ? $request->user()->can('delete', [$this->resource, $this->season]) : false,
+                'canViewQuestion' => true
+            ],
         ];
     }
 
