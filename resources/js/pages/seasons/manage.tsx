@@ -11,9 +11,9 @@ import {
 import AuthLayout from '../../layouts/AuthLayout';
 import { QuestionsTab, MembersTab, UpdateSeasonStatusButton } from '../../components/Season';
 import StatusChip from '../../components/StatusChip';
-import {ManageSeasonProps } from '../../types/season';
+import { ManageSeasonProps } from '../../types/season';
 
-const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers }: ManageSeasonProps) => {
+const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers, permissions }: ManageSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -45,7 +45,9 @@ const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers }: M
             </Box>
 
             {/* Start Season Button */}
-            <UpdateSeasonStatusButton season={season} seasonStatus={seasonStatus} totalRequiredAnswers={totalRequiredAnswers} />
+            {permissions.canUpdateSeasonStatus && (
+              <UpdateSeasonStatusButton season={season} seasonStatus={seasonStatus} totalRequiredAnswers={totalRequiredAnswers} />
+            )}
           </Box>
 
           {/* Season Description */}
@@ -80,14 +82,14 @@ const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers }: M
             {/* Questions Tab Panel */}
             {selectedTab === 0 && (
               <Box sx={{ pt: 3 }}>
-                <QuestionsTab seasonId={season.id} questions={questions} />
+                <QuestionsTab seasonId={season.id} questions={questions} canCreateQuestions={permissions.canCreateQuestions} />
               </Box>
             )}
 
             {/* Members Tab Panel */}
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
-                <MembersTab members={season.members} seasonId={season.id} totalRequiredAnswers={totalRequiredAnswers} />
+                <MembersTab members={season.members} seasonId={season.id} totalRequiredAnswers={totalRequiredAnswers} canInviteMembers={permissions.canInviteMembers} />
               </Box>
             )}
           </Box>

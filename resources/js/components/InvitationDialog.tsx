@@ -12,7 +12,6 @@ import {
   Typography,
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { usePage } from '@inertiajs/react';
 import { apiPost } from '../lib/api';
 
 interface InvitationDialogProps {

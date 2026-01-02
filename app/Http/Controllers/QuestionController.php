@@ -23,7 +23,7 @@ class QuestionController extends Controller
 
     public function create(Season $season): Response
     {
-        Gate::authorize('update', $season);
+        Gate::authorize('create', [Question::class, $season]);
 
         $questionTypes = $this->questionTypeService->build();
 
@@ -38,7 +38,7 @@ class QuestionController extends Controller
      */
     public function store(StoreQuestionRequest $request, Season $season): RedirectResponse
     {
-        Gate::authorize('update', $season);
+        Gate::authorize('create', [Question::class, $season]);
 
         $questionType = $this->questionTypeService->questionByKey($request->input('type'));
 
@@ -66,7 +66,7 @@ class QuestionController extends Controller
      */
     public function edit(Season $season, Question $question): Response
     {
-        Gate::authorize('update', $season);
+        Gate::authorize('update', [$question, $season]);
 
         $questionTypes = $this->questionTypeService->build();
 
@@ -82,7 +82,7 @@ class QuestionController extends Controller
      */
     public function update(UpdateQuestionRequest $request, Season $season, Question $question): RedirectResponse
     {
-        Gate::authorize('update', $season);
+        Gate::authorize('update', [$question, $season]);
 
         // Update the question with validated data
         $question->fill($request->validated());
@@ -114,7 +114,7 @@ class QuestionController extends Controller
      */
     public function destroy(Season $season, Question $question): RedirectResponse
     {
-        Gate::authorize('update', $season);
+        Gate::authorize('delete', [$question, $season]);
         
         $question->delete();
 
