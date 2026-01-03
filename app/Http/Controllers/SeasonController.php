@@ -88,13 +88,13 @@ class SeasonController extends Controller
         // Eager load the sum to avoid an additional query
         $season->loadSum('questions', 'answer_count');
 
-        $season->load('members');
+        $season->load('members', 'questions');
 
         return Inertia::render('seasons/manage', [
             'season' => new SeasonResource($season),
             'seasonStatus' => $season->status->name(),
             'questions' => SeasonQuestionResource::collection(
-                $season->questions()->get()->map(fn ($question) => new SeasonQuestionResource($question, $season))
+                $season->questions->map(fn ($question) => new SeasonQuestionResource($question, $season))
             ),
             'totalRequiredAnswers' => $season->required_answers_sum
         ]);
