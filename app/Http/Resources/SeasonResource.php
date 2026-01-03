@@ -26,7 +26,7 @@ class SeasonResource extends JsonResource
             'permissions' => [
                 'canUpdateSeasonStatus' => Gate::allows('updateStatus', $this->resource),
                 'canInviteMembers' => Gate::allows('inviteMembers', $this->resource),
-                'canCreateQuestions' => Gate::allows('create', [\App\Models\Question::class, $this->resource]),
+                'canCreateQuestions' => Gate::allows('createQuestions', $this->resource),
             ],
         ];
     }
