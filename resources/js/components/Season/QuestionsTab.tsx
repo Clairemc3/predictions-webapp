@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { router } from '@inertiajs/react';
 import ConfirmationDialog from '../ConfirmationDialog';
 import { QuestionsTabProps, QuestionRow } from '../../types/season';
@@ -49,6 +50,10 @@ const QuestionsTab = ({ seasonId, questions, canCreateQuestions }: QuestionsTabP
 
   const handleEditClick = (question: QuestionRow) => {
     router.visit(`/seasons/${seasonId}/questions/${question.id}/edit`);
+  };
+
+  const handleViewClick = (question: QuestionRow) => {
+    router.visit(`/seasons/${seasonId}/questions/${question.id}`);
   };
 
   const formatType = (q: QuestionRow): string => {
@@ -112,21 +117,34 @@ const QuestionsTab = ({ seasonId, questions, canCreateQuestions }: QuestionsTabP
                 <TableCell>{q.title}</TableCell>
                 <TableCell>{formatType(q)}</TableCell>
                 <TableCell>
-                  <IconButton 
-                    aria-label="edit question" 
-                    size="small"
-                    onClick={() => handleEditClick(q)}
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton 
-                    aria-label="delete question" 
-                    size="small" 
-                    color="error"
-                    onClick={() => handleDeleteClick(q)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
+                  {q.permissions.canUpdateQuestion && (
+                    <IconButton 
+                      aria-label="edit question" 
+                      size="small"
+                      onClick={() => handleEditClick(q)}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  )}
+                  {q.permissions.canDeleteQuestion && (
+                    <IconButton 
+                      aria-label="delete question" 
+                      size="small" 
+                      color="error"
+                      onClick={() => handleDeleteClick(q)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  )}
+                  {q.permissions.canViewQuestion && (
+                    <IconButton 
+                      aria-label="view question" 
+                      size="small"
+                      onClick={() => handleViewClick(q)}
+                    >
+                      <VisibilityIcon fontSize="small" />
+                    </IconButton>
+                  )}
                 </TableCell>
               </TableRow>
             ))
