@@ -50,7 +50,7 @@ const PredictionsEdit = () => {
         sx={{ 
           maxWidth: 1200, 
           mx: 'auto', 
-          p: { xs: 2, sm: 3 }, // Responsive padding
+          p: { xs: 1, sm: 3 }, // Reduced mobile padding
           width: '100%', // Ensure full width on mobile
           // Mobile scrolling fixes
           overflow: 'visible',

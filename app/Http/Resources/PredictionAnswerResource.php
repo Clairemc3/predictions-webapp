@@ -18,7 +18,7 @@ class PredictionAnswerResource extends JsonResource
             'id' => $this->id,
             'order' => $this->order,
             'entity_id' => $this->entity_id,
-            'value' => $this->value,
+            'value' => $this->value
         ];
     }
 }

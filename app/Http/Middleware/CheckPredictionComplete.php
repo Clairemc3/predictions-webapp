@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\SeasonStatus;
 use App\Models\SeasonMember;
 use Closure;
 use Illuminate\Http\Request;
@@ -21,7 +22,9 @@ class CheckPredictionComplete
         if ($membershipId) {
             $seasonMember = SeasonMember::find($membershipId);
 
-            if ($seasonMember && !$seasonMember->isComplete()) {
+            $season = $seasonMember ? $seasonMember->season : null;
+
+            if ($season && $season->status === SeasonStatus::Draft) {
                 return redirect()->route('predictions.edit', $membershipId);
             }
         }
