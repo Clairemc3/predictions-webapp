@@ -11,9 +11,13 @@ class SeasonQuestionResource extends JsonResource
 {
     public $withoutWrapping = true;
 
-    public function __construct($resource, private Season $season)
+    public Season $season;
+
+    public static function forSeason($resource, Season $season): self
     {
-        parent::__construct($resource);
+        $instance = new self($resource);
+        $instance->season = $season;
+        return $instance;
     }
 
     /**

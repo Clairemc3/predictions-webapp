@@ -94,7 +94,7 @@ class SeasonController extends Controller
             'season' => new SeasonResource($season),
             'seasonStatus' => $season->status->name(),
             'questions' => $season->questions
-                ->map(fn ($question) => new SeasonQuestionResource($question, $season)),
+                ->map(fn ($question) => SeasonQuestionResource::forSeason($question, $season)),
             'totalRequiredAnswers' => $season->required_answers_sum
         ]);
     }
