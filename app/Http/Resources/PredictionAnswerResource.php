@@ -16,9 +16,19 @@ class PredictionAnswerResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'question_id' => $this->question_id,
             'order' => $this->order,
             'entity_id' => $this->entity_id,
-            'value' => $this->value
+            'value' => $this->value,
+            'entity_value' => $this->whenLoaded('entity', function () {
+                return $this->entity ? $this->entity->value : null;
+            }),
+            'entity_short_value' => $this->whenLoaded('entity', function () {
+                return $this->entity ? $this->entity->short_value : null;
+            }),
+            'entity_image_url' => $this->whenLoaded('entity', function () {
+                return $this->entity ? $this->entity->image->url : null;
+            }),
         ];
     }
 }

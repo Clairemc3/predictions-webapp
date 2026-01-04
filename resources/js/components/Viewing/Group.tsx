@@ -2,13 +2,7 @@ import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import Question from './Question';
 import PredictionsHeading from '../Predictions/PredictionsHeading';
-
-interface Answer {
-  id: number;
-  entity_id: number;
-  order: number;
-  value: string;
-}
+import { Answer } from '../../types/answer';
 
 interface Question {
   id: number;
@@ -28,9 +22,13 @@ interface Question {
 interface ViewGroupProps {
   groupHeading: string;
   questions: Question[];
+  answers: Answer[];
 }
 
-const ViewGroup: React.FC<ViewGroupProps> = ({ groupHeading, questions }) => {
+const ViewGroup: React.FC<ViewGroupProps> = ({ groupHeading, questions, answers }) => {
+  const getAnswersByQuestionId = (questionId: number): Answer[] => {
+    return answers.filter(answer => answer.question_id === questionId);
+  };
   return (
     <Box sx={{ mb: { xs: 2, sm: 4 } }}>
       {/* Group Heading */}
@@ -53,7 +51,11 @@ const ViewGroup: React.FC<ViewGroupProps> = ({ groupHeading, questions }) => {
         >
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             {questions.map((question) => (
-              <Question key={question.id} question={question} />
+              <Question 
+                key={question.id} 
+                question={question}
+                answers={getAnswersByQuestionId(question.id)}
+              />
             ))}
           </Box>
         </Paper>

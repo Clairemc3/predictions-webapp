@@ -1,16 +1,10 @@
 import React from 'react';
 import Ranking from './Ranking';
+import { Answer } from '../../types/answer';
 
 interface Entity {
   id: number;
   name: string;
-}
-
-interface Answer {
-  id: number;
-  entity_id: number;
-  order: number;
-  value: string;
 }
 
 interface BaseQuestion {
@@ -36,9 +30,10 @@ type QuestionData = RankingQuestion | OtherQuestion;
 
 interface ViewQuestionProps {
   question: QuestionData;
+  answers: Answer[];
 }
 
-const ViewQuestion: React.FC<ViewQuestionProps> = ({ question }) => {
+const ViewQuestion: React.FC<ViewQuestionProps> = ({ question, answers }) => {
   const isRankingQuestion = (q: QuestionData): q is RankingQuestion => {
     return q.base_type === 'ranking';
   };
@@ -50,7 +45,7 @@ const ViewQuestion: React.FC<ViewQuestionProps> = ({ question }) => {
         <Ranking 
           heading={question.type}
           answer_count={question.answer_count}
-          answers={question.answers}
+          answers={answers}
           entities={question.entities}
         />
       )}

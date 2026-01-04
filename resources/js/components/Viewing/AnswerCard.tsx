@@ -6,9 +6,10 @@ interface AnswerCardProps {
   shortDescription: string;
   value: string;
   points?: number;
+  icon?: string;
 }
 
-const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription, value, points }) => {
+const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription, value, points, icon }) => {
   return (
     <>
       {/* Position and Value Box - First Grid Column */}
@@ -25,7 +26,7 @@ const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription,
           gap: { xs: 0.5, sm: 1 },
         }}
       >
-        {/* Short Description */}
+        {/* Short Description/Position */}
         <Typography
           sx={{
             fontWeight: 700,
@@ -35,6 +36,20 @@ const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription,
         >
           {shortDescription}.
         </Typography>
+
+        {/* Icon */}
+        {icon && (
+          <Box
+            component="img"
+            src={icon}
+            alt=""
+            sx={{
+              width: 24,
+              height: 24,
+              objectFit: 'contain',
+            }}
+          />
+        )}
 
         {/* Value */}
         <Typography
@@ -60,7 +75,7 @@ const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            justifySelf: 'center',
+            justifySelf: { xs: 'end', sm: 'center' },
             color: 'primary.main',
             fontWeight: 700,
             fontSize: '0.875rem',

@@ -16,7 +16,9 @@ class PredictionsController extends Controller
 
         $season = $membership->season()->with('questions.entities')->first();
 
-        $questions = $season->questions()->with('answers')->get();
+        $questions = $season->questions;
+
+        $answers = $membership->answers()->get();
 
         $questionsResource = PredictionQuestionsResource::collection($questions);
 
@@ -29,17 +31,18 @@ class PredictionsController extends Controller
             'membershipId' => $membershipId,
             'questions' => $groupedQuestions,
             'completedPercentage' => $membership->completedPercentage(),
+            'answers' => PredictionAnswerResource::collection($answers),
         ]);
     }
 
     // Show predictions for a given membership
     public function show($membershipId)
     {
-       $membership = SeasonMember::findOrFail($membershipId);
+        $membership = SeasonMember::findOrFail($membershipId);
 
         $season = $membership->season()->with('questions.entities')->first();
 
-        $questions = $season->questions()->with('answers')->get();
+        $questions = $season->questions;
 
         $questionsResource = PredictionQuestionsResource::collection($questions);
 
@@ -52,6 +55,9 @@ class PredictionsController extends Controller
             'membershipId' => $membershipId,
             'questions' => $groupedQuestions,
             'seasonName' => $season->name,
+            'answers' => PredictionAnswerResource::collection(
+                $membership->answers()->with('entity')->get()
+            ),
         ]);
     }
 }

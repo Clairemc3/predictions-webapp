@@ -5,17 +5,11 @@ import {
   CardContent,
 } from '@mui/material';
 import AnswerCard from './AnswerCard';
+import { Answer } from '../../types/answer';
 
 interface Entity {
   id: number;
   name: string;
-}
-
-interface Answer {
-  id: number;
-  entity_id: number;
-  order: number;
-  value: string;
 }
 
 interface ViewRankingProps {
@@ -43,6 +37,17 @@ const ViewRanking: React.FC<ViewRankingProps> = ({
     return [...answers].sort((a, b) => a.order - b.order);
   }, [answers]);
 
+  // Get the appropriate value to display (short if entity_value is too long)
+  const getAnswerValue = (answer: Answer): string => {
+    if (!answer.entity_value) return answer.value || '';
+    
+    if (answer.entity_value.length <= 20) {
+      return answer.entity_value;
+    }
+    
+    return answer.entity_short_value || answer.entity_value;
+  };
+
   return (
     <Box
       sx={{
@@ -52,7 +57,7 @@ const ViewRanking: React.FC<ViewRankingProps> = ({
         },
       }}
     >
-      <CardContent sx={{ p: 3 }}>
+      <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
         {/* Heading centered at top */}
         <Typography
           variant="h6"
@@ -70,7 +75,7 @@ const ViewRanking: React.FC<ViewRankingProps> = ({
         <Box sx={{ 
           display: 'grid',
           gridTemplateColumns: '1fr auto',
-          gap: 2,
+          gap: { xs: 1, sm: 2 },
           alignItems: 'center',
         }}>
           {/* Empty cell for alignment */}
@@ -93,10 +98,11 @@ const ViewRanking: React.FC<ViewRankingProps> = ({
           {sortedAnswers.map((answer, index) => (
             <React.Fragment key={answer.id}>
               <AnswerCard
-                questionType={heading}
+                questionType="ranking"
                 shortDescription={answer.order.toString()}
-                value={answer.value}
+                value={getAnswerValue(answer)}
                 points={0}
+                icon={answer.entity_image_url}
               />
             </React.Fragment>
           ))}

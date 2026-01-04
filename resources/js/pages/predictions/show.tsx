@@ -7,19 +7,14 @@ import {
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Group from '../../components/Viewing/Group';
+import { Answer } from '../../types/answer';
 
 interface PageProps extends Record<string, any> {
   membershipId: number;
   questions: Record<string, Question[]>; // Grouped questions by key (e.g., "Championship", "Premier League")
+  answers: Answer[];
   completedPercentage: number;
   seasonName: string;
-}
-
-interface Answer {
-  id: number;
-  entity_id: number;
-  order: number;
-  value?: string;
 }
 
 interface Question {
@@ -38,7 +33,7 @@ interface Question {
 }
 
 const PredictionsShow = () => {
-  const { questions, seasonName } = usePage<PageProps>().props;
+  const { questions, answers, seasonName } = usePage<PageProps>().props;
 
   return (
     <AuthLayout>
@@ -58,12 +53,7 @@ const PredictionsShow = () => {
       >
         {/* Header */}
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            View Predictions
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-            Review your predictions for {seasonName}
-          </Typography>
+          Profile picture will go here
         </Box>
 
         {/* Grouped Questions */}
@@ -73,7 +63,8 @@ const PredictionsShow = () => {
               <Group 
                 key={groupHeading} 
                 groupHeading={groupHeading} 
-                questions={groupQuestions} 
+                questions={groupQuestions}
+                answers={answers}
               />
             ))}
           </Box>
