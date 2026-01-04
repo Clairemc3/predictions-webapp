@@ -9,7 +9,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/50.png"
   },
   {
     "value": "Real Madrid",
@@ -57,7 +58,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/40.png"
   },
   {
     "value": "Paris Saint-Germain",
@@ -81,7 +83,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/49.png"
   },
   {
     "value": "Manchester United",
@@ -93,7 +96,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/33.png"
   },
   {
     "value": "Arsenal",
@@ -105,7 +109,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/42.png"
   },
   {
     "value": "Tottenham Hotspur",
@@ -117,7 +122,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/47.png"
   },
   {
     "value": "Newcastle United",
@@ -129,7 +135,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/34.png"
   },
   {
     "value": "Aston Villa",
@@ -141,7 +148,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/66.png"
   },
   {
     "value": "Brighton & Hove Albion",
@@ -153,7 +161,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/51.png"
   },
   {
     "value": "West Ham United",
@@ -165,7 +174,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/48.png"
   },
   {
     "value": "Crystal Palace",
@@ -177,7 +187,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/52.png"
   },
   {
     "value": "Fulham",
@@ -189,7 +200,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/36.png"
   },
   {
     "value": "Wolves",
@@ -201,7 +213,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/39.png"
   },
   {
     "value": "Everton",
@@ -213,7 +226,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/45.png"
   },
   {
     "value": "Brentford",
@@ -225,7 +239,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/55.png"
   },
   {
     "value": "Nottingham Forest",
@@ -237,7 +252,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/65.png"
   },
   {
     "value": "Bournemouth",
@@ -249,7 +265,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/35.png"
   },
   {
     "value": "Southampton",
@@ -261,7 +278,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/41.png"
   },
   {
     "value": "Ipswich Town",
@@ -273,7 +291,8 @@
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/57.png"
   },
   {
     "value": "Juventus",
@@ -454,7 +473,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/46.png"
   },
   {
     "value": "Leeds United",
@@ -466,7 +486,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/63.png"
   },
   {
     "value": "Burnley",
@@ -478,7 +499,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/44.png"
   },
   {
     "value": "Sheffield United",
@@ -490,7 +512,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/62.png"
   },
   {
     "value": "West Bromwich Albion",
@@ -502,7 +525,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/60.png"
   },
   {
     "value": "Middlesbrough",
@@ -514,7 +538,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/70.png"
   },
   {
     "value": "Norwich City",
@@ -526,7 +551,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/71.png"
   },
   {
     "value": "Coventry City",
@@ -538,7 +564,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/1346.png"
   },
   {
     "value": "Sunderland",
@@ -550,7 +577,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/746.png"
   },
   {
     "value": "Hull City",
@@ -562,7 +590,8 @@
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/64.png"
   },
   {
     "value": "Birmingham City",
