@@ -47,6 +47,20 @@ return [
             'report' => false,
         ],
 
+        'entity_images' => [
+            'driver' => env('ENTITY_IMAGES_DRIVER', 'local'),
+            'root' => storage_path('app/public/entity-images'),
+            'url' => env('APP_URL').'/storage/entity-images',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+            // S3 configuration (used when driver is 's3')
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

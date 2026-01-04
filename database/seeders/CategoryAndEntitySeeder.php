@@ -85,10 +85,26 @@ class CategoryAndEntitySeeder extends Seeder
                 ['value' => $entityData['value']],
                 [
                     'value' => $entityData['value'],
+                    'code' => $entityData['code'] ?? null,
+                    'short_value' => $entityData['short_value'] ?? null,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
             );
+
+            // Add images
+            if (isset($entityData['image_api_url'])) {
+                $entityId = DB::table('entities')
+                    ->where('value', $entityData['value'])
+                    ->value('id');
+
+                if ($entityId) {
+                    DB::table('entity_images')->updateOrInsert(
+                        ['entity_id' => $entityId],
+                        ['third_party_url' => $entityData['image_api_url'], 'created_at' => now(), 'updated_at' => now()]
+                    );
+                }
+            }
         }
     }
 

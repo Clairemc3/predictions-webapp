@@ -88,16 +88,14 @@ class SeasonController extends Controller
         // Eager load the sum to avoid an additional query
         $season->loadSum('questions', 'answer_count');
 
+        $season->load('members', 'questions');
+
         return Inertia::render('seasons/manage', [
-            'season' => $season->load('members'),
+            'season' => new SeasonResource($season),
             'seasonStatus' => $season->status->name(),
-            'questions' => SeasonQuestionResource::collection($season->questions()->get()),
-            'totalRequiredAnswers' => $season->required_answers_sum,
-            'permissions' => [
-                'canUpdateSeasonStatus' => Gate::allows('updateStatus', $season),
-                'canInviteMembers' => Gate::allows('inviteMembers', $season),
-                'canCreateQuestions' => Gate::allows('create', [\App\Models\Question::class, $season]),
-            ],
+            'questions' => $season->questions
+                ->map(fn ($question) => SeasonQuestionResource::forSeason($question, $season)),
+            'totalRequiredAnswers' => $season->required_answers_sum
         ]);
     }
 }

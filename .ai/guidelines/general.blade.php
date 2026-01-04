@@ -56,3 +56,13 @@ This file contains coding standards, conventions, and rules for AI assistants wo
 ### Useful Artisan commands to help with tasks
 Use ```php artisan schedule:list``` to look for scheduled commands and scheduled jobs
 
+
+### Permisisons in the front end
+Models sent to the front end via inertia/axios shoukd include a permissions object with boolean
+values for each action the user can take on that model, e.g.
+'permissions': {
+   'canUpdateQuestion': true,
+   'canDeleteQuestion': false,
+   'canViewQuestion': true
+}
+

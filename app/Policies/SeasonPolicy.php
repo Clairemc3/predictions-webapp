@@ -45,4 +45,10 @@ class SeasonPolicy
     {
         return $season->isHost($user) && $season->status == SeasonStatus::Draft;
     }
+
+    public function createQuestions(User $user, Season $season): bool
+    {
+        return $season->isHost($user) && 
+               $season->status == SeasonStatus::Draft;
+    }
 }

@@ -7,6 +7,11 @@ export interface Season {
   status?: string;
   is_host?: boolean;
   members?: Member[];
+  permissions: {
+    canUpdateSeasonStatus: boolean;
+    canInviteMembers: boolean;
+    canCreateQuestions: boolean;
+  };
 }
 
 export interface User {
@@ -50,13 +55,18 @@ export interface QuestionRow {
   title: string;
   type?: string;
   base_type?: string;
+  permissions: {
+    canUpdateQuestion: boolean;
+    canDeleteQuestion: boolean;
+    canViewQuestion: boolean;
+  };
 }
 
 // Page Props interfaces
 export interface ManageSeasonProps {
   season: Season;
   seasonStatus: string;
-  questions: Question[];
+  questions: QuestionRow[];
   totalRequiredAnswers: number;
   permissions: {
     canUpdateSeasonStatus: boolean;
