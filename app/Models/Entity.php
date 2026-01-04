@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Entity extends Model
 {
@@ -16,6 +17,8 @@ class Entity extends Model
      */
     protected $fillable = [
         'value',
+        'code',
+        'short_value',
     ];
 
     /**
@@ -34,5 +37,10 @@ class Entity extends Model
             'child_entity_id',
             'parent_entity_id',
         )->withPivot('relation_type');
-    }   
+    }
+
+    public function image(): HasOne
+    {
+        return $this->hasOne(EntityImage::class);
+    }
 }

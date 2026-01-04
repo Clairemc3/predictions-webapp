@@ -1,16 +1,21 @@
 [
   {
     "value": "Manchester City",
+    "code": "MCI",
+    "short_value": "Man City",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/50.png"
   },
   {
     "value": "Real Madrid",
+    "code": "RMA",
+    "short_value": "Real Madrid",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -21,6 +26,8 @@
   },
   {
     "value": "Barcelona",
+    "code": "BAR",
+    "short_value": "Barcelona",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -31,6 +38,8 @@
   },
   {
     "value": "Bayern Munich",
+    "code": "BAY",
+    "short_value": "Bayern",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -41,16 +50,21 @@
   },
   {
     "value": "Liverpool",
+    "code": "LIV",
+    "short_value": "Liverpool",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/40.png"
   },
   {
     "value": "Paris Saint-Germain",
+    "code": "PSG",
+    "short_value": "Paris SG",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -61,176 +75,229 @@
   },
   {
     "value": "Chelsea",
+    "code": "CHE",
+    "short_value": "Chelsea",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/49.png"
   },
   {
     "value": "Manchester United",
+    "code": "MUN",
+    "short_value": "Man Utd",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/33.png"
   },
   {
     "value": "Arsenal",
+    "code": "ARS",
+    "short_value": "Arsenal",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/42.png"
   },
   {
     "value": "Tottenham Hotspur",
+    "code": "TOT",
+    "short_value": "Spurs",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/47.png"
   },
   {
     "value": "Newcastle United",
+    "code": "NEW",
+    "short_value": "Newcastle",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/34.png"
   },
   {
     "value": "Aston Villa",
+    "code": "AST",
+    "short_value": "Aston Villa",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/66.png"
   },
   {
     "value": "Brighton & Hove Albion",
+    "code": "BRI",
+    "short_value": "Brighton",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/51.png"
   },
   {
     "value": "West Ham United",
+    "code": "WES",
+    "short_value": "West Ham",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/48.png"
   },
   {
     "value": "Crystal Palace",
+    "code": "CRY",
+    "short_value": "C Palace",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/52.png"
   },
   {
     "value": "Fulham",
+    "code": "FUL",
+    "short_value": "Fulham",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/36.png"
   },
   {
     "value": "Wolves",
+    "code": "WOL",
+    "short_value": "Wolves",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/39.png"
   },
   {
     "value": "Everton",
+    "code": "EVE",
+    "short_value": "Everton",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/45.png"
   },
   {
     "value": "Brentford",
+    "code": "BRE",
+    "short_value": "Brentford",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/55.png"
   },
   {
     "value": "Nottingham Forest",
+    "code": "NOT",
+    "short_value": "Nott'm Forest",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/65.png"
   },
   {
     "value": "Bournemouth",
+    "code": "BOU",
+    "short_value": "Bournemouth",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/35.png"
   },
   {
     "value": "Southampton",
+    "code": "SOU",
+    "short_value": "Southampton",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/41.png"
   },
   {
     "value": "Ipswich Town",
+    "code": "IPS",
+    "short_value": "Ipswich",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Premier League"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/57.png"
   },
   {
     "value": "Juventus",
+    "code": "JUV",
+    "short_value": "Juventus",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -241,6 +308,8 @@
   },
   {
     "value": "AC Milan",
+    "code": "MIL",
+    "short_value": "AC Milan",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -251,6 +320,8 @@
   },
   {
     "value": "Inter Milan",
+    "code": "INT",
+    "short_value": "Inter",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -261,6 +332,8 @@
   },
   {
     "value": "Napoli",
+    "code": "NAP",
+    "short_value": "Napoli",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -271,6 +344,8 @@
   },
   {
     "value": "Atlético Madrid",
+    "code": "ATM",
+    "short_value": "Atletico",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -281,6 +356,8 @@
   },
   {
     "value": "Sevilla",
+    "code": "SEV",
+    "short_value": "Sevilla",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -291,6 +368,8 @@
   },
   {
     "value": "Borussia Dortmund",
+    "code": "DOR",
+    "short_value": "Dortmund",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -301,6 +380,8 @@
   },
   {
     "value": "RB Leipzig",
+    "code": "LEI",
+    "short_value": "Leipzig",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -311,6 +392,8 @@
   },
   {
     "value": "Porto",
+    "code": "POR",
+    "short_value": "Porto",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -321,6 +404,8 @@
   },
   {
     "value": "Ajax",
+    "code": "AJA",
+    "short_value": "Ajax",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -331,141 +416,187 @@
   },
   {
     "value": "England",
+    "code": "ENG",
+    "short_value": "England",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "France",
+    "code": "FRA",
+    "short_value": "France",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Brazil",
+    "code": "BRA",
+    "short_value": "Brazil",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Argentina",
+    "code": "ARG",
+    "short_value": "Argentina",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Germany",
+    "code": "GER",
+    "short_value": "Germany",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Spain",
+    "code": "ESP",
+    "short_value": "Spain",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Italy",
+    "code": "ITA",
+    "short_value": "Italy",
     "categories": ["football-team", "national-football-team"],
     "entityRelationships": []
   },
   {
     "value": "Leicester City",
+    "code": "LEI",
+    "short_value": "Leicester",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/46.png"
   },
   {
     "value": "Leeds United",
+    "code": "LEE",
+    "short_value": "Leeds Utd",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/63.png"
   },
   {
     "value": "Burnley",
+    "code": "BUR",
+    "short_value": "Burnley",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/44.png"
   },
   {
     "value": "Sheffield United",
+    "code": "SHU",
+    "short_value": "Sheff Utd",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/62.png"
   },
   {
     "value": "West Bromwich Albion",
+    "code": "WBA",
+    "short_value": "West Brom",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/60.png"
   },
   {
     "value": "Middlesbrough",
+    "code": "MID",
+    "short_value": "Middlesbrough",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/70.png"
   },
   {
     "value": "Norwich City",
+    "code": "NOR",
+    "short_value": "Norwich",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/71.png"
   },
   {
     "value": "Coventry City",
+    "code": "COV",
+    "short_value": "Coventry",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/1346.png"
   },
   {
     "value": "Sunderland",
+    "code": "SUN",
+    "short_value": "Sunderland",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/746.png"
   },
   {
     "value": "Hull City",
+    "code": "HUL",
+    "short_value": "Hull",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "Championship"
       }
-    ]
+    ],
+    "image_api_url": "https://media.api-sports.io/football/teams/64.png"
   },
   {
     "value": "Birmingham City",
+    "code": "BIR",
+    "short_value": "Birmingham",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -476,6 +607,8 @@
   },
   {
     "value": "Wrexham",
+    "code": "WRE",
+    "short_value": "Wrexham",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -486,6 +619,8 @@
   },
   {
     "value": "Wigan Athletic",
+    "code": "WIG",
+    "short_value": "Wigan",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -496,6 +631,8 @@
   },
   {
     "value": "Stockport County",
+    "code": "STO",
+    "short_value": "Stockport",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -506,6 +643,8 @@
   },
   {
     "value": "Barnsley",
+    "code": "BAR",
+    "short_value": "Barnsley",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -516,6 +655,8 @@
   },
   {
     "value": "Lincoln City",
+    "code": "LIN",
+    "short_value": "Lincoln",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -526,6 +667,8 @@
   },
   {
     "value": "Bolton Wanderers",
+    "code": "BOL",
+    "short_value": "Bolton",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -536,6 +679,8 @@
   },
   {
     "value": "Mansfield Town",
+    "code": "MAN",
+    "short_value": "Mansfield",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -546,6 +691,8 @@
   },
   {
     "value": "Charlton Athletic",
+    "code": "CHA",
+    "short_value": "Charlton",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -556,6 +703,8 @@
   },
   {
     "value": "Exeter City",
+    "code": "EXE",
+    "short_value": "Exeter",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -566,6 +715,8 @@
   },
   {
     "value": "Port Vale",
+    "code": "POR",
+    "short_value": "Port Vale",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -576,6 +727,8 @@
   },
   {
     "value": "Walsall",
+    "code": "WAL",
+    "short_value": "Walsall",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -586,6 +739,8 @@
   },
   {
     "value": "Crewe Alexandra",
+    "code": "CRE",
+    "short_value": "Crewe",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -596,6 +751,8 @@
   },
   {
     "value": "Notts County",
+    "code": "NOT",
+    "short_value": "Notts County",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -606,6 +763,8 @@
   },
   {
     "value": "Bradford City",
+    "code": "BRA",
+    "short_value": "Bradford",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -616,6 +775,8 @@
   },
   {
     "value": "Doncaster Rovers",
+    "code": "DON",
+    "short_value": "Doncaster",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -626,6 +787,8 @@
   },
   {
     "value": "Grimsby Town",
+    "code": "GRI",
+    "short_value": "Grimsby",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -636,6 +799,8 @@
   },
   {
     "value": "MK Dons",
+    "code": "MKD",
+    "short_value": "MK Dons",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -646,6 +811,8 @@
   },
   {
     "value": "AFC Wimbledon",
+    "code": "AFC",
+    "short_value": "AFC Wimbledon",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -656,6 +823,8 @@
   },
   {
     "value": "Gillingham",
+    "code": "GIL",
+    "short_value": "Gillingham",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -666,46 +835,20 @@
   },
   {
     "value": "Chesterfield",
+    "code": "CHE",
+    "short_value": "Chesterfield",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
         "relation_type": "in_league",
         "entity": "League Two"
-      }
-    ]
-  },
-  {
-    "value": "Wrexham",
-    "categories": ["football-team", "club-football-team"],
-    "entityRelationships": [
-      {
-        "relation_type": "in_league",
-        "entity": "National League"
-      }
-    ]
-  },
-  {
-    "value": "Notts County",
-    "categories": ["football-team", "club-football-team"],
-    "entityRelationships": [
-      {
-        "relation_type": "in_league",
-        "entity": "National League"
-      }
-    ]
-  },
-  {
-    "value": "Chesterfield",
-    "categories": ["football-team", "club-football-team"],
-    "entityRelationships": [
-      {
-        "relation_type": "in_league",
-        "entity": "National League"
       }
     ]
   },
   {
     "value": "Oldham Athletic",
+    "code": "OLD",
+    "short_value": "Oldham",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
@@ -716,6 +859,8 @@
   },
   {
     "value": "Rochdale",
+    "code": "ROC",
+    "short_value": "Rochdale",
     "categories": ["football-team", "club-football-team"],
     "entityRelationships": [
       {
