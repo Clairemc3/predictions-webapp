@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('entities', function (Blueprint $table) {
             $table->id();
             $table->string('value')->unique();
+            $table->string('short_value')->nullable();
+            $table->string('code')->nullable();
             $table->timestamps();
         });
     }
