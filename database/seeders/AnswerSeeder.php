@@ -27,13 +27,16 @@ class AnswerSeeder extends Seeder
                         continue;
                     }
 
-                    $valuesAndIds = $questionOptions->map(fn($answer) => [
+                    $answerCount = $question->answer_count ?? 1;
+                    
+                    $valuesAndIds = $questionOptions->take($answerCount)->values()->map(fn($answer, $index) => [
                         'entity_id' => $answer->id,
-                        'value' => $answer->value
+                        'value' => $answer->value,
+                        'order' => $index + 1,
                     ])->toArray();
 
                     Answer::factory()
-                        ->count($question->answer_count ?? 1)
+                        ->count($answerCount)
                         ->sequence(...$valuesAndIds)
                         ->create([
                             'question_id' => $question->id,
