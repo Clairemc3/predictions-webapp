@@ -26,7 +26,6 @@ class PredictionQuestionsResource extends JsonResource
             'answer_count' => $this->answer_count,
             'entities' => EntityResource::collection($this->whenLoaded('entities')),
             'answer_entities_route' => $this->generateCategoryEntitiesRoute(),
-            'answers' => PredictionAnswerResource::collection($this->whenLoaded('answers')),
         ];
     }
 

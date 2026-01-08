@@ -1,18 +1,10 @@
 import React from 'react';
 import Ranking from './Ranking';
-import { usePage } from '@inertiajs/react';
+import { Answer } from '../../types/answer';
 
 interface Entity {
   id: number;
   name: string;
-}
-
-interface Answer {
-  id: number;
-  entity_id: number;
-  order: number;
-  value?: string;
-  question_id: number;
 }
 
 interface BaseQuestion {
@@ -31,36 +23,34 @@ interface RankingQuestion extends BaseQuestion {
 }
 
 interface OtherQuestion extends BaseQuestion {
-  base_type: Exclude<string, 'ranking'>; // Any base_type except 'ranking'
+  base_type: Exclude<string, 'ranking'>;
 }
 
 type QuestionData = RankingQuestion | OtherQuestion;
 
-interface QuestionProps {
+interface ViewQuestionProps {
   question: QuestionData;
   answers: Answer[];
 }
 
-const Question: React.FC<QuestionProps> = ({ question, answers }) => {
-
+const ViewQuestion: React.FC<ViewQuestionProps> = ({ question, answers }) => {
   const isRankingQuestion = (q: QuestionData): q is RankingQuestion => {
     return q.base_type === 'ranking';
   };
 
   return (
     <>
-      {/* Dynamic component based on base_type */}
+      {/* Display component based on base_type */}
       {isRankingQuestion(question) && (
         <Ranking 
           heading={question.type}
           answer_count={question.answer_count}
-          question_id={question.id}
-          answer_entities_route={question.answer_entities_route}
           answers={answers}
+          entities={question.entities}
         />
       )}
     </>
   );
 };
 
-export default Question;
+export default ViewQuestion;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SeasonMemberResource;
 use App\Http\Resources\SeasonQuestionResource;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
@@ -95,7 +96,8 @@ class SeasonController extends Controller
             'seasonStatus' => $season->status->name(),
             'questions' => $season->questions
                 ->map(fn ($question) => SeasonQuestionResource::forSeason($question, $season)),
-            'totalRequiredAnswers' => $season->required_answers_sum
+            'totalRequiredAnswers' => $season->required_answers_sum,
+            'members' => SeasonMemberResource::collection($season->members),
         ]);
     }
 }

@@ -69,6 +69,9 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
           className="mt-3"
           fixed={true}
           maxWidth="lg"
+          sx={{
+            px: { xs: 0.5, sm: 2, md: 3 }, // Responsive horizontal padding
+          }}
         >
           <Box
             data-identifier="auth-layout-content-box"
@@ -77,7 +80,7 @@ export default function AuthLayout({children}: {children: React.ReactNode}) {
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
-              pt: 3, // Reduced top padding
+              pt: 3,
               pb: 3,
             }}
           >

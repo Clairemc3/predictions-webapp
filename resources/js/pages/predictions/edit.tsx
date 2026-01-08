@@ -14,6 +14,7 @@ interface Answer {
   entity_id: number;
   order: number;
   value?: string;
+  question_id: number;
 }
 
 interface Question {
@@ -24,7 +25,6 @@ interface Question {
   base_type: string;
   answer_count: number;
   answer_entities_route: string;
-  answers?: Answer[];
   entities?: Array<{
     id: number;
     name: string;
@@ -35,10 +35,11 @@ interface PageProps extends Record<string, any> {
   membershipId: number;
   questions: Record<string, Question[]>; // Grouped questions by key (e.g., "Championship", "Premier League")
   completedPercentage: number;
+  answers: Answer[];
 }
 
 const PredictionsEdit = () => {
-  const { questions, completedPercentage } = usePage<PageProps>().props;
+  const { questions, completedPercentage, answers } = usePage<PageProps>().props;
 
   console.log('Questions:', questions);
   return (
@@ -50,7 +51,7 @@ const PredictionsEdit = () => {
         sx={{ 
           maxWidth: 1200, 
           mx: 'auto', 
-          p: { xs: 2, sm: 3 }, // Responsive padding
+          p: { xs: 1, sm: 3 }, // Reduced mobile padding
           width: '100%', // Ensure full width on mobile
           // Mobile scrolling fixes
           overflow: 'visible',
@@ -99,7 +100,8 @@ const PredictionsEdit = () => {
               <Group 
                 key={groupHeading} 
                 groupHeading={groupHeading} 
-                questions={groupQuestions} 
+                questions={groupQuestions}
+                answers={answers}
               />
             ))}
           </Box>

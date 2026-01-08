@@ -73,6 +73,7 @@ export interface ManageSeasonProps {
     canInviteMembers: boolean;
     canCreateQuestions: boolean;
   };
+  members: Member[];
 }
 
 export interface QuestionsTabProps {
