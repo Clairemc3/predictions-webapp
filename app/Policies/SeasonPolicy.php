@@ -43,7 +43,9 @@ class SeasonPolicy
 
     public function updateStatus(User $user, Season $season): bool
     {
-        return $season->isHost($user) && $season->status == SeasonStatus::Draft;
+        return $season->isHost($user) && 
+            $season->status == SeasonStatus::Draft && 
+            $season->questions->count() > 0;
     }
 
     public function createQuestions(User $user, Season $season): bool
