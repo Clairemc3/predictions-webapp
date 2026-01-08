@@ -1,5 +1,6 @@
 import React from 'react';
 import Ranking from './Ranking';
+import { usePage } from '@inertiajs/react';
 
 interface Entity {
   id: number;
@@ -11,6 +12,7 @@ interface Answer {
   entity_id: number;
   order: number;
   value?: string;
+  question_id: number;
 }
 
 interface BaseQuestion {
@@ -36,9 +38,11 @@ type QuestionData = RankingQuestion | OtherQuestion;
 
 interface QuestionProps {
   question: QuestionData;
+  answers: Answer[];
 }
 
-const Question: React.FC<QuestionProps> = ({ question }) => {
+const Question: React.FC<QuestionProps> = ({ question, answers }) => {
+
   const isRankingQuestion = (q: QuestionData): q is RankingQuestion => {
     return q.base_type === 'ranking';
   };
@@ -52,7 +56,7 @@ const Question: React.FC<QuestionProps> = ({ question }) => {
           answer_count={question.answer_count}
           question_id={question.id}
           answer_entities_route={question.answer_entities_route}
-          answers={question.answers}
+          answers={answers}
         />
       )}
     </>

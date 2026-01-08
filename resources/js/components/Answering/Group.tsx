@@ -8,6 +8,7 @@ interface Answer {
   entity_id: number;
   order: number;
   value?: string;
+  question_id: number;
 }
 
 interface Question {
@@ -28,9 +29,14 @@ interface Question {
 interface GroupProps {
   groupHeading: string;
   questions: Question[];
+  answers: Answer[];
 }
 
-const Group: React.FC<GroupProps> = ({ groupHeading, questions }) => {
+const Group: React.FC<GroupProps> = ({ groupHeading, questions, answers }) => {
+  const getAnswersByQuestionId = (questionId: number): Answer[] => {
+    return answers.filter(answer => answer.question_id === questionId);
+  };
+
   return (
     <Box sx={{ mb: { xs: 2, sm: 4 } }}>
       {/* Group Heading */}
@@ -54,7 +60,11 @@ const Group: React.FC<GroupProps> = ({ groupHeading, questions }) => {
         >
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             {questions.map((question) => (
-              <Question key={question.id} question={question} />
+              <Question 
+                key={question.id} 
+                question={question}
+                answers={getAnswersByQuestionId(question.id)}
+              />
             ))}
           </Box>
         </Paper>
