@@ -11,9 +11,6 @@ require __DIR__.'/admin.php';
 require __DIR__.'/predictions.php';
 require __DIR__.'/answers.php';
 
-// Public invitation acceptance route (accessible without authentication)
-Route::get('/invitations/{token}', [SeasonInvitationController::class, 'accept'])->name('season-invitations.accept');
-
 // Profile route with authentication and email verification middleware
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');    

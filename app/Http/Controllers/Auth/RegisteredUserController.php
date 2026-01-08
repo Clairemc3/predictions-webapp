@@ -35,8 +35,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
-
         // Check if registration code is configured
         // @TODO this code will eventually go into the database
         $registrationCode = config('registration.code');

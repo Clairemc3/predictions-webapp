@@ -6,6 +6,7 @@ use App\Models\Season;
 use App\Models\SeasonMember;
 use App\Repositories\SeasonInvitationRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -33,7 +34,7 @@ class SeasonInvitationController extends Controller
     /**
      * Accept an invitation and join the season.
      */
-    public function accept(string $token)
+    public function accept(Request $request, string $token)
     {
         $invitation = app()->make(SeasonInvitationRepository::class)->findByToken($token);
 
@@ -42,10 +43,12 @@ class SeasonInvitationController extends Controller
         }
 
         $user = Auth::user();
+        
         if (!$user) {
             // Store the invitation token in session and redirect to login
-            session(['invitation_token' => $token]);
-            return redirect()->route('login')->with('warning', 'Please log in to accept the invitation.');
+            $request->session()->put('invitation_token', $token);
+            $request->session()->flash('warning', 'Please login or register to accept the invitation.');
+            return redirect()->route('login');
         }
 
         $season = $invitation->season;

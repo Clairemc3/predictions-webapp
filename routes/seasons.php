@@ -6,6 +6,9 @@ use App\Http\Controllers\SeasonInvitationController;
 use App\Http\Controllers\SeasonStatusController;
 use Illuminate\Support\Facades\Route;
 
+// Public season invitation acceptance route (accessible without authentication)
+Route::get('/invitations/{token}', [SeasonInvitationController::class, 'accept'])->name('season-invitations.accept');
+
 // Season-related routes - require authentication and verification
 Route::middleware(['auth', 'verified'])->group(function () {
     // Season routes
@@ -30,6 +33,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/seasons/{season}/questions/{question}', [QuestionController::class, 'update'])->name('seasons.questions.update');
     Route::delete('/seasons/{season}/questions/{question}', [QuestionController::class, 'destroy'])->name('seasons.questions.destroy');
 });
-
-// Public season invitation acceptance route (accessible without authentication)
-Route::get('/invitations/{token}', [SeasonInvitationController::class, 'accept'])->name('season-invitations.accept');

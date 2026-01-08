@@ -6,11 +6,13 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import muiTheme from '../theme/muiTheme';
+import { FlashMessages } from '../components/FlashMessages';
 
 export default function GuestLayout({children}: {children: React.ReactNode}) {
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
+      <FlashMessages />
       <Box
       >
         {/* Header without burger menu */}
