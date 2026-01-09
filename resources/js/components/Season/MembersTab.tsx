@@ -12,12 +12,22 @@ import {
   Button,
   Box,
   Tooltip,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { router } from '@inertiajs/react';
 import InvitationDialog from '../InvitationDialog';
 import { MembersTabProps } from '../../types/season';
 
 const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMembers }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<{ id: number; name: string; membershipId: number } | null>(null);
 
   const calculatePercentage = (completedQuestions: number): number => {
     if (totalRequiredAnswers === 0) return 0;
@@ -32,6 +42,32 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
+  };
+
+  const handleDeleteClick = (member: any) => {
+    setMemberToDelete({ 
+      id: member.id, 
+      name: member.name,
+      membershipId: member.membership.id 
+    });
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (memberToDelete) {
+      router.delete(`/seasons/${seasonId}/members/${memberToDelete.membershipId}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+          setDeleteDialogOpen(false);
+          setMemberToDelete(null);
+        },
+      });
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setMemberToDelete(null);
   };
 
   return (
@@ -125,9 +161,22 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
                   })()}
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2" color="text.secondary">
-                    -
-                  </Typography>
+                  {member.permissions?.canDeleteMember ? (
+                    <Tooltip title="Delete member">
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => handleDeleteClick(member)}
+                        aria-label="delete member"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      -
+                    </Typography>
+                  )}
                 </TableCell>
               </TableRow>
             ))
@@ -150,6 +199,31 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
       onClose={handleCloseDialog}
       seasonId={seasonId}
     />
+
+    {/* Delete Confirmation Dialog */}
+    <Dialog
+      open={deleteDialogOpen}
+      onClose={handleDeleteCancel}
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-description"
+    >
+      <DialogTitle id="delete-dialog-title">
+        Confirm Deletion
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="delete-dialog-description">
+          Are you sure you want to delete {memberToDelete?.name} - any predictions they have made will also be deleted.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDeleteCancel}>
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteConfirm} color="error" variant="contained" autoFocus>
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
     </>
   );
 };

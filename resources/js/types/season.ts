@@ -24,6 +24,7 @@ export interface User {
 }
 
 export interface Member {
+  permissions: any;
   id: number;
   name: string;
   email: string;

@@ -12,7 +12,7 @@ Route::get('/invitations/{token}', [SeasonInvitationController::class, 'accept']
 // Season-related routes - require authentication and verification
 Route::middleware(['auth', 'verified'])->group(function () {
     // Season routes
-    Route::get('/my-seasons', [SeasonController::class, 'userIndex'])->name('user.seasons.index');
+    Route::get('/my-seasons', [SeasonController::class, 'hostIndex'])->name('host.seasons.index');
     Route::get('/seasons/create', [SeasonController::class, 'create'])->name('seasons.create');
     Route::post('/seasons', [SeasonController::class, 'store'])->name('seasons.store');
     Route::get('/seasons/{season}', [SeasonController::class, 'manage'])->name('seasons.manage');
@@ -24,6 +24,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     // Season invitation routes
     Route::post('/seasons/{season}/invitations', [SeasonInvitationController::class, 'store'])->name('season-invitations.store');
+    
+    // Season member routes
+    Route::delete('/seasons/{season}/members/{member}', [SeasonController::class, 'deleteMember'])->name('seasons.members.destroy');
     
     // Question routes (nested under seasons)
     Route::get('/seasons/{season}/questions', [QuestionController::class, 'index'])->name('seasons.questions.index');

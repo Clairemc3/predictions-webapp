@@ -36,6 +36,7 @@ class Season extends Model
             ->as('membership')
             ->using(SeasonMember::class)
             ->withPivot(
+                'id',
                 'is_host', 
                 'nickname', 
                 'joined_at', 

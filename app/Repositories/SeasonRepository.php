@@ -31,6 +31,23 @@ class SeasonRepository
      * @param User $user
      * @return Collection
      */
+    public function getSeasonsForHost(User $user): Collection
+    {
+        return Season::with('members')
+            ->whereHas('members', function ($query) use ($user) {
+                $query->where('user_id', $user->id)->where('is_host', true);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get('id', 'name', 'status');
+    }
+
+
+    /**
+     * Get season information for the given user.
+     *
+     * @param User $user
+     * @return Collection
+     */
     public function getRecentHostedSeasons(User $user, $limit = 5): Collection
     {
         return $user->seasons()
@@ -71,6 +88,4 @@ class SeasonRepository
                 ];
             });
     }
-
-
 }

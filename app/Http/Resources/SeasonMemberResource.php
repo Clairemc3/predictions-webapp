@@ -19,8 +19,12 @@ class SeasonMemberResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'membership' => [
+                'id' => $this->membership->id,
                 'is_host' => $this->membership->is_host,
                 'number_of_answers' => $this->membership->number_of_answers,
+            ],
+            'permissions' => [
+                'canDeleteMember' => $request->user()->can('delete', $this->membership),
             ],
         ];
     }

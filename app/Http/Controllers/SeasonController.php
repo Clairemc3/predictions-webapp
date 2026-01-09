@@ -6,6 +6,7 @@ use App\Http\Resources\SeasonMemberResource;
 use App\Http\Resources\SeasonQuestionResource;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
+use App\Models\SeasonMember;
 use App\Repositories\SeasonRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,10 +20,10 @@ class SeasonController extends Controller
     /**
      * Display a listing of all seasons the user belongs to.
      */
-    public function userIndex(): Response
+    public function hostIndex(): Response
     {
         $seasons = SeasonResource::collection(
-            app(SeasonRepository::class)->getSeasonsForUser(Auth::user())   
+            app(SeasonRepository::class)->getSeasonsForHost(Auth::user())   
         );
 
         return Inertia::render('seasons/my-seasons/index', [
@@ -83,7 +84,7 @@ class SeasonController extends Controller
      * Show the form for managing the specified season.
      */
     public function manage(Season $season): Response
-    {
+{
         Gate::authorize('update', $season);
 
         // Eager load the sum to avoid an additional query
@@ -99,5 +100,15 @@ class SeasonController extends Controller
             'totalRequiredAnswers' => $season->required_answers_sum,
             'members' => SeasonMemberResource::collection($season->members),
         ]);
+    }
+
+    public function deleteMember(Request $request, Season $season, SeasonMember $member): RedirectResponse
+    {
+        Gate::authorize('delete', $member);
+
+        $member->delete();
+
+        return redirect()->route('seasons.manage', $season)
+            ->with('success', 'Member removed successfully!');
     }
 }
