@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('value')->nullable();
             $table->foreignId('question_id')->constrained();
             $table->foreignId('entity_id')->constrained()->nullable();
+            $table->foreignId('season_user_id')->constrained('season_user')->onDelete('cascade');
             $table->integer('order');
+            $table->softDeletes();
             $table->timestamps();
             
             $table->index(['question_id', 'order']);
