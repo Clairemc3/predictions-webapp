@@ -24,7 +24,9 @@ class SeasonMemberResource extends JsonResource
                 'number_of_answers' => $this->membership->number_of_answers,
             ],
             'permissions' => [
-                'canDeleteMember' => $request->user()->can('delete', $this->membership),
+                'canExcludeMember' => $request->user()->can('delete', $this->membership),
+                'canRestoreMember' => $request->user()->can('restore', $this->membership),
+                'canDeleteMember' => $request->user()->can('forceDelete', $this->membership),
             ],
         ];
     }

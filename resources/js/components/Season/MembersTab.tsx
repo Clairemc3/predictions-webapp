@@ -20,6 +20,7 @@ import {
   DialogActions,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { router } from '@inertiajs/react';
 import InvitationDialog from '../InvitationDialog';
 import { MembersTabProps } from '../../types/season';
@@ -27,7 +28,9 @@ import { MembersTabProps } from '../../types/season';
 const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMembers }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [excludeDialogOpen, setExcludeDialogOpen] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<{ id: number; name: string; membershipId: number } | null>(null);
+  const [memberToExclude, setMemberToExclude] = useState<{ id: number; name: string; membershipId: number } | null>(null);
 
   const calculatePercentage = (completedQuestions: number): number => {
     if (totalRequiredAnswers === 0) return 0;
@@ -68,6 +71,32 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
   const handleDeleteCancel = () => {
     setDeleteDialogOpen(false);
     setMemberToDelete(null);
+  };
+
+  const handleExcludeClick = (member: any) => {
+    setMemberToExclude({ 
+      id: member.id, 
+      name: member.name,
+      membershipId: member.membership.id 
+    });
+    setExcludeDialogOpen(true);
+  };
+
+  const handleExcludeConfirm = () => {
+    if (memberToExclude) {
+      router.delete(`/seasons/${seasonId}/members/${memberToExclude.membershipId}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+          setExcludeDialogOpen(false);
+          setMemberToExclude(null);
+        },
+      });
+    }
+  };
+
+  const handleExcludeCancel = () => {
+    setExcludeDialogOpen(false);
+    setMemberToExclude(null);
   };
 
   return (
@@ -161,22 +190,37 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
                   })()}
                 </TableCell>
                 <TableCell>
-                  {member.permissions?.canDeleteMember ? (
-                    <Tooltip title="Delete member">
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => handleDeleteClick(member)}
-                        aria-label="delete member"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Typography variant="body2" color="text.secondary">
-                      -
-                    </Typography>
-                  )}
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    {member.permissions?.canExcludeMember && (
+                      <Tooltip title="Exclude member">
+                        <IconButton
+                          size="small"
+                          color="warning"
+                          onClick={() => handleExcludeClick(member)}
+                          aria-label="exclude member"
+                        >
+                          <PersonRemoveIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {member.permissions?.canDeleteMember ? (
+                      <Tooltip title="Delete member">
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => handleDeleteClick(member)}
+                          aria-label="delete member"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : null}
+                    {!member.permissions?.canDeleteMember && !member.permissions?.canExcludeMember && (
+                      <Typography variant="body2" color="text.secondary">
+                        -
+                      </Typography>
+                    )}
+                  </Box>
                 </TableCell>
               </TableRow>
             ))
@@ -199,6 +243,31 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
       onClose={handleCloseDialog}
       seasonId={seasonId}
     />
+
+    {/* Exclude Confirmation Dialog */}
+    <Dialog
+      open={excludeDialogOpen}
+      onClose={handleExcludeCancel}
+      aria-labelledby="exclude-dialog-title"
+      aria-describedby="exclude-dialog-description"
+    >
+      <DialogTitle id="exclude-dialog-title">
+        Exclude Member
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="exclude-dialog-description">
+          Are you sure you want to exclude this member? The member will not be able to participate in these predictions.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleExcludeCancel}>
+          Cancel
+        </Button>
+        <Button onClick={handleExcludeConfirm} color="warning" variant="contained" autoFocus>
+          Exclude
+        </Button>
+      </DialogActions>
+    </Dialog>
 
     {/* Delete Confirmation Dialog */}
     <Dialog
