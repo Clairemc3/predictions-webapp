@@ -40,8 +40,10 @@ class Season extends Model
                 'is_host', 
                 'nickname', 
                 'joined_at', 
-                'number_of_answers'
+                'number_of_answers',
+                'deleted_at'
             )
+            ->wherePivotNull('deleted_at')
             ->withTimestamps();
     }
 

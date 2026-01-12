@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\CascadesSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SeasonMember extends Pivot
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, CascadesSoftDeletes;
 
     /**
      * The table associated with the model.
@@ -37,6 +38,11 @@ class SeasonMember extends Pivot
         'joined_at',
         'number_of_answers',
     ];
+
+    /**
+     * The relations to cascade soft deletes to.
+     */
+    protected array $cascadeDeletes = ['answers'];
 
     /**
      * The attributes that should be cast.

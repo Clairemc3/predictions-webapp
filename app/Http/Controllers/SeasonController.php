@@ -106,9 +106,19 @@ class SeasonController extends Controller
     {
         Gate::authorize('delete', $member);
 
-        $member->delete();
+        $member->delete(); // Soft delete - will cascade to answers
 
         return redirect()->route('seasons.manage', $season)
-            ->with('success', 'Member removed successfully!');
+            ->with('success', 'Member excluded successfully!');
+    }
+
+    public function forceDeleteMember(Request $request, Season $season, SeasonMember $member): RedirectResponse
+    {
+        Gate::authorize('forceDelete', $member);
+
+        $member->forceDelete(); // Permanent delete - will cascade via database
+
+        return redirect()->route('seasons.manage', $season)
+            ->with('success', 'Member permanently removed!');
     }
 }
