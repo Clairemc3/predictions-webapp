@@ -21,7 +21,7 @@ class SeasonRepository
                 $query->where('user_id', $user->id);
             })
             ->orderBy('created_at', 'desc')
-            ->get('id', 'name', 'status');
+             ->get(['id', 'name', 'status']);
     }
 
 
@@ -38,7 +38,7 @@ class SeasonRepository
                 $query->where('user_id', $user->id)->where('is_host', true);
             })
             ->orderBy('created_at', 'desc')
-            ->get('id', 'name', 'status');
+            ->get(['id', 'name', 'status']);
     }
 
 
