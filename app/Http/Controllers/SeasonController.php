@@ -6,7 +6,6 @@ use App\Http\Resources\SeasonMemberResource;
 use App\Http\Resources\SeasonQuestionResource;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
-use App\Models\SeasonMember;
 use App\Repositories\SeasonRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -90,7 +89,7 @@ class SeasonController extends Controller
         // Eager load the sum to avoid an additional query
         $season->loadSum('questions', 'answer_count');
 
-        $season->load('members', 'questions');
+        $season->load('members', 'excludedMembers', 'questions');
 
         return Inertia::render('seasons/manage', [
             'season' => new SeasonResource($season),
@@ -99,26 +98,8 @@ class SeasonController extends Controller
                 ->map(fn ($question) => SeasonQuestionResource::forSeason($question, $season)),
             'totalRequiredAnswers' => $season->required_answers_sum,
             'members' => SeasonMemberResource::collection($season->members),
+            'excludedMembers' => SeasonMemberResource::collection($season->excludedMembers),
+            'excludedMembersCount' => $season->excludedMembers->count(),
         ]);
-    }
-
-    public function deleteMember(Request $request, Season $season, SeasonMember $member): RedirectResponse
-    {
-        Gate::authorize('delete', $member);
-
-        $member->delete(); // Soft delete - will cascade to answers
-
-        return redirect()->route('seasons.manage', $season)
-            ->with('success', 'Member excluded successfully!');
-    }
-
-    public function forceDeleteMember(Request $request, Season $season, SeasonMember $member): RedirectResponse
-    {
-        Gate::authorize('forceDelete', $member);
-
-        $member->forceDelete(); // Permanent delete - will cascade via database
-
-        return redirect()->route('seasons.manage', $season)
-            ->with('success', 'Member permanently removed!');
     }
 }

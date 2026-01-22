@@ -13,6 +13,7 @@ class SeasonMemberPolicy
         $season = $seasonMember->season;
 
         return $season->isHost($user) && 
+            !$seasonMember->trashed() &&
             $seasonMember->user_id !== $user->id && 
             in_array($season->status, [SeasonStatus::Draft, SeasonStatus::Active]);
     }

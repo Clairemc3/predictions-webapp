@@ -18,19 +18,27 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import RestoreIcon from '@mui/icons-material/Restore';
 import { router } from '@inertiajs/react';
 import InvitationDialog from '../InvitationDialog';
 import { MembersTabProps } from '../../types/season';
 
-const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMembers }: MembersTabProps) => {
+const MembersTab = ({ members = [], excludedMembers = [], excludedMembersCount, seasonId, totalRequiredAnswers, canInviteMembers }: MembersTabProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [excludeDialogOpen, setExcludeDialogOpen] = useState(false);
+  const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
+  const [showExcluded, setShowExcluded] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<{ id: number; name: string; membershipId: number } | null>(null);
   const [memberToExclude, setMemberToExclude] = useState<{ id: number; name: string; membershipId: number } | null>(null);
+  const [memberToRestore, setMemberToRestore] = useState<{ id: number; name: string; membershipId: number } | null>(null);
+
+  const displayMembers = showExcluded && excludedMembersCount > 0 ? excludedMembers : members;
 
   const calculatePercentage = (completedQuestions: number): number => {
     if (totalRequiredAnswers === 0) return 0;
@@ -58,7 +66,7 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
 
   const handleDeleteConfirm = () => {
     if (memberToDelete) {
-      router.delete(`/seasons/${seasonId}/members/${memberToDelete.membershipId}`, {
+      router.delete(`/seasons/${seasonId}/members/force/${memberToDelete.membershipId}`, {
         preserveScroll: true,
         onSuccess: () => {
           setDeleteDialogOpen(false);
@@ -97,6 +105,32 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
   const handleExcludeCancel = () => {
     setExcludeDialogOpen(false);
     setMemberToExclude(null);
+  };
+
+  const handleRestoreClick = (member: any) => {
+    setMemberToRestore({ 
+      id: member.id, 
+      name: member.name,
+      membershipId: member.membership.id 
+    });
+    setRestoreDialogOpen(true);
+  };
+
+  const handleRestoreConfirm = () => {
+    if (memberToRestore) {
+      router.post(`/seasons/${seasonId}/members/${memberToRestore.membershipId}/restore`, {}, {
+        preserveScroll: true,
+        onSuccess: () => {
+          setRestoreDialogOpen(false);
+          setMemberToRestore(null);
+        },
+      });
+    }
+  };
+
+  const handleRestoreCancel = () => {
+    setRestoreDialogOpen(false);
+    setMemberToRestore(null);
   };
 
   return (
@@ -151,6 +185,21 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
         </Typography>
       </Box>
 
+      {excludedMembersCount > 0 && (
+        <Box sx={{ mb: 2 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showExcluded}
+                onChange={(e) => setShowExcluded(e.target.checked)}
+                size="small"
+              />
+            }
+            label="View excluded members"
+          />
+        </Box>
+      )}
+
       <TableContainer component={Paper} elevation={0}>
       <Table>
         <TableHead>
@@ -161,8 +210,8 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
           </TableRow>
         </TableHead>
         <TableBody>
-          {members && members.length > 0 ? (
-            members.map((member) => (
+          {displayMembers && displayMembers.length > 0 ? (
+            displayMembers.map((member) => (
               <TableRow key={member.id}>
                 <TableCell>
                   <Typography variant="body2">
@@ -191,6 +240,18 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
                 </TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', gap: 1 }}>
+                    {member.permissions?.canRestoreMember && (
+                      <Tooltip title="Restore member">
+                        <IconButton
+                          size="small"
+                          color="success"
+                          onClick={() => handleRestoreClick(member)}
+                          aria-label="restore member"
+                        >
+                          <RestoreIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     {member.permissions?.canExcludeMember && (
                       <Tooltip title="Exclude member">
                         <IconButton
@@ -204,7 +265,7 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
                       </Tooltip>
                     )}
                     {member.permissions?.canDeleteMember ? (
-                      <Tooltip title="Delete member">
+                      <Tooltip title="Delete member and their predictions">
                         <IconButton
                           size="small"
                           color="error"
@@ -215,7 +276,7 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
                         </IconButton>
                       </Tooltip>
                     ) : null}
-                    {!member.permissions?.canDeleteMember && !member.permissions?.canExcludeMember && (
+                    {!member.permissions?.canDeleteMember && !member.permissions?.canExcludeMember && !member.permissions?.canRestoreMember && (
                       <Typography variant="body2" color="text.secondary">
                         -
                       </Typography>
@@ -243,6 +304,31 @@ const MembersTab = ({ members = [], seasonId, totalRequiredAnswers, canInviteMem
       onClose={handleCloseDialog}
       seasonId={seasonId}
     />
+
+    {/* Restore Confirmation Dialog */}
+    <Dialog
+      open={restoreDialogOpen}
+      onClose={handleRestoreCancel}
+      aria-labelledby="restore-dialog-title"
+      aria-describedby="restore-dialog-description"
+    >
+      <DialogTitle id="restore-dialog-title">
+        Restore Member
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="restore-dialog-description">
+          Are you sure you want to restore {memberToRestore?.name}? They will be able to participate in the predictions again.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleRestoreCancel}>
+          Cancel
+        </Button>
+        <Button onClick={handleRestoreConfirm} color="success" variant="contained" autoFocus>
+          Restore
+        </Button>
+      </DialogActions>
+    </Dialog>
 
     {/* Exclude Confirmation Dialog */}
     <Dialog

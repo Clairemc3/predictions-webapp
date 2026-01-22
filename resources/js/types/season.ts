@@ -75,6 +75,8 @@ export interface ManageSeasonProps {
     canCreateQuestions: boolean;
   };
   members: Member[];
+  excludedMembers: Member[];
+  excludedMembersCount: number;
 }
 
 export interface QuestionsTabProps {
@@ -85,6 +87,8 @@ export interface QuestionsTabProps {
 
 export interface MembersTabProps {
   members?: Member[];
+  excludedMembers?: Member[];
+  excludedMembersCount: number;
   seasonId: number;
   totalRequiredAnswers: number;
   canInviteMembers: boolean;
