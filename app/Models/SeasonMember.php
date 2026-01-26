@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SeasonMember extends Pivot
 {
-    use HasFactory, SoftDeletes, CascadesSoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -44,10 +44,6 @@ class SeasonMember extends Pivot
         'number_of_answers',
     ];
 
-    /**
-     * The relations to cascade soft deletes to.
-     */
-    protected array $cascadeDeletes = ['answers'];
 
     /**
      * The attributes that should be cast.
