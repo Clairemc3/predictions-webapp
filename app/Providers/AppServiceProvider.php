@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Enums\Role;
 use App\Models\Question;
+use App\Models\SeasonMember;
 use App\Observers\QuestionObserver;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::bind('seasonMember', function ($value, $route) {
+            $season = $route->parameter('season');
+
+            return SeasonMember::where('season_id', (int) $season)
+                ->where('id', $value)->withTrashed()
+                ->firstOrFail();
+        });
+
         // Register model observers
         Question::observe(QuestionObserver::class);
 

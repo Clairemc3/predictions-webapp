@@ -66,11 +66,12 @@ const MembersTab = ({ members = [], excludedMembers = [], excludedMembersCount, 
 
   const handleDeleteConfirm = () => {
     if (memberToDelete) {
-      router.delete(`/seasons/${seasonId}/members/force/${memberToDelete.membershipId}`, {
+      router.delete(`/seasons/${seasonId}/members/${memberToDelete.membershipId}/force`, {
         preserveScroll: true,
         onSuccess: () => {
           setDeleteDialogOpen(false);
           setMemberToDelete(null);
+          setShowExcluded(false);
         },
       });
     }
@@ -97,6 +98,7 @@ const MembersTab = ({ members = [], excludedMembers = [], excludedMembersCount, 
         onSuccess: () => {
           setExcludeDialogOpen(false);
           setMemberToExclude(null);
+          setShowExcluded(false);
         },
       });
     }
@@ -123,6 +125,7 @@ const MembersTab = ({ members = [], excludedMembers = [], excludedMembersCount, 
         onSuccess: () => {
           setRestoreDialogOpen(false);
           setMemberToRestore(null);
+          setShowExcluded(false);
         },
       });
     }

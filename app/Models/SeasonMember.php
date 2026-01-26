@@ -18,6 +18,11 @@ class SeasonMember extends Pivot
     protected $table = 'season_user';
 
     /**
+     * The primary key associated with the table.
+     */
+    protected $primaryKey = 'id';
+
+    /**
      * Indicates if the IDs are auto-incrementing.
      */
     public $incrementing = true;

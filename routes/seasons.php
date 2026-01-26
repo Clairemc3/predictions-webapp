@@ -28,16 +28,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{season}/invitations', [SeasonInvitationController::class, 'store'])->name('season-invitations.store');
         
         // Season member routes
-        Route::delete('/{season}/members/{member}', [SeasonMemberController::class, 'destroy'])->name('seasons.members.destroy');
-        Route::delete('/{season}/members/force/{member}', [SeasonMemberController::class, 'forceDestroy'])->name('seasons.members.force-destroy')->withTrashed();
-        Route::post('/{season}/members/{member}/restore', [SeasonMemberController::class, 'restore'])->name('seasons.members.restore')->withTrashed();
+        Route::delete('/{season}/members/{seasonMember}', [SeasonMemberController::class, 'destroy'])
+            ->name('seasons.members.destroy');
+        Route::delete('/{season}/members/{seasonMember}/force', [SeasonMemberController::class, 'forceDestroy'])
+            ->name('seasons.members.force-destroy')->withTrashed();
+        Route::post('/{season}/members/{seasonMember}/restore', [SeasonMemberController::class, 'restore'])
+            ->name('seasons.members.restore')->withTrashed();
         
         // Question routes (nested under seasons)
-        Route::get('/{season}/questions', [QuestionController::class, 'index'])->name('seasons.questions.index');
-        Route::get('/{season}/questions/create', [QuestionController::class, 'create'])->name('seasons.questions.create');
-        Route::post('/{season}/questions', [QuestionController::class, 'store'])->name('seasons.questions.store');
-        Route::get('/{season}/questions/{question}/edit', [QuestionController::class, 'edit'])->name('seasons.questions.edit');
-        Route::put('/{season}/questions/{question}', [QuestionController::class, 'update'])->name('seasons.questions.update');
-        Route::delete('/{season}/questions/{question}', [QuestionController::class, 'destroy'])->name('seasons.questions.destroy');
+        Route::scopeBindings()->group(function () {
+            Route::get('/{season}/questions', [QuestionController::class, 'index'])->name('seasons.questions.index');
+            Route::get('/{season}/questions/create', [QuestionController::class, 'create'])->name('seasons.questions.create');
+            Route::post('/{season}/questions', [QuestionController::class, 'store'])->name('seasons.questions.store');
+            Route::get('/{season}/questions/{question}/edit', [QuestionController::class, 'edit'])->name('seasons.questions.edit');
+            Route::put('/{season}/questions/{question}', [QuestionController::class, 'update'])->name('seasons.questions.update');
+            Route::delete('/{season}/questions/{question}', [QuestionController::class, 'destroy'])->name('seasons.questions.destroy');
+        });
     });
 });

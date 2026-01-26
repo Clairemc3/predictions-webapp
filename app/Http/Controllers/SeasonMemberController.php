@@ -5,36 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\Season;
 use App\Models\SeasonMember;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class SeasonMemberController extends Controller
 {
-    public function destroy(Request $request, Season $season, SeasonMember $member): RedirectResponse
+    public function destroy(Season $season, SeasonMember $seasonMember): RedirectResponse
     {
-        Gate::authorize('delete', $member);
+        Gate::authorize('delete', $seasonMember);
 
-        $member->delete(); // Soft delete - will cascade to answers
+        $seasonMember->delete(); // Soft delete - will cascade to answers
 
         return redirect()->route('seasons.manage', $season)
             ->with('success', 'Member excluded successfully!');
     }
 
-    public function forceDestroy(Request $request, Season $season, SeasonMember $member): RedirectResponse
+    public function forceDestroy(Season $season, SeasonMember $seasonMember): RedirectResponse
     {
-        Gate::authorize('forceDelete', $member);
+        Gate::authorize('forceDelete', $seasonMember);
 
-        $member->forceDelete(); // Permanent delete - will cascade via database
+        $seasonMember->forceDelete(); // Permanent delete - will cascade via database
 
         return redirect()->route('seasons.manage', $season)
             ->with('success', 'Member permanently removed!');
     }
 
-    public function restore(Request $request, Season $season, SeasonMember $member): RedirectResponse
+    public function restore(Season $season, SeasonMember $seasonMember): RedirectResponse
     {
-        Gate::authorize('restore', $member);
+        Gate::authorize('restore', $seasonMember);
 
-        $member->restore(); // Restore soft-deleted member
+        $seasonMember->restore(); // Restore soft-deleted member
 
         return redirect()->route('seasons.manage', $season)
             ->with('success', 'Member restored successfully!');
