@@ -29,6 +29,7 @@ export interface Member {
   name: string;
   email: string;
   membership: {
+    id: number;
     is_host: boolean;
     number_of_answers: number;
   };
