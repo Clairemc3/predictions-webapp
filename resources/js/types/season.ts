@@ -24,10 +24,12 @@ export interface User {
 }
 
 export interface Member {
+  permissions: any;
   id: number;
   name: string;
   email: string;
   membership: {
+    id: number;
     is_host: boolean;
     number_of_answers: number;
   };
@@ -74,6 +76,8 @@ export interface ManageSeasonProps {
     canCreateQuestions: boolean;
   };
   members: Member[];
+  excludedMembers: Member[];
+  excludedMembersCount: number;
 }
 
 export interface QuestionsTabProps {
@@ -84,6 +88,8 @@ export interface QuestionsTabProps {
 
 export interface MembersTabProps {
   members?: Member[];
+  excludedMembers?: Member[];
+  excludedMembersCount: number;
   seasonId: number;
   totalRequiredAnswers: number;
   canInviteMembers: boolean;

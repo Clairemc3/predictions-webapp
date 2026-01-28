@@ -13,7 +13,7 @@ import { QuestionsTab, MembersTab, UpdateSeasonStatusButton } from '../../compon
 import StatusChip from '../../components/StatusChip';
 import { ManageSeasonProps } from '../../types/season';
 
-const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers, members }: ManageSeasonProps) => {
+const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers, members, excludedMembers, excludedMembersCount }: ManageSeasonProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const permissions = season.permissions;
@@ -95,7 +95,9 @@ const EditSeason = ({ season, seasonStatus, questions, totalRequiredAnswers, mem
             {selectedTab === 1 && (
               <Box sx={{ pt: 3 }}>
                 <MembersTab 
-                  members={members} 
+                  members={members}
+                  excludedMembers={excludedMembers}
+                  excludedMembersCount={excludedMembersCount}
                   seasonId={season.id} 
                   totalRequiredAnswers={totalRequiredAnswers} 
                   canInviteMembers={permissions.canInviteMembers} />

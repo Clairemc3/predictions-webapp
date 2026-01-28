@@ -2,18 +2,25 @@
 
 namespace App\Models;
 
+use App\Models\Traits\CascadesSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SeasonMember extends Pivot
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The table associated with the model.
      */
     protected $table = 'season_user';
+
+    /**
+     * The primary key associated with the table.
+     */
+    protected $primaryKey = 'id';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -36,6 +43,7 @@ class SeasonMember extends Pivot
         'joined_at',
         'number_of_answers',
     ];
+
 
     /**
      * The attributes that should be cast.

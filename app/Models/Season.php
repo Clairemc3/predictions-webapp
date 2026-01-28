@@ -36,11 +36,34 @@ class Season extends Model
             ->as('membership')
             ->using(SeasonMember::class)
             ->withPivot(
+                'id',
                 'is_host', 
                 'nickname', 
                 'joined_at', 
-                'number_of_answers'
+                'number_of_answers',
+                'deleted_at'
             )
+            ->wherePivotNull('deleted_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the excluded (soft deleted) members of the season.
+     */
+    public function excludedMembers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->as('membership')
+            ->using(SeasonMember::class)
+            ->withPivot(
+                'id',
+                'is_host', 
+                'nickname', 
+                'joined_at', 
+                'number_of_answers',
+                'deleted_at'
+            )
+            ->wherePivotNotNull('deleted_at')
             ->withTimestamps();
     }
 

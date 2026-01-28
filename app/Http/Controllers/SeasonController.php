@@ -19,10 +19,10 @@ class SeasonController extends Controller
     /**
      * Display a listing of all seasons the user belongs to.
      */
-    public function userIndex(): Response
+    public function hostIndex(): Response
     {
         $seasons = SeasonResource::collection(
-            app(SeasonRepository::class)->getSeasonsForUser(Auth::user())   
+            app(SeasonRepository::class)->getSeasonsForHost(Auth::user())   
         );
 
         return Inertia::render('seasons/my-seasons/index', [
@@ -83,13 +83,13 @@ class SeasonController extends Controller
      * Show the form for managing the specified season.
      */
     public function manage(Season $season): Response
-    {
+{
         Gate::authorize('update', $season);
 
         // Eager load the sum to avoid an additional query
         $season->loadSum('questions', 'answer_count');
 
-        $season->load('members', 'questions');
+        $season->load('members', 'excludedMembers', 'questions');
 
         return Inertia::render('seasons/manage', [
             'season' => new SeasonResource($season),
@@ -98,6 +98,8 @@ class SeasonController extends Controller
                 ->map(fn ($question) => SeasonQuestionResource::forSeason($question, $season)),
             'totalRequiredAnswers' => $season->required_answers_sum,
             'members' => SeasonMemberResource::collection($season->members),
+            'excludedMembers' => SeasonMemberResource::collection($season->excludedMembers),
+            'excludedMembersCount' => $season->excludedMembers->count(),
         ]);
     }
 }

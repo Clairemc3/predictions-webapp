@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nickname')->nullable();
             $table->timestamp('joined_at')->nullable();
             $table->float('percentage_complete')->default(0);
+            $table->softDeletes();
             $table->timestamps();
             
             // Ensure a user can only be in a season once
