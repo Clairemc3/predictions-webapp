@@ -27,7 +27,7 @@ class PredictionAnswerResource extends JsonResource
                 return $this->entity ? $this->entity->short_value : null;
             }),
             'entity_image_url' => $this->whenLoaded('entity', function () {
-                return $this->entity ? $this->entity->image->url : null;
+                return $this->entity ? $this->entity->image?->url : null;
             }),
         ];
     }
