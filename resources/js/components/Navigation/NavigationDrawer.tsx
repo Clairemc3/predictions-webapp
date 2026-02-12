@@ -79,12 +79,17 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
         )}
         
         {/* My Predictions Section */}
-        <MyPredictions seasons={memberSeasons} />
-        
-        <Divider sx={{ my: 1 }} />
+        {!isAdmin && (
+          <>
+            <MyPredictions seasons={memberSeasons} />
+            <Divider sx={{ my: 1 }} />
+          </>
+        )}
+
+
         
         {/* Seasons Section - Only show if user can host */}
-        {canHost && (
+        {!isAdmin && canHost && (
           <>
             <ManageSeasons hostedSeasons={hostedSeasons} />
             <Divider sx={{ my: 1 }} />

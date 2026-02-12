@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -32,7 +33,19 @@ class UserSeeder extends Seeder
         $this->command->info('Super Admin user created and role assigned successfully!');
 
 
-        // Create additional test users
-        User::factory(50)->create();
+        // Create additional test users all with the 'players' role
+        $playersRole = Role::where('name', 'players')->first();
+        $users = User::factory(50)->create();
+        
+        // Bulk insert role assignments
+        $roleAssignments = $users->map(function ($user) use ($playersRole) {
+            return [
+                'role_id' => $playersRole->id,
+                'model_type' => User::class,
+                'model_id' => $user->id,
+            ];
+        })->toArray();
+        
+        DB::table('model_has_roles')->insert($roleAssignments);
     }
 }
