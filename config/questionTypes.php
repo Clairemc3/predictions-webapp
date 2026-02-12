@@ -39,7 +39,7 @@ return [
         'managers' => [
             'base' => QuestionType::EntitySelection,
             'answer_category' => 'manager',
-            'label' => 'Managers',
+            'label' => 'Managers (not yet set up)',
             'short_description' => 'Use this when members should select one or more managers.',
             'description' => 'Members select one manager from a list of available managers.',
             'answer_category_filters' => [
@@ -54,7 +54,7 @@ return [
         'players' => [
             'base' => QuestionType::EntitySelection,
             'answer_category' => 'player',
-            'label' => 'Players',
+            'label' => 'Players (not yet set up)',
             'short_description' => 'Use this when members should select one or more players.',
             'description' => 'Members select one player from a list of available players.',
             'answer_category_filters' => [
