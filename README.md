@@ -4,7 +4,7 @@ A Laravel-powered web application for hosting and participating in predictions f
 
 ## About
 
-Predictions WebApp is a collaborative prediction platform that allows users to participate in seasonal prediction contests. Users can answer questions about various footballing entities (teams, players, managers, events etc), be awarded points, track their performance, and compete with others throughout a season.
+This is a web app which allows users to participate in football based prediction contests. Users can answer questions about various footballing entities (teams, players, managers, events etc), be awarded points, track their performance, and compete with others throughout a season.
 
 ## Tech Stack
 
