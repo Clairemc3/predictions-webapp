@@ -2,6 +2,9 @@
 
 use App\Enums\ApplicationContext;
 use App\Enums\QuestionType;
+use App\Enums\ScoringTypes;
+
+// Will be moved to db once there is a UI to manage
 
 return [
     // Generic base types
@@ -33,8 +36,15 @@ return [
                     'filters' => ['country' => 'England']
                 ]
             ],
-            'answer_count_label' => 'Number of teams to predict',
-            'answer_count_helper_text' => 'The order of how many teams should be predicted?'
+            'answer_count_label' => 'Number of team positions to predict',
+            'answer_count_helper_text' => 'The position of how many teams should be predicted?',
+            'scoring_types' => [
+               [
+                'value' => ScoringTypes::PositionWithProximity->value,
+                'label' => 'Position with Proximity',
+                'description' => 'Points for correct positions and near misses',
+                ],
+            ],
         ],
         'managers' => [
             'base' => QuestionType::EntitySelection,
@@ -67,5 +77,4 @@ return [
             ],
         ],
     ],
-
 ];

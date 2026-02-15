@@ -3,7 +3,6 @@
 namespace App\Services\ContextualQuestionType;
 
 use App\Enums\ApplicationContext;
-use App\Enums\QuestionType;
 use Illuminate\Support\Collection;
 
 class ContextualQuestionTypeService
@@ -13,8 +12,6 @@ class ContextualQuestionTypeService
         private ApplicationContext $context
     ) {
     }
-
-
 
     public function build(): Collection
     {

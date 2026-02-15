@@ -10,6 +10,8 @@ interface QuestionFormData {
   entities: Array<{entity_id: number; category_id: number}>;
   answer_count: string;
   answer_count_all: boolean;
+  scoring_type: string;
+  scoring_points: Record<string, number | string>;
 }
 
 interface UseQuestionFormProps {
@@ -29,6 +31,8 @@ export const useQuestionForm = ({
     entities: [],
     answer_count: '',
     answer_count_all: false,
+    scoring_type: '',
+    scoring_points: {},
   };
 
   const { data, setData, post, put, processing, errors, clearErrors } = useForm({

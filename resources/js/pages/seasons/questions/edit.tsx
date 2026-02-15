@@ -33,6 +33,8 @@ const EditQuestion = () => {
     answer_count: question.answer_count?.toString() || '',
     answer_count_all: false,
     answer_category: question.answer_category || '',
+    scoring_type: '',
+    scoring_points: {},
   };
 
   const {
@@ -81,6 +83,8 @@ const EditQuestion = () => {
               setData={setData}
               currentEntities={data.entities}
               currentAnswerCount={data.answer_count}
+              currentScoringType={data.scoring_type}
+              currentScoringPoints={data.scoring_points}
             />
           )}
 

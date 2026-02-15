@@ -20,6 +20,7 @@ class ContextualQuestionType
         public readonly ?int $answerCategoryId = null,
         public readonly ?string $answerCountLabel = null,
         public readonly ?string $answerCountHelperText = null,
+        public readonly ?array $scoringTypes = null,
     ) {}
 
     /**
@@ -36,6 +37,7 @@ class ContextualQuestionType
             description: $config['description'],
             answerCategoryFilters: self::getAnswerCategoryFilters($config['answer_category_filters'] ?? []),
             answerCategory: $config['answer_category'] ?? null,
+            scoringTypes: $config['scoring_types'] ?? null,
             answerCategoryId: self::getAnswerCategoryId($config['answer_category']),
             answerCountLabel: $config['answer_count_label'] ?? null,
             answerCountHelperText: $config['answer_count_helper_text'] ?? null,

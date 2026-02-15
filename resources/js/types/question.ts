@@ -12,6 +12,11 @@ export interface QuestionType {
   answerCategoryId: number | null;
   answerCountLabel: string | null;
   answerCountHelperText: string | null;
+  scoringTypes?: Array<{
+    value: string;
+    label: string;
+    description: string;
+  }>;
 }
 
 export interface QuestionOptionsProps {

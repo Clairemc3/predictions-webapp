@@ -13,6 +13,8 @@ interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
   setData: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
+  currentScoringType?: string;
+  currentScoringPoints?: Record<string, number | string>;
 }
 
 const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({ 
@@ -20,7 +22,9 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
   errors = {},
   setData,
   currentEntities = [],
-  currentAnswerCount
+  currentAnswerCount,
+  currentScoringType,
+  currentScoringPoints
 }) => {
   return (
     <>
@@ -43,6 +47,8 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             setData={setData}
             currentEntities={currentEntities}
             currentAnswerCount={currentAnswerCount}
+            currentScoringType={currentScoringType}
+            currentScoringPoints={currentScoringPoints}
           />
         )}
         {selectedQuestionType?.base === 'entity_selection' && (
