@@ -20,6 +20,6 @@ class RoleSeeder extends Seeder
         
         $this->command->info('Super Admin role created successfully!');
 
-        Role::firstOrCreate(['name' => 'players']);
+        Role::firstOrCreate(['name' => 'player']);
     }
 }

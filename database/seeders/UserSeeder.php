@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -33,8 +34,8 @@ class UserSeeder extends Seeder
         $this->command->info('Super Admin user created and role assigned successfully!');
 
 
-        // Create additional test users all with the 'players' role
-        $playersRole = Role::where('name', 'players')->first();
+        // Create additional test users all with the 'player' role
+        $playersRole = Role::where('name', 'player')->first();
         $users = User::factory(50)->create();
         
         // Bulk insert role assignments
@@ -47,5 +48,17 @@ class UserSeeder extends Seeder
         })->toArray();
         
         DB::table('model_has_roles')->insert($roleAssignments);
+
+        // Add a host
+        $host = User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'host@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
+
+        $host->assignRole('player');
+
+        $host->givePermissionTo(Permission::HostASeason->value);
     }
 }
