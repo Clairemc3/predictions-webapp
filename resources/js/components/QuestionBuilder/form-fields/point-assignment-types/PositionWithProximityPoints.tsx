@@ -54,7 +54,7 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
         <FormHelperText sx={{ mb: 2 }}>
           Set points for exact and nearby positions (up to {maxOffset} positions out).
         </FormHelperText>
-        <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {availableOffsets
             .filter((offset) => offset <= visibleMaxOffset)
             .map((offset) => (
