@@ -57,7 +57,7 @@ class QuestionController extends Controller
 
         // Store question score values
         if ($request->has('question_points')) {
-            app(QuestionPointValuePersistService::class)->syncScoreValues(
+            app(QuestionPointValuePersistService::class)->sync(
                 $question,
                 $request->input('question_points')
             );
@@ -107,7 +107,7 @@ class QuestionController extends Controller
 
         // Update question score values
         if ($request->has('question_points')) {
-            app(QuestionPointValuePersistService::class)->syncScoreValues(
+            app(QuestionPointValuePersistService::class)->sync(
                 $question,
                 $request->input('question_points')
             );

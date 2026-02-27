@@ -41,7 +41,7 @@ class Question extends Model
         return $this->hasMany(Answer::class)->orderBy('order');
     }
 
-    public function scoreValues(): HasMany
+    public function pointsValues(): HasMany
     {
         return $this->hasMany(QuestionPoint::class);
     }

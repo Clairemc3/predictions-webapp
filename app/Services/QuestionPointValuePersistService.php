@@ -9,19 +9,27 @@ class QuestionPointValuePersistService
     /**
      * Sync score values for a question.
      */
-    public function syncScoreValues(Question $question, array $scoreValues): void
+    public function sync(Question $question, array $scoreValues): void
     {
-        // Delete existing score values
-        $question->scoreValues()->delete();
+        $savedPositions = [];
         
-        // Create new score values
+        // Update or create score values
         foreach ($scoreValues as $position => $value) {
             if ($value !== null && $value !== '') {
-                $question->scoreValues()->create([
-                    'position' => (int) $position,
-                    'value' => (int) $value,
-                ]);
+                $question->pointsValues()->updateOrCreate(
+                    [
+                        'question_id' => $question->id,
+                        'position' => (int) $position,
+                    ],
+                    [
+                        'value' => (int) $value,
+                    ]
+                );
+                $savedPositions[] = (int) $position;
             }
         }
+        
+        // Delete positions that arent in the set of values
+        $question->pointsValues()->whereNotIn('position', $savedPositions)->delete();
     }
 }
