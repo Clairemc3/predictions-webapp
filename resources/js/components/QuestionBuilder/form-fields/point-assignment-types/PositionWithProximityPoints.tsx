@@ -13,12 +13,14 @@ interface PositionWithProximityPointsProps {
   answerCount?: number | string;
   setData?: (callback: (prevData: any) => any) => void;
   currentScoringPoints?: Record<string, number | string>;
+  errors?: Record<string, string>;
 }
 
 const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = ({
   answerCount,
   setData,
   currentScoringPoints = {},
+  errors = {},
 }) => {
   const parsedAnswerCount = typeof answerCount === 'string' ? parseInt(answerCount, 10) : answerCount;
 
@@ -69,6 +71,8 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
                   value={currentScoringPoints[offset + 1] ?? ''}
                   onChange={(event) => handleOffsetChange(offset, event.target.value)}
                   size="small"
+                  error={!!errors[`question_points.${offset + 1}`]}
+                  helperText={errors[`question_points.${offset + 1}`]}
                   slotProps={{
                     htmlInput: {
                       min: 0,

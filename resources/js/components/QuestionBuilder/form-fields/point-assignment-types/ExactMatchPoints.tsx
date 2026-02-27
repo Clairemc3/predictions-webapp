@@ -10,11 +10,13 @@ import {
 interface ExactMatchPointsProps {
   setData?: (callback: (prevData: any) => any) => void;
   currentScoringPoints?: Record<string, number | string>;
+  errors?: Record<string, string>;
 }
 
 const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
   setData,
   currentScoringPoints = {},
+  errors = {},
 }) => {
   const handleExactChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -44,6 +46,8 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
           value={currentScoringPoints[1] ?? ''}
           onChange={handleExactChange}
           size="small"
+          error={!!errors['question_points.1']}
+          helperText={errors['question_points.1']}
           slotProps={{
             htmlInput: {
               min: 0,

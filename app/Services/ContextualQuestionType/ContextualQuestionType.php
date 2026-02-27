@@ -53,9 +53,19 @@ class ContextualQuestionType
      * Get answer category filters with category_id added to each filter
      */
     private static function getAnswerCategoryFilters(array $filters): array
-    {        
+    {
+        if (empty($filters)) {
+            return [];
+        }
+        
+        // Load all categories once and cache by name
+        static $categories = null;
+        if ($categories === null) {
+            $categories = Category::all()->keyBy('name');
+        }
+        
         foreach ($filters as &$filter) {
-            $category = Category::where('name', $filter['name'])->first();
+            $category = $categories->get($filter['name']);
             if (!$category) {
                 throw new InvalidArgumentException("Category with name {$filter['name']} does not exist.");
             }
@@ -71,7 +81,13 @@ class ContextualQuestionType
             return null;
         }
 
-        $category = Category::where('name', $categoryName)->first();
+        // Load all categories once and cache by name
+        static $categories = null;
+        if ($categories === null) {
+            $categories = Category::all()->keyBy('name');
+        }
+
+        $category = $categories->get($categoryName);
         if (!$category) {
             throw new InvalidArgumentException("Category with name {$categoryName} does not exist.");
         }

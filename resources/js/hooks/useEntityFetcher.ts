@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 interface EntityOption {
   id: number;
@@ -21,7 +21,7 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
   const [entityCounts, setEntityCounts] = useState<{ [key: string]: { [entityId: number]: number } }>({});
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
 
-  const fetchEntitiesForCategory = async (
+  const fetchEntitiesForCategory = useCallback(async (
     categoryName: string, 
     filterIndex: number, 
     filters: Record<string, any> = {},
@@ -70,7 +70,6 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
               entityCountMap[entity.id] = entity.count.value;
             }
           });
-          console.log('Entity Count Map for', stateKey, ':', entityCountMap);
           setEntityCounts(prev => ({
             ...prev,
             [stateKey]: entityCountMap
@@ -92,7 +91,7 @@ export const useEntityFetcher = (): UseEntityFetcherReturn => {
     } finally {
       setLoading(prev => ({ ...prev, [stateKey]: false }));
     }
-  };
+  }, []);
 
   return {
     entityOptions,

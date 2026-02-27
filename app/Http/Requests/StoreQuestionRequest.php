@@ -27,21 +27,19 @@ class StoreQuestionRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        $questionType = $this->contextualQuestionTypeService->questionByKey($this->input('type'));
-        
+    {        
         return [
             'title' => ['nullable', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:50'],
-            'base_type' => ['required', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
+            'base_type' => ['required', 'bail', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
             'type' => ['required', Rule::in($this->contextualQuestionTypeService->allTypes())],
-            'entities' => ['nullable', 'array'],
+            'entities' => ['required', 'array'],
             'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],
             'entities.*.category_id' => ['required', 'integer', 'exists:categories,id'],
-            'answer_count' => ['nullable', 'integer', 'min:1', 'max:20'],
-            'question_points' => ['nullable', 'array'],
-            'question_points.*' => ['nullable', 'integer', 'min:0'],
-            'scoring_type' => ['required', 'string', Rule::in($questionType->scoringTypes())],
+            'answer_count' => ['required', 'integer', 'min:1', 'max:20'],
+            'question_points' => ['required', 'array', 'min:1'],
+            'question_points.*' => ['required', 'integer', 'min:0'],
+            'scoring_type' => ['required', 'string'],
         ];
     }
 
@@ -51,6 +49,8 @@ class StoreQuestionRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'entities.required' => 'Please select at least one entity.',
+            'entities.*.entity_id.required' => 'Please select an entity.',
             'entities.*.entity_id.exists' => 'The selected entity is invalid.',
             'entities.*.category_id.exists' => 'The selected entity category is invalid.',
         ];

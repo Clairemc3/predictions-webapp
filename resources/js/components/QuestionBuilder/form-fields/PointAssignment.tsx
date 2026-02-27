@@ -7,6 +7,7 @@ interface PointAssignmentProps {
   answerCount?: number | string;
   setData?: (callback: (prevData: any) => any) => void;
   currentScoringPoints?: Record<string, number | string>;
+  errors?: Record<string, string>;
 }
 
 const PointAssignment: React.FC<PointAssignmentProps> = ({
@@ -14,6 +15,7 @@ const PointAssignment: React.FC<PointAssignmentProps> = ({
   answerCount,
   setData,
   currentScoringPoints = {},
+  errors = {},
 }) => {
   if (!scoringType) {
     return null;
@@ -23,6 +25,7 @@ const PointAssignment: React.FC<PointAssignmentProps> = ({
       <ExactMatchPoints
         setData={setData}
         currentScoringPoints={currentScoringPoints}
+        errors={errors}
       />
     );
   }
@@ -33,6 +36,7 @@ const PointAssignment: React.FC<PointAssignmentProps> = ({
         answerCount={answerCount}
         setData={setData}
         currentScoringPoints={currentScoringPoints}
+        errors={errors}
       />
     );
   }

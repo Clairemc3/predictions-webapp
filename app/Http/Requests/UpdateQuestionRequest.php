@@ -34,13 +34,14 @@ class UpdateQuestionRequest extends FormRequest
         return [
             'title' => ['nullable', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:50'],
-            'base_type' => ['sometimes', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
-            'type' => ['sometimes', Rule::in($this->contextualQuestionTypeService->allTypes())],
+            'base_type' => ['required', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
+            'type' => ['required', Rule::in($this->contextualQuestionTypeService->allTypes())],
             'entities' => ['nullable', 'array'],
             'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],
             'entities.*.category_id' => ['required', 'integer', 'exists:categories,id'],
-            'answer_count' => ['nullable', 'integer', 'min:1', 'max:20'],
-            'question_points' => ['array'],
+            'answer_count' => ['required', 'integer', 'min:1', 'max:20'],
+            'question_points' => ['required', 'array', 'min:1'],
+            'question_points.*' => ['required', 'integer', 'min:0'],
             'scoring_type' => ['required', 'string', Rule::in($questionType->scoringTypes())],
         ];
     }
