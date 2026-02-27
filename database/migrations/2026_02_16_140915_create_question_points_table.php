@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedInteger('position')->default(1);
             $table->unsignedInteger('value');
             $table->timestamps();
+            
+            $table->unique(['question_id', 'position']);
         });
     }
 
