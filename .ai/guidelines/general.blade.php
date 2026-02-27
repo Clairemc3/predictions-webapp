@@ -8,7 +8,7 @@ This file contains coding standards, conventions, and rules for AI assistants wo
 - **All TSX/JSX files which represent pages must use kebab case** (e.g., `login.tsx`, `register.tsx`, `user-page.tsx`, NOT `Login.tsx`, `Register.tsx`). All component and layout files should be PascalCase (e.g. `Header.jsx`, `Footer.jsx`, `ConfirmationDialog.jsx`).
 - **Directory names should be lowercase** (e.g., `auth/`, `components/`, NOT `Auth/`, `Components/`)
 - **Component file names should match the component name but in lowercase**
- - Use the ConfirmationDialog component in `ConfirmationDialog.tsx` for daliogs confirming updating or deleting an entity.
+ - Use the ConfirmationDialog component in `ConfirmationDialog.tsx` for dialogs confirming updating or deleting an entity.
 
 ## 🚫 React Page Creation Rules
 
@@ -57,8 +57,8 @@ This file contains coding standards, conventions, and rules for AI assistants wo
 Use ```php artisan schedule:list``` to look for scheduled commands and scheduled jobs
 
 
-### Permisisons in the front end
-Models sent to the front end via inertia/axios shoukd include a permissions object with boolean
+### Permissions in the front end
+Models sent to the front end via inertia/axios should include a permissions object with boolean
 values for each action the user can take on that model, e.g.
 'permissions': {
    'canUpdateQuestion': true,

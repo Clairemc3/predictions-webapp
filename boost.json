@@ -1,0 +1,16 @@
+{
+    "agents": [
+        "copilot",
+        "cursor"
+    ],
+    "guidelines": true,
+    "herd_mcp": true,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "sail": false,
+    "skills": [
+        "pest-testing",
+        "inertia-react-development",
+        "tailwindcss-development"
+    ]
+}

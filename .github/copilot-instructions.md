@@ -1,12 +1,94 @@
 <laravel-boost-guidelines>
+=== .ai/pr-rules rules ===
 
-
-=== Copilot Review Instructions ===
+# Copilot Review Instructions
 
 ## Focus areas
 - Pay special attention to performance issues in database queries.
 - Flag any code that looks like it could have security vulnerabilities.
 
+
+=== .ai/critical rules ===
+
+## 🚨 Critical Rules
+
+1. **NEVER change file naming from lowercase to uppercase without explicit permission**
+2. **ALWAYS preserve existing functionality when making modifications**
+3. **DO NOT create new pages/routes without specific instruction**
+4. **MAINTAIN the established MUI theming and component patterns**
+5. **USE the existing import paths and component structure**
+6. **Do not implement methods for features which are outside of the scope of the active prompt**
+
+
+=== .ai/general rules ===
+
+# GitHub Copilot Instructions for Predictions WebApp
+
+This file contains coding standards, conventions, and rules for AI assistants working on this Laravel/React/TypeScript project.
+
+## 📁 File Naming Conventions
+
+### Frontend (TypeScript/React)
+- **All TSX/JSX files which represent pages must use kebab case** (e.g., `login.tsx`, `register.tsx`, `user-page.tsx`, NOT `Login.tsx`, `Register.tsx`). All component and layout files should be PascalCase (e.g. `Header.jsx`, `Footer.jsx`, `ConfirmationDialog.jsx`).
+- **Directory names should be lowercase** (e.g., `auth/`, `components/`, NOT `Auth/`, `Components/`)
+- **Component file names should match the component name but in lowercase**
+ - Use the ConfirmationDialog component in `ConfirmationDialog.tsx` for dialogs confirming updating or deleting an entity.
+
+## 🚫 React Page Creation Rules
+
+1. **Do NOT create new pages unless explicitly instructed**
+2. **Always ask before creating new routes or controllers**
+3. **Stick to modifying existing functionality unless specifically asked to add new features**
+
+## 🎨 Frontend Standards
+
+### React Components
+- Use functional components with hooks
+- Export components as default exports
+- Use TypeScript for all components
+- Follow the existing component structure pattern
+
+### State Management
+- Use Inertia.js `useForm` hook for form handling
+- Maintain consistent error handling patterns
+- Use React hooks for local component state
+
+
+### Form Components
+- Use MUI TextField with filled variant
+- Include proper validation and error handling
+- Use InputAdornment for icons
+- Implement password visibility toggles where needed
+- Follow the existing form structure pattern
+
+
+## 🔄 Development Workflow
+
+### Before Making Changes
+1. Check current file structure and naming conventions
+2. Read existing code patterns before implementing new features
+3. Maintain consistency with established patterns
+4. Use existing components and utilities where possible
+
+### Code Quality
+- Write TypeScript with proper typing
+- Use meaningful variable and function names
+- Follow existing code formatting and structure
+- Maintain consistent import ordering
+
+
+### Useful Artisan commands to help with tasks
+Use ```php artisan schedule:list``` to look for scheduled commands and scheduled jobs
+
+
+### Permissions in the front end
+Models sent to the front end via inertia/axios should include a permissions object with boolean
+values for each action the user can take on that model, e.g.
+'permissions': {
+   'canUpdateQuestion': true,
+   'canDeleteQuestion': false,
+   'canViewQuestion': true
+}
 
 
 === foundation rules ===
@@ -18,7 +100,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 ## Foundational Context
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.4.11
+- php - 8.4.14
 - inertiajs/inertia-laravel (INERTIA) - v2
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
@@ -32,7 +114,6 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - tailwindcss (TAILWINDCSS) - v4
 - eslint (ESLINT) - v9
 - prettier (PRETTIER) - v3
-
 
 ## Conventions
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, naming.
@@ -133,6 +214,14 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - You must not run any commands to make the site available via HTTP(s). It is _always_ available through Laravel Herd.
 
 
+=== tests rules ===
+
+## Test Enforcement
+
+- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test` with a specific filename or filter.
+
+
 === inertia-laravel/core rules ===
 
 ## Inertia Core
@@ -176,7 +265,7 @@ Route::get('/users', function () {
 ## Do Things the Laravel Way
 
 - Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
-- If you're creating a generic PHP class, use `artisan make:class`.
+- If you're creating a generic PHP class, use `php artisan make:class`.
 - Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
 
 ### Database
@@ -211,7 +300,7 @@ Route::get('/users', function () {
 ### Testing
 - When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
 - Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] <name>` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
+- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
 
 ### Vite Error
 - If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
@@ -238,15 +327,23 @@ Route::get('/users', function () {
 ### Models
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
 
+
+=== pint/core rules ===
+
+## Laravel Pint Code Formatter
+
+- You must run `vendor/bin/pint --dirty` before finalizing changes to ensure your code matches the project's expected style.
+- Do not run `vendor/bin/pint --test`, simply run `vendor/bin/pint` to fix any formatting issues.
+
+
 === pest/core rules ===
 
 ## Pest
-
 ### Testing
 - If you need to verify a feature is working, write or update a Unit / Feature test.
 
 ### Pest Tests
-- All tests must be written using Pest. Use `php artisan make:test --pest <name>`.
+- All tests must be written using Pest. Use `php artisan make:test --pest {name}`.
 - You must not remove any tests or test files from the tests directory without approval. These are not temporary or helper files - these are core to the application.
 - Tests should test all of the happy paths, failure paths, and weird paths.
 - Tests live in the `tests/Feature` and `tests/Unit` directories.
@@ -415,6 +512,13 @@ return (
 
 - Always use Tailwind CSS v4 - do not use the deprecated utilities.
 - `corePlugins` is not supported in Tailwind v4.
+- In Tailwind v4, configuration is CSS-first using the `@theme` directive — no separate `tailwind.config.js` file is needed.
+<code-snippet name="Extending Theme in CSS" lang="css">
+@theme {
+  --color-brand: oklch(0.72 0.11 178);
+}
+</code-snippet>
+
 - In Tailwind v4, you import Tailwind using a regular CSS `@import` statement, not using the `@tailwind` directives used in v3:
 
 <code-snippet name="Tailwind v4 Import Tailwind Diff" lang="diff">
@@ -442,78 +546,4 @@ return (
 | overflow-ellipsis | text-ellipsis |
 | decoration-slice | box-decoration-slice |
 | decoration-clone | box-decoration-clone |
-
-
-=== .ai/critical rules ===
-
-## 🚨 Critical Rules
-
-1. **NEVER change file naming from lowercase to uppercase without explicit permission**
-2. **ALWAYS preserve existing functionality when making modifications**
-3. **DO NOT create new pages/routes without specific instruction**
-4. **MAINTAIN the established MUI theming and component patterns**
-5. **USE the existing import paths and component structure**
-6. **Do not implement methods for features which are outside of the scope of the active prompt**
-7. Don't suggest running `npm run build` in the command line for frontend changes. `npm run dev` is usually always running.
-8. Don't suggest running Laravel Pint (ie `./vendor/bin/pint`)
-
-
-=== .ai/general rules ===
-
-# GitHub Copilot Instructions for Predictions WebApp
-
-This file contains coding standards, conventions, and rules for AI assistants working on this Laravel/React/TypeScript project.
-
-## 📁 File Naming Conventions
-
-### Frontend (TypeScript/React)
-- **All TSX/JSX files which represent pages must use kebab case** (e.g., `login.tsx`, `register.tsx`, `user-page.tsx`, NOT `Login.tsx`, `Register.tsx`). All component and layout files should be PascalCase (e.g. `Header.jsx`, `Footer.jsx`, `ConfirmationDialog.jsx`).
-- **Directory names should be lowercase** (e.g., `auth/`, `components/`, NOT `Auth/`, `Components/`)
-- **Component file names should match the component name but in lowercase**
-
-## 🚫 React Page Creation Rules
-
-1. **Do NOT create new pages unless explicitly instructed**
-2. **Always ask before creating new routes or controllers**
-3. **Stick to modifying existing functionality unless specifically asked to add new features**
-
-## 🎨 Frontend Standards
-
-### React Components
-- Use functional components with hooks
-- Export components as default exports
-- Use TypeScript for all components
-- Follow the existing component structure pattern
-
-### State Management
-- Use Inertia.js `useForm` hook for form handling
-- Maintain consistent error handling patterns
-- Use React hooks for local component state
-
-
-### Form Components
-- Use MUI TextField with filled variant
-- Include proper validation and error handling
-- Use InputAdornment for icons
-- Implement password visibility toggles where needed
-- Follow the existing form structure pattern
-
-
-## 🔄 Development Workflow
-
-### Before Making Changes
-1. Check current file structure and naming conventions
-2. Read existing code patterns before implementing new features
-3. Maintain consistency with established patterns
-4. Use existing components and utilities where possible
-
-### Code Quality
-- Write TypeScript with proper typing
-- Use meaningful variable and function names
-- Follow existing code formatting and structure
-- Maintain consistent import ordering
-
-
-### Useful Artisan commands to help with tasks
-Use ```php artisan schedule:list``` to look for scheduled commands and scheduled jobs
 </laravel-boost-guidelines>
