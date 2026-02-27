@@ -77,7 +77,7 @@ class QuestionController extends Controller
 
         return Inertia::render('seasons/questions/edit', [
             'season' => new SeasonResource($season),
-            'question' => $question->load('entities'),
+            'question' => $question->load(['entities', 'pointsValues']),
             'questionTypes' => $questionTypes
         ]);
     }
