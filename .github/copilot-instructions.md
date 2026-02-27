@@ -84,7 +84,7 @@ Use ```php artisan schedule:list``` to look for scheduled commands and scheduled
 
 
 ### Permisisons in the front end
-Models sent to the front end via inertia/axios shoukd include a permissions object with boolean
+Models sent to the front end via inertia/axios should include a permissions object with boolean
 values for each action the user can take on that model, e.g.
 'permissions': {
    'canUpdateQuestion': true,
