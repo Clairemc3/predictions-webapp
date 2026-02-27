@@ -21,6 +21,7 @@ class Question extends Model
         'title',
         'short_title',
         'answer_count',
+        'scoring_type',
     ];
 
     protected $casts = [
@@ -38,6 +39,11 @@ class Question extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(Answer::class)->orderBy('order');
+    }
+
+    public function scoreValues(): HasMany
+    {
+        return $this->hasMany(QuestionPoint::class);
     }
 
     /**

@@ -44,6 +44,11 @@ class ContextualQuestionType
         );
     }
 
+    public function scoringTypes(): array
+    {
+        return data_get($this->scoringTypes, '*.value', []);
+    }
+
     /**
      * Get answer category filters with category_id added to each filter
      */

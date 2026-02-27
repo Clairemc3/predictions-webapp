@@ -9,7 +9,7 @@ import EntitySelection from './QuestionTypeOptions/EntitySelection';
 import { QuestionOptionsProps } from '../../types/question';
 
 interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
-  errors?: Record<string, string>;
+  errors?: Partial<Record<string, string>>;
   setData: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;

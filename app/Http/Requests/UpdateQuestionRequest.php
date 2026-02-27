@@ -29,6 +29,8 @@ class UpdateQuestionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $questionType = $this->contextualQuestionTypeService->questionByKey($this->input('type'));
+        
         return [
             'title' => ['nullable', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:50'],
@@ -38,6 +40,8 @@ class UpdateQuestionRequest extends FormRequest
             'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],
             'entities.*.category_id' => ['required', 'integer', 'exists:categories,id'],
             'answer_count' => ['nullable', 'integer', 'min:1', 'max:20'],
+            'question_points' => ['array'],
+            'scoring_type' => ['required', 'string', Rule::in($questionType->scoringTypes())],
         ];
     }
 

@@ -22,9 +22,9 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
     if (setData) {
       setData((prevData: any) => ({
         ...prevData,
-        scoring_points: {
-          ...(prevData.scoring_points || {}),
-          exact: value === '' ? '' : parseInt(value, 10),
+        question_points: {
+          ...(prevData.question_points || {}),
+          1: value === '' ? '' : parseInt(value, 10),
         },
       }));
     }
@@ -39,9 +39,9 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
         </FormHelperText>
         <TextField
           label="Points for correct answer"
-          name="scoring_points_exact"
+          name="question_points_1"
           type="number"
-          value={currentScoringPoints.exact ?? ''}
+          value={currentScoringPoints[1] ?? ''}
           onChange={handleExactChange}
           size="small"
           slotProps={{

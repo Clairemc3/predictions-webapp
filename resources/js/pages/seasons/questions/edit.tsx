@@ -34,7 +34,7 @@ const EditQuestion = () => {
     answer_count_all: false,
     answer_category: question.answer_category || '',
     scoring_type: '',
-    scoring_points: {},
+    question_points: {},
   };
 
   const {
@@ -84,7 +84,7 @@ const EditQuestion = () => {
               currentEntities={data.entities}
               currentAnswerCount={data.answer_count}
               currentScoringType={data.scoring_type}
-              currentScoringPoints={data.scoring_points}
+              currentScoringPoints={data.question_points}
             />
           )}
 

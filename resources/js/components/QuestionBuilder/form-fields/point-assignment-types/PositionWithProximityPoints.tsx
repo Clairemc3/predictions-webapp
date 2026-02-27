@@ -39,9 +39,9 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
     if (setData) {
       setData((prevData: any) => ({
         ...prevData,
-        scoring_points: {
-          ...(prevData.scoring_points || {}),
-          [offset]: value === '' ? '' : parseInt(value, 10),
+        question_points: {
+          ...(prevData.question_points || {}),
+          [offset + 1]: value === '' ? '' : parseInt(value, 10),
         },
       }));
     }
@@ -52,7 +52,7 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
       <FormControl component="fieldset" fullWidth>
         <FormLabel component="legend">Point Assignment</FormLabel>
         <FormHelperText sx={{ mb: 2 }}>
-          Set points for exact and nearby positions (up to {maxOffset} positions out).
+          Set points for exact and nearby positions.
         </FormHelperText>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {availableOffsets
@@ -64,9 +64,9 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
                 </Typography>
                 <TextField
                   label="Points"
-                  name={`scoring_points_${offset}`}
+                  name={`question_points_${offset + 1}`}
                   type="number"
-                  value={currentScoringPoints[offset] ?? ''}
+                  value={currentScoringPoints[offset + 1] ?? ''}
                   onChange={(event) => handleOffsetChange(offset, event.target.value)}
                   size="small"
                   slotProps={{
