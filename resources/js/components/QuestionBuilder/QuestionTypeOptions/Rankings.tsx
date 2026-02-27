@@ -2,6 +2,8 @@ import React from 'react';
 import { Box } from '@mui/material';
 import EntitySelect from '../form-fields/EntitySelect';
 import AnswerCount from '../form-fields/AnswerCount';
+import ScoringOption from '../form-fields/ScoringOption';
+import PointAssignment from '../form-fields/PointAssignment';
 import { RankingsProps } from '../../../types/question';
 
 interface RankingsExtendedProps extends RankingsProps {
@@ -9,6 +11,8 @@ interface RankingsExtendedProps extends RankingsProps {
   setData: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
+  currentScoringType?: string;
+  currentScoringPoints?: Record<string, number | string>;
 }
 
 const Rankings: React.FC<RankingsExtendedProps> = ({ 
@@ -16,9 +20,13 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
   errors = {},
   setData,
   currentEntities = [],
-  currentAnswerCount
+  currentAnswerCount,
+  currentScoringType,
+  currentScoringPoints
 }) => {
   const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
+  const hasAnswerCount = currentAnswerCount !== undefined && currentAnswerCount !== '' && currentAnswerCount !== null;
+  const hasScoringType = currentScoringType !== undefined && currentScoringType !== '' && currentScoringType !== null;
 
   const handleEntityChange = (count: number) => {
     setMaxAnswerCount(count);
@@ -33,40 +41,73 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
       {/* Render select dropdowns based on answerCategoryFilters */}
       {selectedQuestionType?.answerCategoryFilters && Array.isArray(selectedQuestionType.answerCategoryFilters) && selectedQuestionType.answerCategoryFilters.length > 0 && (
         <Box sx={{ mt: 3 }}>
-          {selectedQuestionType.answerCategoryFilters.map((filter, index) => (
-            <EntitySelect
-              key={index}
-              category={filter?.name || ''}
-              category_id={filter.category_id}
-              filters={filter?.filters || {}}
-              label={filter?.label || 'Select an option'}
-              description={filter?.description}
-              index={index}
-              required={true}
-              error={!!errors[`entities[${index}]`]}
-              helperText={errors[`entities[${index}]`]}
-              name={`entities[${index}]`}
-              setData={setData}
-              currentEntities={currentEntities}
-              onChange={handleEntityChange}
-              answerCategory={selectedQuestionType?.answerCategory || undefined}
-            />
-          ))}
+          {selectedQuestionType.answerCategoryFilters.map((filter, index) => {
+            const hasError = !!errors[`entities.${index}.entity_id`] || !!errors[`entities.${index}.category_id`] || (index === 0 && !!errors['entities']);
+            const errorMessage = errors[`entities.${index}.entity_id`] || errors[`entities.${index}.category_id`] || (index === 0 ? errors['entities'] : undefined);
+            
+            // If there's a generic entities error on the first field, customize the message with the label
+            const displayError = (index === 0 && errors['entities']) 
+              ? `${filter?.label || 'Entity'}` 
+              : errorMessage;
+            
+            return (
+              <EntitySelect
+                key={index}
+                category={filter?.name || ''}
+                category_id={filter.category_id}
+                filters={filter?.filters || {}}
+                label={filter?.label || 'Select an option'}
+                description={filter?.description}
+                index={index}
+                required={true}
+                error={hasError}
+                helperText={displayError}
+                name={`entities[${index}]`}
+                setData={setData}
+                currentEntities={currentEntities}
+                onChange={handleEntityChange}
+                answerCategory={selectedQuestionType?.answerCategory || undefined}
+              />
+            );
+          })}
         </Box>
       )}
 
       {/* Number to predict field - Only show when entity has been selected */}
       {maxAnswerCount !== undefined && (
-        <AnswerCount 
-          label={selectedQuestionType?.answerCountLabel || undefined}
-          helperText={selectedQuestionType?.answerCountHelperText || undefined}
-          required={true}
-          error={!!errors.answer_count}
-          errorText={errors.answer_count}
-          setData={setData}
-          currentAnswerCount={currentAnswerCount}
-          maxValue={maxAnswerCount}
-        />
+        <>
+          <AnswerCount 
+            label={selectedQuestionType?.answerCountLabel || undefined}
+            helperText={selectedQuestionType?.answerCountHelperText || undefined}
+            required={true}
+            error={!!errors.answer_count}
+            errorText={errors.answer_count}
+            setData={setData}
+            currentAnswerCount={currentAnswerCount}
+            maxValue={maxAnswerCount}
+          />
+          {hasAnswerCount && (
+            <>
+              <ScoringOption
+                options={selectedQuestionType?.scoringTypes || []}
+                required={true}
+                error={!!errors.scoring_type}
+                errorText={errors.scoring_type}
+                setData={setData}
+                currentScoringType={currentScoringType}
+              />
+              {hasScoringType && (
+                <PointAssignment
+                  scoringType={currentScoringType}
+                  answerCount={currentAnswerCount}
+                  setData={setData}
+                  currentScoringPoints={currentScoringPoints}
+                  errors={errors}
+                />
+              )}
+            </>
+          )}
+        </>
       )}
     </Box>
   );

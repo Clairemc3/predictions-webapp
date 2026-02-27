@@ -20,6 +20,7 @@ class ContextualQuestionType
         public readonly ?int $answerCategoryId = null,
         public readonly ?string $answerCountLabel = null,
         public readonly ?string $answerCountHelperText = null,
+        public readonly ?array $scoringTypes = null,
     ) {}
 
     /**
@@ -36,19 +37,35 @@ class ContextualQuestionType
             description: $config['description'],
             answerCategoryFilters: self::getAnswerCategoryFilters($config['answer_category_filters'] ?? []),
             answerCategory: $config['answer_category'] ?? null,
+            scoringTypes: $config['scoring_types'] ?? null,
             answerCategoryId: self::getAnswerCategoryId($config['answer_category']),
             answerCountLabel: $config['answer_count_label'] ?? null,
             answerCountHelperText: $config['answer_count_helper_text'] ?? null,
         );
     }
 
+    public function scoringTypes(): array
+    {
+        return data_get($this->scoringTypes, '*.value', []);
+    }
+
     /**
      * Get answer category filters with category_id added to each filter
      */
     private static function getAnswerCategoryFilters(array $filters): array
-    {        
+    {
+        if (empty($filters)) {
+            return [];
+        }
+        
+        // Load all categories once and cache by name
+        static $categories = null;
+        if ($categories === null) {
+            $categories = Category::all()->keyBy('name');
+        }
+        
         foreach ($filters as &$filter) {
-            $category = Category::where('name', $filter['name'])->first();
+            $category = $categories->get($filter['name']);
             if (!$category) {
                 throw new InvalidArgumentException("Category with name {$filter['name']} does not exist.");
             }
@@ -64,7 +81,13 @@ class ContextualQuestionType
             return null;
         }
 
-        $category = Category::where('name', $categoryName)->first();
+        // Load all categories once and cache by name
+        static $categories = null;
+        if ($categories === null) {
+            $categories = Category::all()->keyBy('name');
+        }
+
+        $category = $categories->get($categoryName);
         if (!$category) {
             throw new InvalidArgumentException("Category with name {$categoryName} does not exist.");
         }

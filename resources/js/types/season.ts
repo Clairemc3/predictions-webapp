@@ -43,6 +43,11 @@ export interface Question {
   base_type?: string;
   answer_count?: number;
   answer_category?: string;
+  scoring_type?: string;
+  points_values?: Array<{
+    position: number;
+    value: number;
+  }>;
   entities?: Array<{
     id: number;
     name?: string;

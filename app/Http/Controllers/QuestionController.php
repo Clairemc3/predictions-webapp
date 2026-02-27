@@ -8,6 +8,8 @@ use App\Http\Resources\SeasonResource;
 use App\Models\Question;
 use App\Models\Season;
 use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
+use App\Services\QuestionEntityPersistService;
+use App\Services\QuestionPointPersistService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -17,8 +19,9 @@ use Inertia\Response;
 class QuestionController extends Controller
 {
 
-    public function __construct(private ContextualQuestionTypeService $questionTypeService)
-    {
+    public function __construct(
+        private ContextualQuestionTypeService $questionTypeService
+    ) {
     }
 
     public function create(Season $season): Response
@@ -50,13 +53,15 @@ class QuestionController extends Controller
         $question->answer_category_id = $questionType->answerCategoryId;
         $season->questions()->save($question);
         
-        $entities = collect($request->entities)->mapWithKeys(function ($entity) {
-            return [$entity['entity_id'] => [
-                'category_id' => $entity['category_id']
-            ]];
-        })->toArray();
+        app(QuestionEntityPersistService::class)->syncEntities($question, $request->entities);
 
-        $question->entities()->attach($entities);
+        // Store question score values
+        if ($request->has('question_points')) {
+            app(QuestionPointPersistService::class)->sync(
+                $question,
+                $request->input('question_points')
+            );
+        }
 
         return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }
@@ -72,7 +77,7 @@ class QuestionController extends Controller
 
         return Inertia::render('seasons/questions/edit', [
             'season' => new SeasonResource($season),
-            'question' => $question->load('entities'),
+            'question' => $question->load(['entities', 'pointsValues']),
             'questionTypes' => $questionTypes
         ]);
     }
@@ -97,13 +102,15 @@ class QuestionController extends Controller
 
         // Update entities if provided
         if ($request->has('entities')) {
-            $entities = collect($request->entities)->mapWithKeys(function ($entity) {
-                return [$entity['entity_id'] => [
-                    'category_id' => $entity['category_id']
-                ]];
-            })->toArray();
+            app(QuestionEntityPersistService::class)->syncEntities($question, $request->entities);
+        }
 
-            $question->entities()->sync($entities);
+        // Update question score values
+        if ($request->has('question_points')) {
+            app(QuestionPointPersistService::class)->sync(
+                $question,
+                $request->input('question_points')
+            );
         }
 
         return response()->redirectTo(route('seasons.manage', [$season, $question]));

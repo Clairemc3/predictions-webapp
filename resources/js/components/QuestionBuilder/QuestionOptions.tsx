@@ -9,10 +9,12 @@ import EntitySelection from './QuestionTypeOptions/EntitySelection';
 import { QuestionOptionsProps } from '../../types/question';
 
 interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
-  errors?: Record<string, string>;
+  errors?: Partial<Record<string, string>>;
   setData: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
+  currentScoringType?: string;
+  currentScoringPoints?: Record<string, number | string>;
 }
 
 const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({ 
@@ -20,8 +22,21 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
   errors = {},
   setData,
   currentEntities = [],
-  currentAnswerCount
+  currentAnswerCount,
+  currentScoringType,
+  currentScoringPoints
 }) => {
+  const [shouldRenderOptions, setShouldRenderOptions] = React.useState(false);
+  
+  React.useEffect(() => {
+    // Defer rendering the heavy EntitySelection component until after initial paint
+    const timer = setTimeout(() => {
+      setShouldRenderOptions(true);
+    }, 0);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <>
       <Divider sx={{ my: 3 }} />
@@ -43,9 +58,11 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             setData={setData}
             currentEntities={currentEntities}
             currentAnswerCount={currentAnswerCount}
+            currentScoringType={currentScoringType}
+            currentScoringPoints={currentScoringPoints}
           />
         )}
-        {selectedQuestionType?.base === 'entity_selection' && (
+        {shouldRenderOptions && selectedQuestionType?.base === 'entity_selection' && (
           <EntitySelection 
             selectedQuestionType={selectedQuestionType}
             setData={setData}

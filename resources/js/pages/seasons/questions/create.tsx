@@ -66,6 +66,8 @@ const CreateQuestion = () => {
               setData={setData}
               currentEntities={data.entities}
               currentAnswerCount={data.answer_count}
+              currentScoringType={data.scoring_type}
+              currentScoringPoints={data.question_points}
             />
           )}
 

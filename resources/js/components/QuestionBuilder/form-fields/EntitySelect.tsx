@@ -59,7 +59,7 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
     if (category && value && !entityOptions[entityKey] && !loading[entityKey]) {
       fetchEntitiesForCategory(category, index, filters, answerCategory);
     }
-  }, [category, value, entityKey, index, filters, answerCategory]);
+  }, [category, value, entityKey, filters, answerCategory, entityOptions, loading, fetchEntitiesForCategory, index]);
 
   // Notify parent component when the selected entity changes
   React.useEffect(() => {
@@ -130,7 +130,6 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
         onChange={handleChange}
         required={required}
         onOpen={() => {
-          console.log('Select onOpen triggered:', { category, entityKey, hasOptions: !!entityOptions[entityKey], isLoading: !!loading[entityKey] });
           if (category && !entityOptions[entityKey] && !loading[entityKey]) {
             fetchEntitiesForCategory(category, index, filters, answerCategory);
           }
@@ -149,14 +148,11 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
             No options available
           </MenuItem>
         )}
-        {entityOptions[entityKey]?.map((entity) => {
-          console.log('Rendering entity:', entity);
-          return (
-            <MenuItem key={entity.id} value={entity.id}>
-              {entity.value}
-            </MenuItem>
-          );
-        })}
+        {entityOptions[entityKey]?.map((entity) => (
+          <MenuItem key={entity.id} value={entity.id}>
+            {entity.value}
+          </MenuItem>
+        ))}
       </Select>
       {(helperText || description) && (
         <FormHelperText>{helperText || description}</FormHelperText>

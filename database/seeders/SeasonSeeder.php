@@ -17,7 +17,7 @@ class SeasonSeeder extends Seeder
     public function run(): void
     {
         $statuses = SeasonStatus::cases();
-        $users = User::role('players')->get();
+        $users = User::role('player')->get();
 
         // Create 10 seasons, cycling through different statuses
         for ($i = 0; $i < 10; $i++) {
