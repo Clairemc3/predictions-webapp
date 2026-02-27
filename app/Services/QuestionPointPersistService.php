@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Question;
 
-class QuestionPointValuePersistService
+class QuestionPointPersistService
 {
     /**
      * Sync score values for a question.

@@ -9,7 +9,7 @@ use App\Models\Question;
 use App\Models\Season;
 use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
 use App\Services\QuestionEntityPersistService;
-use App\Services\QuestionPointValuePersistService;
+use App\Services\QuestionPointPersistService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -57,7 +57,7 @@ class QuestionController extends Controller
 
         // Store question score values
         if ($request->has('question_points')) {
-            app(QuestionPointValuePersistService::class)->sync(
+            app(QuestionPointPersistService::class)->sync(
                 $question,
                 $request->input('question_points')
             );
@@ -107,7 +107,7 @@ class QuestionController extends Controller
 
         // Update question score values
         if ($request->has('question_points')) {
-            app(QuestionPointValuePersistService::class)->sync(
+            app(QuestionPointPersistService::class)->sync(
                 $question,
                 $request->input('question_points')
             );
