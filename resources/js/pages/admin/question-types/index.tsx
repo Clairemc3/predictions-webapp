@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { route } from '../../../lib/routes';
 import {
   Box,
