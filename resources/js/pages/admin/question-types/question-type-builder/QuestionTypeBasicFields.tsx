@@ -142,10 +142,11 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         error={!!errors.answer_category_id}
         helperText={errors.answer_category_id}
         margin="normal"
+        required
       >
         <MenuItem value="">None</MenuItem>
         {categories.map((category) => (
-          <MenuItem key={category.id} value={category.id}>
+          <MenuItem key={category.id} value={category.id.toString()}>
             {category.name}
           </MenuItem>
         ))}
