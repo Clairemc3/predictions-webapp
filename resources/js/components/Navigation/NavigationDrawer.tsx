@@ -60,16 +60,23 @@ export default function NavigationDrawer({ open, onClose }: NavigationDrawerProp
               />
             </ListItem>
             <ListItem disablePadding>
-              <Link href="/seasons">
+              <Link href="/admin/seasons">
                 <ListItemButton>
                   <ListItemText primary="Seasons" />
                 </ListItemButton>
               </Link>
             </ListItem>
             <ListItem disablePadding>
-              <Link href="/users">
+              <Link href="/admin/users">
                 <ListItemButton>
                   <ListItemText primary="Users" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            <ListItem disablePadding>
+              <Link href="/admin/question-types">
+                <ListItemButton>
+                  <ListItemText primary="Question Types" />
                 </ListItemButton>
               </Link>
             </ListItem>
