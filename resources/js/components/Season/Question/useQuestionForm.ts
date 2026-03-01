@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from '@inertiajs/react';
-import { QuestionType } from '../../../types/question';
+import axios from 'axios';
+import { QuestionType, QuestionTypeSummary } from '../../../types/question';
 
 interface QuestionFormData {
   type: string;
@@ -16,7 +17,7 @@ interface QuestionFormData {
 
 interface UseQuestionFormProps {
   initialData?: Partial<QuestionFormData>;
-  questionTypes: QuestionType[];
+  questionTypes: QuestionTypeSummary[];
 }
 
 export const useQuestionForm = ({
@@ -40,12 +41,26 @@ export const useQuestionForm = ({
     ...initialData,
   });
 
-  // Find the selected question type
-  const selectedQuestionType = React.useMemo(() => {
-    return data.type && questionTypes?.length > 0 
-      ? questionTypes.find(questionType => questionType.key === data.type) 
-      : null;
-  }, [data.type, questionTypes]);
+  const [selectedQuestionType, setSelectedQuestionType] = React.useState<QuestionType | null>(null);
+  const [loadingQuestionType, setLoadingQuestionType] = React.useState(false);
+
+  // Fetch full question type details when type changes
+  React.useEffect(() => {
+    if (data.type) {
+      setLoadingQuestionType(true);
+      axios.get(`/api/question-types/${data.type}`)
+        .then(response => {
+          setSelectedQuestionType(response.data);
+          setLoadingQuestionType(false);
+        })
+        .catch(error => {
+          console.error('Error fetching question type:', error);
+          setLoadingQuestionType(false);
+        });
+    } else {
+      setSelectedQuestionType(null);
+    }
+  }, [data.type]);
 
   // Update base_type when question type changes
   React.useEffect(() => {
@@ -88,6 +103,7 @@ export const useQuestionForm = ({
     processing,
     errors,
     selectedQuestionType,
+    loadingQuestionType,
     handleTypeChange,
     submitCreate,
     submitUpdate,

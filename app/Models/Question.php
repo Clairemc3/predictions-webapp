@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\QuestionType;
+use App\Enums\BaseQuestionTypes;
 use App\Queries\EntityQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ class Question extends Model
     ];
 
     protected $casts = [
-        'base_type' => QuestionType::class,
+        'base_type' => BaseQuestionTypes::class,
     ];
 
     /**
@@ -63,8 +63,8 @@ class Question extends Model
 
     public function allOptions(): Collection
     {
-         $entityQuery = new EntityQuery($this->answerCategory);
-         foreach ($this->entities as $questionEntity) {
+        $entityQuery = new EntityQuery($this->answerCategory);
+        foreach ($this->entities as $questionEntity) {
             $category = Category::find($questionEntity->pivot->category_id);
             $entity = Entity::find($questionEntity->pivot->entity_id);
             $entityQuery->filter($category->name, $entity->value);

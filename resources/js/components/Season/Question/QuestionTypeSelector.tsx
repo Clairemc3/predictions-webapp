@@ -9,12 +9,12 @@ import {
   Typography,
   Alert,
 } from '@mui/material';
-import { QuestionType } from '../../../types/question';
+import { QuestionTypeSummary } from '../../../types/question';
 
 interface QuestionTypeSelectorProps {
   value: string;
   onChange: (value: string) => void;
-  questionTypes: QuestionType[];
+  questionTypes: QuestionTypeSummary[];
   error?: string;
 }
 

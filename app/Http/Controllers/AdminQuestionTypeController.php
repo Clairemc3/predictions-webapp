@@ -35,12 +35,12 @@ class AdminQuestionTypeController extends Controller
 
         return Inertia::render('admin/question-types/create', [
             'categories' => $categories,
-            'applicationContexts' => collect(ApplicationContext::cases())->map(fn($case) => [
+            'applicationContexts' => collect(ApplicationContext::cases())->map(fn ($case) => [
                 'label' => $case->name,
                 'value' => $case->value,
             ]),
             'baseTypes' => ['ranking', 'entity_selection'],
-            'availableScoringTypes' => collect(ScoringTypes::cases())->map(fn($case) => [
+            'availableScoringTypes' => collect(ScoringTypes::cases())->map(fn ($case) => [
                 'value' => $case->value,
                 'label' => ucwords(str_replace('_', ' ', $case->value)),
             ]),
@@ -112,7 +112,7 @@ class AdminQuestionTypeController extends Controller
             }
         }
 
-        app(\App\Services\ContextualQuestionType\ContextualQuestionTypeService::class)->clearCache();
+        app(\App\Services\QuestionTypeService::class)->clearCache();
 
         return redirect()->route('admin.question-types.index');
     }
@@ -127,12 +127,12 @@ class AdminQuestionTypeController extends Controller
         return Inertia::render('admin/question-types/edit', [
             'questionType' => $questionType,
             'categories' => $categories,
-            'applicationContexts' => collect(ApplicationContext::cases())->map(fn($case) => [
+            'applicationContexts' => collect(ApplicationContext::cases())->map(fn ($case) => [
                 'label' => $case->name,
                 'value' => $case->value,
             ]),
             'baseTypes' => ['ranking', 'entity_selection'],
-            'availableScoringTypes' => collect(ScoringTypes::cases())->map(fn($case) => [
+            'availableScoringTypes' => collect(ScoringTypes::cases())->map(fn ($case) => [
                 'value' => $case->value,
                 'label' => ucwords(str_replace('_', ' ', $case->value)),
             ]),
@@ -206,7 +206,7 @@ class AdminQuestionTypeController extends Controller
             }
         }
 
-        app(\App\Services\ContextualQuestionType\ContextualQuestionTypeService::class)->clearCache();
+        app(\App\Services\QuestionTypeService::class)->clearCache();
 
         return redirect()->route('admin.question-types.index');
     }
@@ -217,7 +217,7 @@ class AdminQuestionTypeController extends Controller
 
         $questionType->delete();
 
-        app(\App\Services\ContextualQuestionType\ContextualQuestionTypeService::class)->clearCache();
+        app(\App\Services\QuestionTypeService::class)->clearCache();
 
         return redirect()->route('admin.question-types.index');
     }

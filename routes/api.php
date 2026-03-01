@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryEntitiesController;
+use App\Http\Controllers\Api\QuestionTypeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/entities/{category:name}', [CategoryEntitiesController::class, 'index'])
     ->name('api.category-entities.index');
+
+Route::get('/question-types/{key}', [QuestionTypeController::class, 'show'])
+    ->name('api.question-types.show');

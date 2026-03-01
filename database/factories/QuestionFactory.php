@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Enums\QuestionType;
+use App\Enums\BaseQuestionTypes;
 use App\Models\Category;
 use App\Models\Question;
 use App\Models\User;
 use App\Queries\EntityQuery;
-use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
+use App\Services\QuestionTypeService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,7 +26,7 @@ class QuestionFactory extends Factory
 
         return [
             'type' => 'standings',
-            'base_type' => QuestionType::Ranking,
+            'base_type' => BaseQuestionTypes::Ranking,
             'title' => $this->faker->sentence(4),
             'short_title' => $this->faker->words(3, true),
             'answer_count' => $this->faker->numberBetween(6, 20),
@@ -44,7 +44,7 @@ class QuestionFactory extends Factory
 
         return $this->state(fn (array $attributes) => [
             'type' => 'standings',
-            'base_type' => QuestionType::Ranking,
+            'base_type' => BaseQuestionTypes::Ranking,
             'title' => $this->faker->randomElement([
                 'Premier League Final Standings',
                 'Championship Final Table',
@@ -82,20 +82,18 @@ class QuestionFactory extends Factory
 
     private function attachQuestionEntities(Question $question): void
     {
-        $contextualQuestionTypeService = app(ContextualQuestionTypeService::class);
+        $questionTypeService = app(QuestionTypeService::class);
 
-        $questionType = $contextualQuestionTypeService->byType($question->type);
+        $questionType = $questionTypeService->getModelByKey($question->type);
 
-        $answerCategoryFilters = $questionType?->answerCategoryFilters ?? [];
-
-        if (count($answerCategoryFilters) === 0) {
+        if (! $questionType || $questionType->answerFilters->isEmpty()) {
             return;
         }
 
-        foreach ($answerCategoryFilters as $filter) {
-            $category = Category::where('name', $filter['name'])->first();
+        foreach ($questionType->answerFilters as $filter) {
+            $category = $filter->category;
 
-            $randomEntity = $this->selectRandomEntityForFilter($category, $filter);
+            $randomEntity = $this->selectRandomEntityForFilter($category, $filter->filters ?? []);
 
             $question->entities()->attach($randomEntity->id, [
                 'category_id' => $category->id,
@@ -103,11 +101,11 @@ class QuestionFactory extends Factory
         }
     }
 
-    private function selectRandomEntityForFilter(Category $category, array $filter): ?\App\Models\Entity
+    private function selectRandomEntityForFilter(Category $category, array $filters): ?\App\Models\Entity
     {
         $entityQuery = new EntityQuery($category);
 
-        foreach ($filter['filters'] as $filterCategory => $filterEntityValue) {
+        foreach ($filters as $filterCategory => $filterEntityValue) {
             $entityQuery->filter($filterCategory, $filterEntityValue);
         }
 

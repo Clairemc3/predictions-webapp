@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\ApplicationContext;
-use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
+use App\Services\QuestionTypeService;
 use Illuminate\Support\ServiceProvider;
 
 class ContextualQuestionTypeServiceProvider extends ServiceProvider
@@ -13,11 +13,11 @@ class ContextualQuestionTypeServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ContextualQuestionTypeService::class, function ($app) {
+        $this->app->bind(QuestionTypeService::class, function ($app) {
             $contextValue = config('app.context');
             $context = ApplicationContext::from($contextValue);
-            
-            return new ContextualQuestionTypeService($context);
+
+            return new QuestionTypeService($context);
         });
     }
 

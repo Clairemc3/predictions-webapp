@@ -2,18 +2,15 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\QuestionType;
-use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
+use App\Enums\BaseQuestionTypes;
+use App\Services\QuestionTypeService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateQuestionRequest extends FormRequest
 {
+    public function __construct(private readonly QuestionTypeService $questionTypeService) {}
 
-    public function __construct(private readonly ContextualQuestionTypeService $contextualQuestionTypeService)
-    {
-    }
-    
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -29,20 +26,18 @@ class UpdateQuestionRequest extends FormRequest
      */
     public function rules(): array
     {
-        $questionType = $this->contextualQuestionTypeService->questionByKey($this->input('type'));
-        
         return [
             'title' => ['nullable', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:50'],
-            'base_type' => ['required', Rule::in([QuestionType::Ranking->value, QuestionType::EntitySelection->value])],
-            'type' => ['required', Rule::in($this->contextualQuestionTypeService->allTypes())],
+            'base_type' => ['required', Rule::in([BaseQuestionTypes::Ranking->value, BaseQuestionTypes::EntitySelection->value])],
+            'type' => ['required', Rule::in($this->questionTypeService->allTypes())],
             'entities' => ['nullable', 'array'],
             'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],
             'entities.*.category_id' => ['required', 'integer', 'exists:categories,id'],
             'answer_count' => ['required', 'integer', 'min:1', 'max:20'],
             'question_points' => ['required', 'array', 'min:1'],
             'question_points.*' => ['required', 'integer', 'min:0'],
-            'scoring_type' => ['required', 'string', Rule::in($questionType->scoringTypes())],
+            'scoring_type' => ['required', 'string', Rule::in($this->questionTypeService->getScoringTypesForKey($this->input('type')))],
         ];
     }
 
@@ -65,21 +60,21 @@ class UpdateQuestionRequest extends FormRequest
         // Convert answer_count_all checkbox to boolean
         if ($this->has('answer_count_all')) {
             $this->merge([
-                'answer_count_all' => $this->boolean('answer_count_all')
+                'answer_count_all' => $this->boolean('answer_count_all'),
             ]);
         }
 
         // If answer_count_all is true, set answer_count to 20 (max value)
         if ($this->boolean('answer_count_all')) {
             $this->merge([
-                'answer_count' => 20
+                'answer_count' => 20,
             ]);
         }
 
         // Clean up entities array to remove empty values
         if ($this->has('entities')) {
-            $entities = array_filter($this->input('entities'), function($entity) {
-                return !empty($entity['entity_id'] && !empty($entity['category_id']));
+            $entities = array_filter($this->input('entities'), function ($entity) {
+                return ! empty($entity['entity_id'] && ! empty($entity['category_id']));
             });
             $this->merge(['entities' => array_values($entities)]);
         }

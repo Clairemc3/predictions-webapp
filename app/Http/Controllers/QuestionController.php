@@ -7,9 +7,9 @@ use App\Http\Requests\UpdateQuestionRequest;
 use App\Http\Resources\SeasonResource;
 use App\Models\Question;
 use App\Models\Season;
-use App\Services\ContextualQuestionType\ContextualQuestionTypeService;
 use App\Services\QuestionEntityPersistService;
 use App\Services\QuestionPointPersistService;
+use App\Services\QuestionTypeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -18,21 +18,19 @@ use Inertia\Response;
 
 class QuestionController extends Controller
 {
-
     public function __construct(
-        private ContextualQuestionTypeService $questionTypeService
-    ) {
-    }
+        private QuestionTypeService $questionTypeService
+    ) {}
 
     public function create(Season $season): Response
     {
         Gate::authorize('create', [Question::class, $season]);
 
-        $questionTypes = $this->questionTypeService->build();
+        $questionTypes = $this->questionTypeService->getTypes();
 
         return Inertia::render('seasons/questions/create', [
             'season' => new SeasonResource($season),
-            'questionTypes' => $questionTypes
+            'questionTypes' => $questionTypes,
         ]);
     }
 
@@ -43,16 +41,14 @@ class QuestionController extends Controller
     {
         Gate::authorize('create', [Question::class, $season]);
 
-        $questionType = $this->questionTypeService->questionByKey($request->input('type'));
+        $questionType = $this->questionTypeService->getModelByKey($request->input('type'));
 
-        $question = new Question();
+        $question = new Question;
         $question->fill($request->validated());
         $question->created_by = Auth::id();
-
-        // @TODO: Refine this
-        $question->answer_category_id = $questionType->answerCategoryId;
+        $question->answer_category_id = $questionType->answer_category_id;
         $season->questions()->save($question);
-        
+
         app(QuestionEntityPersistService::class)->syncEntities($question, $request->entities);
 
         // Store question score values
@@ -73,12 +69,12 @@ class QuestionController extends Controller
     {
         Gate::authorize('update', [$question, $season]);
 
-        $questionTypes = $this->questionTypeService->build();
+        $questionTypes = $this->questionTypeService->getTypes();
 
         return Inertia::render('seasons/questions/edit', [
             'season' => new SeasonResource($season),
             'question' => $question->load(['entities', 'pointsValues']),
-            'questionTypes' => $questionTypes
+            'questionTypes' => $questionTypes,
         ]);
     }
 
@@ -91,13 +87,13 @@ class QuestionController extends Controller
 
         // Update the question with validated data
         $question->fill($request->validated());
-        
+
         // Update question type if provided
         if ($request->has('type')) {
-            $questionType = $this->questionTypeService->questionByKey($request->input('type'));
-            $question->answer_category_id = $questionType->answerCategoryId;
+            $questionType = $this->questionTypeService->getModelByKey($request->input('type'));
+            $question->answer_category_id = $questionType->answer_category_id;
         }
-        
+
         $question->save();
 
         // Update entities if provided
@@ -122,7 +118,7 @@ class QuestionController extends Controller
     public function destroy(Season $season, Question $question): RedirectResponse
     {
         Gate::authorize('delete', [$question, $season]);
-        
+
         $question->delete();
 
         return response()->redirectTo(route('seasons.manage', $season));
