@@ -58,7 +58,7 @@ const QuestionTypeAnswerFilters: React.FC<QuestionTypeAnswerFiltersProps> = ({
         <Card key={index} sx={{ mb: 2, p: 2, bgcolor: 'grey.50' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
             <Typography variant="subtitle2">Filter {index + 1}</Typography>
-            <IconButton size="small" onClick={() => onRemove(index)}>
+            <IconButton size="small" onClick={() => onRemove(index)} aria-label="Remove answer filter">
               <DeleteIcon />
             </IconButton>
           </Box>
