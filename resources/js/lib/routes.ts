@@ -16,10 +16,10 @@ interface RouteParams {
 export const buildRoute = (name: string, params: RouteParams = {}): string => {
   switch (name) {
     case 'users.permissions.toggle':
-      return `/users/${params.user}/permissions/${params.permission}/toggle`;
+      return `/admin/users/${params.user}/permissions/${params.permission}/toggle`;
     
     case 'users.index':
-      return '/users';
+      return '/admin/users';
     
     case 'seasons.manage':
       return `/seasons/${params.season}`;
