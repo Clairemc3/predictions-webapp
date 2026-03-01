@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { route } from '../../../lib/routes';
 import {
@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import AuthLayout from '../../../layouts/AuthLayout';
+import ConfirmationDialog from '../../../components/ConfirmationDialog';
 
 interface QuestionType {
   id: number;
@@ -33,10 +34,28 @@ interface PageProps {
 }
 
 const Index = ({ questionTypes }: PageProps) => {
-  const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this question type?')) {
-      router.delete(route('admin.question-types.destroy', { id }));
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [questionTypeToDelete, setQuestionTypeToDelete] = useState<QuestionType | null>(null);
+
+  const handleDeleteClick = (questionType: QuestionType) => {
+    setQuestionTypeToDelete(questionType);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (questionTypeToDelete) {
+      router.delete(route('admin.question-types.destroy', { id: questionTypeToDelete.id }), {
+        onSuccess: () => {
+          setDeleteDialogOpen(false);
+          setQuestionTypeToDelete(null);
+        },
+      });
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setQuestionTypeToDelete(null);
   };
 
   return (
@@ -101,7 +120,7 @@ const Index = ({ questionTypes }: PageProps) => {
                       <EditIcon />
                     </IconButton>
                     <IconButton
-                      onClick={() => handleDelete(questionType.id)}
+                      onClick={() => handleDeleteClick(questionType)}
                       size="small"
                       color="error"
                     >
@@ -115,6 +134,16 @@ const Index = ({ questionTypes }: PageProps) => {
         </CardContent>
       </Card>
       </Box>
+
+      <ConfirmationDialog
+        open={deleteDialogOpen}
+        title="Delete Question Type"
+        message={`Are you sure you want to delete the question type "${questionTypeToDelete?.label}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </AuthLayout>
   );
 };
