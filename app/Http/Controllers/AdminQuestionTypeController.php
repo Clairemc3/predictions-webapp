@@ -20,8 +20,7 @@ class AdminQuestionTypeController extends Controller
     {
         Gate::authorize('viewAny', QuestionType::class);
 
-        $questionTypes = QuestionType::with(['answerCategory', 'answerFilters', 'scoringTypes'])
-            ->orderBy('display_order')
+        $questionTypes = QuestionType::orderBy('display_order')
             ->get();
 
         return Inertia::render('admin/question-types/index', [
