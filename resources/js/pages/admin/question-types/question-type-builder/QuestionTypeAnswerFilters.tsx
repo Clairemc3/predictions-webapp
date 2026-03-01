@@ -73,7 +73,7 @@ const QuestionTypeAnswerFilters: React.FC<QuestionTypeAnswerFiltersProps> = ({
             size="small"
           >
             {categories.map((category) => (
-              <MenuItem key={category.id} value={category.id}>
+              <MenuItem key={category.id} value={category.id.toString()}>
                 {category.name}
               </MenuItem>
             ))}
