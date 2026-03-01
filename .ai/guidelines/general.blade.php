@@ -52,6 +52,8 @@ This file contains coding standards, conventions, and rules for AI assistants wo
 - Follow existing code formatting and structure
 - Maintain consistent import ordering
 
+### Application-Specific Enum Usage
+- Always use BaseQuestionType, ApplicationContext, Permission, Role, ScoringTypes, and SeasonStatus enum values rather than string literals when checking or comparing values (e.g., use `BaseQuestionType::Ranking->value` instead of `'ranking'`).
 
 ### Useful Artisan commands to help with tasks
 Use ```php artisan schedule:list``` to look for scheduled commands and scheduled jobs
@@ -65,4 +67,5 @@ values for each action the user can take on that model, e.g.
    'canDeleteQuestion': false,
    'canViewQuestion': true
 }
+
 
