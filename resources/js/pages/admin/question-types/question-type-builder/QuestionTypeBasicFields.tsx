@@ -182,7 +182,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         type="number"
         variant="filled"
         value={data.display_order}
-        onChange={(e) => onChange('display_order', parseInt(e.target.value))}
+        onChange={(e) => onChange('display_order', e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
         error={!!errors.display_order}
         helperText={errors.display_order}
         margin="normal"
