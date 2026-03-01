@@ -43,7 +43,12 @@ const QuestionTypeAnswerFilters: React.FC<QuestionTypeAnswerFiltersProps> = ({
       <Divider sx={{ my: 4 }} />
 
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6">Answer Filters</Typography>
+        <Box>
+          <Typography variant="h6" sx={{ mb: 2 }}>Answer Filters</Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Select filters that the user will be able to apply to the answer category
+          </Typography>
+        </Box>
         <Button startIcon={<AddIcon />} onClick={onAdd}>
           Add Filter
         </Button>

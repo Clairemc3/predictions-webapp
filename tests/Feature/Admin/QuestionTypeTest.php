@@ -13,7 +13,7 @@ beforeEach(function () {
     // Create roles
     Role::create(['name' => 'super-admin']);
     Role::create(['name' => 'player']);
-    
+
     // Create categories for testing
     Category::create(['name' => 'football-team']);
     Category::create(['name' => 'football-league']);
@@ -67,7 +67,7 @@ test('super admin can view create question type form', function () {
 test('super admin can create a question type', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $category = Category::first();
 
     $data = [
@@ -82,6 +82,13 @@ test('super admin can create a question type', function () {
         'answer_count_helper_text' => 'Helper text',
         'is_active' => true,
         'display_order' => 1,
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $response = $this->actingAs($superAdmin)->post('/admin/question-types', $data);
@@ -97,7 +104,7 @@ test('super admin can create a question type', function () {
 test('super admin can create a question type with answer filters', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $category = Category::where('name', 'football-team')->first();
     $leagueCategory = Category::where('name', 'football-league')->first();
 
@@ -109,6 +116,8 @@ test('super admin can create a question type with answer filters', function () {
         'short_description' => 'Short description',
         'description' => 'Full description',
         'answer_category_id' => $category->id,
+        'answer_count_label' => 'Number of items',
+        'answer_count_helper_text' => 'Helper text',
         'is_active' => true,
         'display_order' => 1,
         'answer_filters' => [
@@ -119,12 +128,19 @@ test('super admin can create a question type with answer filters', function () {
                 'filters' => ['country' => 'England'],
             ],
         ],
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $response = $this->actingAs($superAdmin)->post('/admin/question-types', $data);
 
     $response->assertRedirect('/admin/question-types');
-    
+
     $questionType = QuestionType::where('key', 'standings')->first();
     expect($questionType->answerFilters)->toHaveCount(1);
     expect($questionType->answerFilters->first()->label)->toBe('Select a League');
@@ -134,7 +150,7 @@ test('super admin can create a question type with answer filters', function () {
 test('super admin can create a question type with scoring types', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $category = Category::first();
 
     $data = [
@@ -145,6 +161,8 @@ test('super admin can create a question type with scoring types', function () {
         'short_description' => 'Short description',
         'description' => 'Full description',
         'answer_category_id' => $category->id,
+        'answer_count_label' => 'Number of items',
+        'answer_count_helper_text' => 'Helper text',
         'is_active' => true,
         'display_order' => 1,
         'scoring_types' => [
@@ -159,7 +177,7 @@ test('super admin can create a question type with scoring types', function () {
     $response = $this->actingAs($superAdmin)->post('/admin/question-types', $data);
 
     $response->assertRedirect('/admin/question-types');
-    
+
     $questionType = QuestionType::where('key', 'test-scoring')->first();
     expect($questionType->scoringTypes)->toHaveCount(1);
     expect($questionType->scoringTypes->first()->value)->toBe('position_with_proximity');
@@ -168,7 +186,7 @@ test('super admin can create a question type with scoring types', function () {
 test('regular user cannot create a question type', function () {
     $user = User::factory()->create();
     $user->assignRole('player');
-    
+
     $category = Category::first();
 
     $data = [
@@ -179,8 +197,17 @@ test('regular user cannot create a question type', function () {
         'short_description' => 'Short description',
         'description' => 'Full description',
         'answer_category_id' => $category->id,
+        'answer_count_label' => 'Number of items',
+        'answer_count_helper_text' => 'Helper text',
         'is_active' => true,
         'display_order' => 1,
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $response = $this->actingAs($user)->post('/admin/question-types', $data);
@@ -207,7 +234,7 @@ test('question type requires valid fields', function () {
 test('super admin can view edit question type form', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()->create();
 
     $response = $this->actingAs($superAdmin)->get("/admin/question-types/{$questionType->id}/edit");
@@ -225,7 +252,7 @@ test('super admin can view edit question type form', function () {
 test('super admin can update a question type', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()->create([
         'label' => 'Original Label',
     ]);
@@ -238,8 +265,17 @@ test('super admin can update a question type', function () {
         'short_description' => 'Updated short description',
         'description' => 'Updated description',
         'answer_category_id' => $questionType->answer_category_id,
+        'answer_count_label' => 'Updated count label',
+        'answer_count_helper_text' => 'Updated helper text',
         'is_active' => false,
         'display_order' => 5,
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $response = $this->actingAs($superAdmin)->put("/admin/question-types/{$questionType->id}", $data);
@@ -256,7 +292,7 @@ test('super admin can update a question type', function () {
 test('super admin can update question type answer filters', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()
         ->hasAnswerFilters(2)
         ->create();
@@ -271,6 +307,8 @@ test('super admin can update question type answer filters', function () {
         'short_description' => $questionType->short_description,
         'description' => $questionType->description,
         'answer_category_id' => $questionType->answer_category_id,
+        'answer_count_label' => $questionType->answer_count_label,
+        'answer_count_helper_text' => $questionType->answer_count_helper_text,
         'is_active' => $questionType->is_active,
         'display_order' => $questionType->display_order,
         'answer_filters' => [
@@ -281,12 +319,19 @@ test('super admin can update question type answer filters', function () {
                 'filters' => ['new' => 'filter'],
             ],
         ],
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $response = $this->actingAs($superAdmin)->put("/admin/question-types/{$questionType->id}", $data);
 
     $response->assertRedirect('/admin/question-types');
-    
+
     $questionType->refresh();
     expect($questionType->answerFilters)->toHaveCount(1);
     expect($questionType->answerFilters->first()->label)->toBe('New Filter');
@@ -295,7 +340,7 @@ test('super admin can update question type answer filters', function () {
 test('regular user cannot update a question type', function () {
     $user = User::factory()->create();
     $user->assignRole('player');
-    
+
     $questionType = QuestionType::factory()->create();
 
     $data = [
@@ -305,8 +350,18 @@ test('regular user cannot update a question type', function () {
         'label' => 'Updated Label',
         'short_description' => $questionType->short_description,
         'description' => $questionType->description,
+        'answer_category_id' => $questionType->answer_category_id,
+        'answer_count_label' => $questionType->answer_count_label,
+        'answer_count_helper_text' => $questionType->answer_count_helper_text,
         'is_active' => $questionType->is_active,
         'display_order' => $questionType->display_order,
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $response = $this->actingAs($user)->put("/admin/question-types/{$questionType->id}", $data);
@@ -317,7 +372,7 @@ test('regular user cannot update a question type', function () {
 test('super admin can delete a question type', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()->create();
 
     $response = $this->actingAs($superAdmin)->delete("/admin/question-types/{$questionType->id}");
@@ -331,7 +386,7 @@ test('super admin can delete a question type', function () {
 test('deleting question type cascades to answer filters and scoring types', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()
         ->hasAnswerFilters(2)
         ->hasScoringTypes(2)
@@ -343,11 +398,11 @@ test('deleting question type cascades to answer filters and scoring types', func
     $response = $this->actingAs($superAdmin)->delete("/admin/question-types/{$questionType->id}");
 
     $response->assertRedirect('/admin/question-types');
-    
+
     foreach ($filterIds as $filterId) {
         $this->assertDatabaseMissing('question_type_answer_filters', ['id' => $filterId]);
     }
-    
+
     foreach ($scoringIds as $scoringId) {
         $this->assertDatabaseMissing('question_type_scoring_types', ['id' => $scoringId]);
     }
@@ -356,7 +411,7 @@ test('deleting question type cascades to answer filters and scoring types', func
 test('regular user cannot delete a question type', function () {
     $user = User::factory()->create();
     $user->assignRole('player');
-    
+
     $questionType = QuestionType::factory()->create();
 
     $response = $this->actingAs($user)->delete("/admin/question-types/{$questionType->id}");
@@ -367,7 +422,7 @@ test('regular user cannot delete a question type', function () {
 test('cache is cleared when question type is created', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $category = Category::first();
 
     // Warm the cache
@@ -381,8 +436,17 @@ test('cache is cleared when question type is created', function () {
         'short_description' => 'Short description',
         'description' => 'Full description',
         'answer_category_id' => $category->id,
+        'answer_count_label' => 'Number of items',
+        'answer_count_helper_text' => 'Helper text',
         'is_active' => true,
         'display_order' => 1,
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $this->actingAs($superAdmin)->post('/admin/question-types', $data);
@@ -393,7 +457,7 @@ test('cache is cleared when question type is created', function () {
 test('cache is cleared when question type is updated', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()->create([
         'application_context' => 'uk_football',
     ]);
@@ -408,8 +472,18 @@ test('cache is cleared when question type is updated', function () {
         'label' => 'Updated Label',
         'short_description' => $questionType->short_description,
         'description' => $questionType->description,
+        'answer_category_id' => $questionType->answer_category_id,
+        'answer_count_label' => $questionType->answer_count_label,
+        'answer_count_helper_text' => $questionType->answer_count_helper_text,
         'is_active' => $questionType->is_active,
         'display_order' => $questionType->display_order,
+        'scoring_types' => [
+            [
+                'value' => 'exact_match',
+                'label' => 'Exact Match',
+                'description' => 'Points for exact match',
+            ],
+        ],
     ];
 
     $this->actingAs($superAdmin)->put("/admin/question-types/{$questionType->id}", $data);
@@ -420,7 +494,7 @@ test('cache is cleared when question type is updated', function () {
 test('cache is cleared when question type is deleted', function () {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole('super-admin');
-    
+
     $questionType = QuestionType::factory()->create([
         'application_context' => 'uk_football',
     ]);

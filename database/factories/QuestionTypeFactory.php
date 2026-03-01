@@ -23,8 +23,8 @@ class QuestionTypeFactory extends Factory
             'short_description' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
             'answer_category_id' => Category::factory(),
-            'answer_count_label' => $this->faker->optional()->words(3, true),
-            'answer_count_helper_text' => $this->faker->optional()->sentence(),
+            'answer_count_label' => $this->faker->words(3, true),
+            'answer_count_helper_text' => $this->faker->sentence(),
             'is_active' => true,
             'display_order' => $this->faker->numberBetween(0, 100),
         ];

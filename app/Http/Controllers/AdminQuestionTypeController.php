@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\ApplicationContext;
 use App\Enums\ScoringTypes;
+use App\Http\Requests\StoreQuestionTypeRequest;
+use App\Http\Requests\UpdateQuestionTypeRequest;
 use App\Models\Category;
 use App\Models\QuestionType;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -47,70 +49,40 @@ class AdminQuestionTypeController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreQuestionTypeRequest $request): RedirectResponse
     {
         Gate::authorize('create', QuestionType::class);
 
-        $validated = $request->validate([
-            'application_context' => 'required|string|max:50',
-            'key' => 'required|string|max:100',
-            'base_type' => 'required|in:ranking,entity_selection',
-            'label' => 'required|string|max:255',
-            'short_description' => 'required|string',
-            'description' => 'required|string',
-            'answer_category_id' => 'nullable|exists:categories,id',
-            'answer_count_label' => 'nullable|string|max:255',
-            'answer_count_helper_text' => 'nullable|string',
-            'is_active' => 'boolean',
-            'display_order' => 'integer',
-            'answer_filters' => 'array',
-            'answer_filters.*.category_id' => 'required|exists:categories,id',
-            'answer_filters.*.label' => 'required|string|max:255',
-            'answer_filters.*.description' => 'nullable|string',
-            'answer_filters.*.filters' => 'nullable|array',
-            'scoring_types' => 'array',
-            'scoring_types.*.value' => 'required|string|in:exact_match,position_with_proximity,closest_wins',
-            'scoring_types.*.description' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
-        $questionType = QuestionType::create([
-            'application_context' => $validated['application_context'],
-            'key' => $validated['key'],
-            'base_type' => $validated['base_type'],
-            'label' => $validated['label'],
-            'short_description' => $validated['short_description'],
-            'description' => $validated['description'],
-            'answer_category_id' => $validated['answer_category_id'] ?? null,
-            'answer_count_label' => $validated['answer_count_label'] ?? null,
-            'answer_count_helper_text' => $validated['answer_count_helper_text'] ?? null,
-            'is_active' => $validated['is_active'] ?? true,
-            'display_order' => $validated['display_order'] ?? 0,
-        ]);
+        DB::transaction(function () use ($validated) {
+            $questionType = QuestionType::create($validated);
 
-        // Create answer filters
-        if (isset($validated['answer_filters'])) {
-            foreach ($validated['answer_filters'] as $index => $filter) {
-                $questionType->answerFilters()->create([
-                    'category_id' => $filter['category_id'],
-                    'label' => $filter['label'],
-                    'description' => $filter['description'] ?? null,
-                    'filters' => $filter['filters'] ?? [],
-                    'display_order' => $index + 1,
-                ]);
+            // Create answer filters
+            if (isset($validated['answer_filters'])) {
+                foreach ($validated['answer_filters'] as $index => $filter) {
+                    $questionType->answerFilters()->create([
+                        'category_id' => $filter['category_id'],
+                        'label' => $filter['label'],
+                        'description' => $filter['description'] ?? null,
+                        'filters' => $filter['filters'] ?? [],
+                        'display_order' => $index + 1,
+                    ]);
+                }
             }
-        }
 
-        // Create scoring types
-        if (isset($validated['scoring_types'])) {
-            foreach ($validated['scoring_types'] as $index => $scoringType) {
-                $questionType->scoringTypes()->create([
-                    'value' => $scoringType['value'],
-                    'label' => ucwords(str_replace('_', ' ', $scoringType['value'])),
-                    'description' => $scoringType['description'] ?? null,
-                    'display_order' => $index + 1,
-                ]);
+            // Create scoring types
+            if (isset($validated['scoring_types'])) {
+                foreach ($validated['scoring_types'] as $index => $scoringType) {
+                    $questionType->scoringTypes()->create([
+                        'value' => $scoringType['value'],
+                        'label' => ucwords(str_replace('_', ' ', $scoringType['value'])),
+                        'description' => $scoringType['description'] ?? null,
+                        'display_order' => $index + 1,
+                    ]);
+                }
             }
-        }
+        });
 
         app(\App\Services\QuestionTypeService::class)->clearCache();
 
@@ -139,72 +111,42 @@ class AdminQuestionTypeController extends Controller
         ]);
     }
 
-    public function update(Request $request, QuestionType $questionType): RedirectResponse
+    public function update(UpdateQuestionTypeRequest $request, QuestionType $questionType): RedirectResponse
     {
         Gate::authorize('update', $questionType);
 
-        $validated = $request->validate([
-            'application_context' => 'required|string|max:50',
-            'key' => 'required|string|max:100',
-            'base_type' => 'required|in:ranking,entity_selection',
-            'label' => 'required|string|max:255',
-            'short_description' => 'required|string',
-            'description' => 'required|string',
-            'answer_category_id' => 'nullable|exists:categories,id',
-            'answer_count_label' => 'nullable|string|max:255',
-            'answer_count_helper_text' => 'nullable|string',
-            'is_active' => 'boolean',
-            'display_order' => 'integer',
-            'answer_filters' => 'array',
-            'answer_filters.*.category_id' => 'required|exists:categories,id',
-            'answer_filters.*.label' => 'required|string|max:255',
-            'answer_filters.*.description' => 'nullable|string',
-            'answer_filters.*.filters' => 'nullable|array',
-            'scoring_types' => 'array',
-            'scoring_types.*.value' => 'required|string|in:exact_match,position_with_proximity,closest_wins',
-            'scoring_types.*.description' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
-        $questionType->update([
-            'application_context' => $validated['application_context'],
-            'key' => $validated['key'],
-            'base_type' => $validated['base_type'],
-            'label' => $validated['label'],
-            'short_description' => $validated['short_description'],
-            'description' => $validated['description'],
-            'answer_category_id' => $validated['answer_category_id'] ?? null,
-            'answer_count_label' => $validated['answer_count_label'] ?? null,
-            'answer_count_helper_text' => $validated['answer_count_helper_text'] ?? null,
-            'is_active' => $validated['is_active'] ?? true,
-            'display_order' => $validated['display_order'] ?? 0,
-        ]);
+        DB::transaction(function () use ($validated, $questionType) {
+            $questionType->update($validated);
 
-        // Sync answer filters
-        $questionType->answerFilters()->delete();
-        if (isset($validated['answer_filters'])) {
-            foreach ($validated['answer_filters'] as $index => $filter) {
-                $questionType->answerFilters()->create([
-                    'category_id' => $filter['category_id'],
-                    'label' => $filter['label'],
-                    'description' => $filter['description'] ?? null,
-                    'filters' => $filter['filters'] ?? [],
-                    'display_order' => $index + 1,
-                ]);
+            // Sync answer filters
+            $questionType->answerFilters()->delete();
+            if (isset($validated['answer_filters'])) {
+                foreach ($validated['answer_filters'] as $index => $filter) {
+                    $questionType->answerFilters()->create([
+                        'category_id' => $filter['category_id'],
+                        'label' => $filter['label'],
+                        'description' => $filter['description'] ?? null,
+                        'filters' => $filter['filters'] ?? [],
+                        'display_order' => $index + 1,
+                    ]);
+                }
             }
-        }
 
-        // Sync scoring types
-        $questionType->scoringTypes()->delete();
-        if (isset($validated['scoring_types'])) {
-            foreach ($validated['scoring_types'] as $index => $scoringType) {
-                $questionType->scoringTypes()->create([
-                    'value' => $scoringType['value'],
-                    'label' => ucwords(str_replace('_', ' ', $scoringType['value'])),
-                    'description' => $scoringType['description'] ?? null,
-                    'display_order' => $index + 1,
-                ]);
+            // Sync scoring types
+            $questionType->scoringTypes()->delete();
+            if (isset($validated['scoring_types'])) {
+                foreach ($validated['scoring_types'] as $index => $scoringType) {
+                    $questionType->scoringTypes()->create([
+                        'value' => $scoringType['value'],
+                        'label' => ucwords(str_replace('_', ' ', $scoringType['value'])),
+                        'description' => $scoringType['description'] ?? null,
+                        'display_order' => $index + 1,
+                    ]);
+                }
             }
-        }
+        });
 
         app(\App\Services\QuestionTypeService::class)->clearCache();
 
