@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\ApplicationContext;
-use App\Enums\BaseQuestionTypes;
+use App\Enums\BaseQuestionType;
 use App\Enums\ScoringTypes;
 
 // Will be moved to db once there is a UI to manage
@@ -9,11 +9,11 @@ use App\Enums\ScoringTypes;
 return [
     // Generic base types
     'base' => [
-        BaseQuestionTypes::Ranking->value => [
+        BaseQuestionType::Ranking->value => [
             'label' => 'Ranking',
             'helper_text' => 'Generic ranking of entities in a defined order.',
         ],
-        BaseQuestionTypes::EntitySelection->value => [
+        BaseQuestionType::EntitySelection->value => [
             'label' => 'Entity Selection',
             'helper_text' => 'Select one or more entities from a category.',
         ],
@@ -22,7 +22,7 @@ return [
     // Specialized question types built on top of base types
     ApplicationContext::UKFootball->value => [
         'standings' => [
-            'base' => BaseQuestionTypes::Ranking,
+            'base' => BaseQuestionType::Ranking,
             'answer_category' => 'football-team',
             'label' => 'Standings',
             'short_description' => 'Members should predict the final order of teams in a league.',
@@ -47,7 +47,7 @@ return [
             ],
         ],
         'managers' => [
-            'base' => BaseQuestionTypes::EntitySelection,
+            'base' => BaseQuestionType::EntitySelection,
             'answer_category' => 'manager',
             'label' => 'Managers (not yet set up)',
             'short_description' => 'Use this when members should select one or more managers.',
@@ -62,7 +62,7 @@ return [
             ],
         ],
         'players' => [
-            'base' => BaseQuestionTypes::EntitySelection,
+            'base' => BaseQuestionType::EntitySelection,
             'answer_category' => 'player',
             'label' => 'Players (not yet set up)',
             'short_description' => 'Use this when members should select one or more players.',

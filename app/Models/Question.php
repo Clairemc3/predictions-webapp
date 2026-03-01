@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\BaseQuestionTypes;
+use App\Enums\BaseQuestionType;
 use App\Queries\EntityQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ class Question extends Model
     ];
 
     protected $casts = [
-        'base_type' => BaseQuestionTypes::class,
+        'base_type' => BaseQuestionType::class,
     ];
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\BaseQuestionTypes;
+use App\Enums\BaseQuestionType;
 use App\Services\QuestionTypeService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -29,7 +29,7 @@ class UpdateQuestionRequest extends FormRequest
         return [
             'title' => ['nullable', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:50'],
-            'base_type' => ['required', Rule::in([BaseQuestionTypes::Ranking->value, BaseQuestionTypes::EntitySelection->value])],
+            'base_type' => ['required', Rule::in(BaseQuestionType::values())],
             'type' => ['required', Rule::in($this->questionTypeService->allTypes())],
             'entities' => ['nullable', 'array'],
             'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],

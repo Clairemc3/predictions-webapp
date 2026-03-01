@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\BaseQuestionTypes;
+use App\Enums\BaseQuestionType;
 use App\Models\Question;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +33,7 @@ class StoreAnswerRequest extends FormRequest
 
         // Only require order if the question base_type is 'ranking'
         $question = Question::find($this->question_id);
-        if ($question->base_type === BaseQuestionTypes::Ranking) {
+        if ($question->base_type === BaseQuestionType::Ranking->value) {
             $rules['order'] = 'required|integer|min:1';
         } else {
             $rules['order'] = 'sometimes|integer|min:1';

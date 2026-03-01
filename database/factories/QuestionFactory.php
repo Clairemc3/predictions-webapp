@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\BaseQuestionTypes;
+use App\Enums\BaseQuestionType;
 use App\Models\Category;
 use App\Models\Question;
 use App\Models\User;
@@ -26,7 +26,7 @@ class QuestionFactory extends Factory
 
         return [
             'type' => 'standings',
-            'base_type' => BaseQuestionTypes::Ranking,
+            'base_type' => BaseQuestionType::Ranking,
             'title' => $this->faker->sentence(4),
             'short_title' => $this->faker->words(3, true),
             'answer_count' => $this->faker->numberBetween(6, 20),
@@ -44,7 +44,7 @@ class QuestionFactory extends Factory
 
         return $this->state(fn (array $attributes) => [
             'type' => 'standings',
-            'base_type' => BaseQuestionTypes::Ranking,
+            'base_type' => BaseQuestionType::Ranking,
             'title' => $this->faker->randomElement([
                 'Premier League Final Standings',
                 'Championship Final Table',

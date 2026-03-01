@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\BaseQuestionTypes;
+use App\Enums\BaseQuestionType;
 use App\Enums\ScoringTypes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,7 +27,7 @@ class StoreQuestionTypeRequest extends FormRequest
         return [
             'application_context' => 'required|string|max:50',
             'key' => 'required|string|max:100',
-            'base_type' => ['required', Rule::enum(BaseQuestionTypes::class)],
+            'base_type' => ['required', Rule::enum(BaseQuestionType::class)],
             'label' => 'required|string|max:255',
             'short_description' => 'required|string',
             'description' => 'required|string',
