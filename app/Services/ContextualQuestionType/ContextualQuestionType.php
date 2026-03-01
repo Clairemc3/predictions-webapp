@@ -2,7 +2,7 @@
 
 namespace App\Services\ContextualQuestionType;
 
-use App\Enums\QuestionType;
+use App\Enums\BaseQuestionType;
 use App\Models\Category;
 use InvalidArgumentException;
 
@@ -10,7 +10,7 @@ class ContextualQuestionType
 {
     public function __construct(
         public readonly string $key,
-        public readonly QuestionType $base,
+        public readonly BaseQuestionType $base,
         public readonly string $type,
         public readonly string $label,
         public readonly string $shortDescription,
@@ -57,16 +57,16 @@ class ContextualQuestionType
         if (empty($filters)) {
             return [];
         }
-        
+
         // Load all categories once and cache by name
         static $categories = null;
         if ($categories === null) {
             $categories = Category::all()->keyBy('name');
         }
-        
+
         foreach ($filters as &$filter) {
             $category = $categories->get($filter['name']);
-            if (!$category) {
+            if (! $category) {
                 throw new InvalidArgumentException("Category with name {$filter['name']} does not exist.");
             }
             $filter['category_id'] = $category->id;
@@ -77,7 +77,7 @@ class ContextualQuestionType
 
     private static function getAnswerCategoryId(?string $categoryName): ?int
     {
-        if (!$categoryName) {
+        if (! $categoryName) {
             return null;
         }
 
@@ -88,7 +88,7 @@ class ContextualQuestionType
         }
 
         $category = $categories->get($categoryName);
-        if (!$category) {
+        if (! $category) {
             throw new InvalidArgumentException("Category with name {$categoryName} does not exist.");
         }
 

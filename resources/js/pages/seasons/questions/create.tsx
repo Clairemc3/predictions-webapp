@@ -2,7 +2,7 @@ import React from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import { route } from '../../../lib/routes';
 import QuestionOptions from '../../../components/QuestionBuilder/QuestionOptions';
-import { QuestionType } from '../../../types/question';
+import { QuestionTypeSummary } from '../../../types/question';
 import { Season } from '../../../types/season';
 import {
   QuestionFormLayout,
@@ -13,7 +13,7 @@ import {
 
 interface PageProps extends Record<string, any> {
   season: Season;
-  questionTypes: QuestionType[];
+  questionTypes: QuestionTypeSummary[];
 }
 
 const CreateQuestion = () => {
@@ -28,7 +28,7 @@ const CreateQuestion = () => {
     selectedQuestionType,
     handleTypeChange,
     submitCreate,
-  } = useQuestionForm({ questionTypes });
+  } = useQuestionForm();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

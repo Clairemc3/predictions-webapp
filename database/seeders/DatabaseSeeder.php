@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             CategoryAndEntitySeeder::class,
+            QuestionTypeSeeder::class,
             SeasonSeeder::class,
             QuestionSeeder::class,
             AnswerSeeder::class,

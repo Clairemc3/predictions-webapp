@@ -213,9 +213,12 @@ const UsersIndex = () => {
                     <PaginationItem
                       component={Link}
                       href={
-                        item.page === users.current_page 
-                          ? '#' 
-                          : `/users?page=${item.page}${search ? `&search=${encodeURIComponent(search)}` : ''}`
+                        item.page === null || item.page === users.current_page
+                          ? '#'
+                          : route('users.index', {
+                              page: item.page,
+                              ...(search ? { search } : {})
+                            })
                       }
                       {...item}
                     />

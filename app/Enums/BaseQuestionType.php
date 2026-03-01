@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum QuestionType: string
+enum BaseQuestionType: string
 {
     case Ranking = 'ranking';
     case EntitySelection = 'entity_selection';
@@ -35,12 +35,17 @@ enum QuestionType: string
     public static function options(): array
     {
         return array_map(
-            fn(QuestionType $type) => [
+            fn (BaseQuestionType $type) => [
                 'value' => $type->value,
                 'name' => $type->name(),
                 'description' => $type->description(),
             ],
             self::cases()
         );
+    }
+
+    public static function values(): array
+    {
+        return array_map(fn (self $type) => $type->value, self::cases());
     }
 }

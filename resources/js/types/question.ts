@@ -1,5 +1,13 @@
 
 
+export interface QuestionTypeSummary {
+  id: number;
+  key: string;
+  label: string;
+  shortDescription: string;
+  description: string;
+}
+
 export interface QuestionType {
   key: string;
   type: string;

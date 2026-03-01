@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import { QuestionType } from '../../../types/question';
 
 interface QuestionFormData {
@@ -16,13 +17,11 @@ interface QuestionFormData {
 
 interface UseQuestionFormProps {
   initialData?: Partial<QuestionFormData>;
-  questionTypes: QuestionType[];
 }
 
 export const useQuestionForm = ({
-  initialData = {},
-  questionTypes = []
-}: UseQuestionFormProps) => {
+  initialData = {}
+}: UseQuestionFormProps = {}) => {
   const defaultData: QuestionFormData = {
     type: '',
     title: '',
@@ -40,12 +39,42 @@ export const useQuestionForm = ({
     ...initialData,
   });
 
-  // Find the selected question type
-  const selectedQuestionType = React.useMemo(() => {
-    return data.type && questionTypes?.length > 0 
-      ? questionTypes.find(questionType => questionType.key === data.type) 
-      : null;
-  }, [data.type, questionTypes]);
+  const [selectedQuestionType, setSelectedQuestionType] = React.useState<QuestionType | null>(null);
+  const [loadingQuestionType, setLoadingQuestionType] = React.useState(false);
+
+  // Fetch full question type details when type changes
+  React.useEffect(() => {
+    // Create an AbortController to cancel the request if the effect re-runs
+    const abortController = new AbortController();
+
+    if (data.type) {
+      setLoadingQuestionType(true);
+      axios.get(`/api/question-types/${data.type}`, {
+        // Pass the abort signal to axios so it can cancel the request
+        signal: abortController.signal
+      })
+        .then(response => {
+          setSelectedQuestionType(response.data);
+        })
+        .catch(error => {
+          // Ignore errors from cancelled requests (user changed type quickly)
+          if (error.name !== 'CanceledError' && error.code !== 'ERR_CANCELED') {
+            console.error('Error fetching question type:', error);
+          }
+        })
+        .finally(() => {
+          setLoadingQuestionType(false);
+        });
+    } else {
+      setSelectedQuestionType(null);
+      setLoadingQuestionType(false);
+    }
+
+    // Cleanup: abort the request if the user changes type before it completes
+    return () => {
+      abortController.abort();
+    };
+  }, [data.type]);
 
   // Update base_type when question type changes
   React.useEffect(() => {
@@ -88,6 +117,7 @@ export const useQuestionForm = ({
     processing,
     errors,
     selectedQuestionType,
+    loadingQuestionType,
     handleTypeChange,
     submitCreate,
     submitUpdate,

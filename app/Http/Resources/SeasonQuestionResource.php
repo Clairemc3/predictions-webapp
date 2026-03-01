@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\QuestionType;
+use App\Enums\BaseQuestionType;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -41,7 +41,7 @@ class SeasonQuestionResource extends JsonResource
 
     private function getTitle(): string
     {
-        if ($this->base_type === QuestionType::Ranking) {
+        if ($this->base_type === BaseQuestionType::Ranking) {
             $entity = $this->entities->first();
             if ($entity) {
                 return $entity->value ." ". ucfirst($this->type);

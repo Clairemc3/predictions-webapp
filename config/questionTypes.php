@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\ApplicationContext;
-use App\Enums\QuestionType;
+use App\Enums\BaseQuestionType;
 use App\Enums\ScoringTypes;
 
 // Will be moved to db once there is a UI to manage
@@ -9,11 +9,11 @@ use App\Enums\ScoringTypes;
 return [
     // Generic base types
     'base' => [
-        QuestionType::Ranking->value => [
+        BaseQuestionType::Ranking->value => [
             'label' => 'Ranking',
             'helper_text' => 'Generic ranking of entities in a defined order.',
         ],
-        QuestionType::EntitySelection->value => [
+        BaseQuestionType::EntitySelection->value => [
             'label' => 'Entity Selection',
             'helper_text' => 'Select one or more entities from a category.',
         ],
@@ -22,7 +22,7 @@ return [
     // Specialized question types built on top of base types
     ApplicationContext::UKFootball->value => [
         'standings' => [
-            'base' => QuestionType::Ranking,
+            'base' => BaseQuestionType::Ranking,
             'answer_category' => 'football-team',
             'label' => 'Standings',
             'short_description' => 'Members should predict the final order of teams in a league.',
@@ -33,21 +33,21 @@ return [
                 [
                     'name' => 'football-league',
                     'label' => 'Select a UK league',
-                    'filters' => ['country' => 'England']
-                ]
+                    'filters' => ['country' => 'England'],
+                ],
             ],
             'answer_count_label' => 'Number of team positions to predict',
             'answer_count_helper_text' => 'The position of how many teams should be predicted?',
             'scoring_types' => [
-               [
-                'value' => ScoringTypes::PositionWithProximity->value,
-                'label' => 'Position with Proximity',
-                'description' => 'Points for correct positions and near misses',
+                [
+                    'value' => ScoringTypes::PositionWithProximity->value,
+                    'label' => 'Position with Proximity',
+                    'description' => 'Points for correct positions and near misses',
                 ],
             ],
         ],
         'managers' => [
-            'base' => QuestionType::EntitySelection,
+            'base' => BaseQuestionType::EntitySelection,
             'answer_category' => 'manager',
             'label' => 'Managers (not yet set up)',
             'short_description' => 'Use this when members should select one or more managers.',
@@ -57,12 +57,12 @@ return [
                     'name' => 'football-league',
                     'label' => 'Select a League',
                     'description' => 'Select the league the manager should work within',
-                    'filters' => []
+                    'filters' => [],
                 ],
             ],
         ],
         'players' => [
-            'base' => QuestionType::EntitySelection,
+            'base' => BaseQuestionType::EntitySelection,
             'answer_category' => 'player',
             'label' => 'Players (not yet set up)',
             'short_description' => 'Use this when members should select one or more players.',
@@ -72,7 +72,7 @@ return [
                     'name' => 'football-league',
                     'label' => 'Select a League',
                     'description' => 'Select the league the player should work within',
-                    'filters' => []
+                    'filters' => [],
                 ],
             ],
         ],

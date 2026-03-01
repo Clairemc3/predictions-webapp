@@ -2,7 +2,7 @@ import React from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import { route } from '../../../lib/routes';
 import QuestionOptions from '../../../components/QuestionBuilder/QuestionOptions';
-import { QuestionType } from '../../../types/question';
+import { QuestionTypeSummary } from '../../../types/question';
 import { Season, Question } from '../../../types/season';
 import {
   QuestionFormLayout,
@@ -14,7 +14,7 @@ import {
 interface PageProps extends Record<string, any> {
   season: Season;
   question: Question;
-  questionTypes: QuestionType[];
+  questionTypes: QuestionTypeSummary[];
 }
 
 const EditQuestion = () => {
@@ -48,7 +48,7 @@ const EditQuestion = () => {
     selectedQuestionType,
     handleTypeChange,
     submitUpdate,
-  } = useQuestionForm({ initialData, questionTypes });
+  } = useQuestionForm({ initialData });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
