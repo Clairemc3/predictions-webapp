@@ -13,13 +13,6 @@ class QuestionTypeService
         private ApplicationContext $context
     ) {}
 
-    public function build(): Collection
-    {
-        $contextTypes = $this->getQuestionTypesForContext();
-
-        return $contextTypes;
-    }
-
     public function getTypes(): Collection
     {
         return $this->getQuestionTypesForContext();
