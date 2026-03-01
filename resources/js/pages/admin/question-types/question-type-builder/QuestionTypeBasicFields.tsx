@@ -46,6 +46,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         fullWidth
         label="Application Context"
         select
+        variant="filled"
         value={data.application_context}
         onChange={(e) => onChange('application_context', e.target.value)}
         error={!!errors.application_context}
@@ -63,6 +64,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
       <TextField
         fullWidth
         label="Key"
+        variant="filled"
         value={data.key}
         onChange={(e) => onChange('key', e.target.value)}
         error={!!errors.key}
@@ -75,6 +77,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         fullWidth
         label="Base Type"
         select
+        variant="filled"
         value={data.base_type}
         onChange={(e) => onChange('base_type', e.target.value)}
         error={!!errors.base_type}
@@ -92,6 +95,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
       <TextField
         fullWidth
         label="Label"
+        variant="filled"
         value={data.label}
         onChange={(e) => onChange('label', e.target.value)}
         error={!!errors.label}
@@ -103,6 +107,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
       <TextField
         fullWidth
         label="Short Description"
+        variant="filled"
         value={data.short_description}
         onChange={(e) => onChange('short_description', e.target.value)}
         error={!!errors.short_description}
@@ -116,6 +121,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
       <TextField
         fullWidth
         label="Description"
+        variant="filled"
         value={data.description}
         onChange={(e) => onChange('description', e.target.value)}
         error={!!errors.description}
@@ -130,6 +136,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         fullWidth
         label="Answer Category"
         select
+        variant="filled"
         value={data.answer_category_id}
         onChange={(e) => onChange('answer_category_id', e.target.value)}
         error={!!errors.answer_category_id}
@@ -147,6 +154,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
       <TextField
         fullWidth
         label="Answer Count Label"
+        variant="filled"
         value={data.answer_count_label}
         onChange={(e) => onChange('answer_count_label', e.target.value)}
         error={!!errors.answer_count_label}
@@ -157,6 +165,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
       <TextField
         fullWidth
         label="Answer Count Helper Text"
+        variant="filled"
         value={data.answer_count_helper_text}
         onChange={(e) => onChange('answer_count_helper_text', e.target.value)}
         error={!!errors.answer_count_helper_text}
@@ -170,6 +179,7 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         fullWidth
         label="Display Order"
         type="number"
+        variant="filled"
         value={data.display_order}
         onChange={(e) => onChange('display_order', parseInt(e.target.value))}
         error={!!errors.display_order}
