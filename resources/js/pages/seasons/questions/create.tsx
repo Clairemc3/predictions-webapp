@@ -28,7 +28,7 @@ const CreateQuestion = () => {
     selectedQuestionType,
     handleTypeChange,
     submitCreate,
-  } = useQuestionForm({ questionTypes });
+  } = useQuestionForm();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

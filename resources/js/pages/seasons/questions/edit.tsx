@@ -48,7 +48,7 @@ const EditQuestion = () => {
     selectedQuestionType,
     handleTypeChange,
     submitUpdate,
-  } = useQuestionForm({ initialData, questionTypes });
+  } = useQuestionForm({ initialData });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
