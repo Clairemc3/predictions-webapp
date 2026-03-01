@@ -116,6 +116,7 @@ const Index = ({ questionTypes }: PageProps) => {
                       onClick={() => router.visit(route('admin.question-types.edit', { id: questionType.id }))}
                       size="small"
                       color="primary"
+                      aria-label={`Edit ${questionType.label}`}
                     >
                       <EditIcon />
                     </IconButton>
@@ -123,6 +124,7 @@ const Index = ({ questionTypes }: PageProps) => {
                       onClick={() => handleDeleteClick(questionType)}
                       size="small"
                       color="error"
+                      aria-label={`Delete ${questionType.label}`}
                     >
                       <DeleteIcon />
                     </IconButton>
