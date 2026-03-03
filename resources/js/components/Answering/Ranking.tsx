@@ -57,6 +57,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [apiError, setApiError] = useState('');
   const membershipId = usePage().props.membershipId;
 
   // State to track selected entities for each position
@@ -171,27 +172,54 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     const previousEntity = selectedEntities[index];
     console.log('handleEntitySelect called:', { index, newValue, previousEntity });
     
-    const newSelectedEntities = [...selectedEntities];
-    newSelectedEntities[index] = newValue;
-    setSelectedEntities(newSelectedEntities);
+    // Clear any previous API errors
+    setApiError('');
     
     // If clearing a selection (newValue is null), delete the answer
     if (!newValue && previousEntity?.answerId) {
       console.log('Deleting answer with ID:', previousEntity.answerId);
+      
+      // Optimistically update the UI
+      const newSelectedEntities = [...selectedEntities];
+      newSelectedEntities[index] = newValue;
+      setSelectedEntities(newSelectedEntities);
+      
       try {
         const response = await apiDelete(`/answers/${previousEntity.answerId}`);
         console.log('Delete response:', response);
         
-        // Trigger debounced reload
-        setNeedsReload(true);
+        // Check for successful deletion (200 or 204)
+        if (response.status === 200 || response.status === 204) {
+          // Trigger debounced reload on success
+          setNeedsReload(true);
+        } else {
+          // Revert the change if deletion failed
+          const revertedEntities = [...selectedEntities];
+          revertedEntities[index] = previousEntity;
+          setSelectedEntities(revertedEntities);
+          
+          // Display error message
+          const errorData = await response.json().catch(() => ({}));
+          setApiError(errorData.message || 'Failed to delete answer. Please try again.');
+        }
       } catch (error) {
         console.error('Error deleting answer:', error);
+        // Revert the change on error
+        const revertedEntities = [...selectedEntities];
+        revertedEntities[index] = previousEntity;
+        setSelectedEntities(revertedEntities);
+        setApiError('Failed to delete answer. Please try again.');
       }
       return;
     }
     
     // Make POST request to /answers when an entity is selected
     if (newValue) {
+      // Optimistically update the UI
+      const newSelectedEntities = [...selectedEntities];
+      newSelectedEntities[index] = newValue;
+      setSelectedEntities(newSelectedEntities);
+      
       try {
         const response = await answersRequest({
           membership_id: membershipId as number,
@@ -201,8 +229,8 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
           value: newValue.name
         });
         
-        // Update the selected entity with the answer ID from the response
-        if (response.ok) {
+        // Check for successful creation (201)
+        if (response.status === 201) {
           const data = await response.json();
           console.log('Answer created/updated:', data);
           
@@ -214,12 +242,26 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
             };
             setSelectedEntities(updatedSelectedEntities);
           }
+          
+          // Trigger debounced reload on success
+          setNeedsReload(true);
+        } else {
+          // Revert the change if creation failed
+          const revertedEntities = [...selectedEntities];
+          revertedEntities[index] = previousEntity;
+          setSelectedEntities(revertedEntities);
+          
+          // Display error message
+          const errorData = await response.json().catch(() => ({}));
+          setApiError(errorData.message || 'Failed to save answer. Please try again.');
         }
-        
-        // Trigger debounced reload
-        setNeedsReload(true);
       } catch (error) {
         console.error('Error making request:', error);
+        // Revert the change on error
+        const revertedEntities = [...selectedEntities];
+        revertedEntities[index] = previousEntity;
+        setSelectedEntities(revertedEntities);
+        setApiError('Failed to save answer. Please try again.');
       }
     }
   };
@@ -297,6 +339,13 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {error}
+            </Alert>
+          )}
+
+          {/* API Error state */}
+          {apiError && (
+            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setApiError('')}>
+              {apiError}
             </Alert>
           )}
 
