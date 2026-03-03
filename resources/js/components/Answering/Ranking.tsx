@@ -274,40 +274,65 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
       const oldIndex = items.indexOf(active.id as string);
       const newIndex = items.indexOf(over.id as string);
 
-      // Reorder both the items and selected entities
+      // Store previous state for potential revert
+      const previousItems = [...items];
+      const previousSelectedEntities = [...selectedEntities];
+
+      // Reorder both the items and selected entities (optimistic update)
       const newItems = arrayMove(items, oldIndex, newIndex);
       const newSelectedEntities = arrayMove(selectedEntities, oldIndex, newIndex);
       
       setItems(newItems);
       setSelectedEntities(newSelectedEntities);
 
+      // Clear any previous API errors
+      setApiError('');
+
       // Send POST requests for all changed orders
-      await sendReorderedAnswers(newSelectedEntities);
+      const success = await sendReorderedAnswers(newSelectedEntities);
+      
+      // Revert if any request failed
+      if (!success) {
+        setItems(previousItems);
+        setSelectedEntities(previousSelectedEntities);
+        setApiError('Failed to save new order. Please try again.');
+      }
     }
   };
 
   // Function to send reordered answers
-  const sendReorderedAnswers = async (reorderedEntities: (Entity | null)[]) => {
+  const sendReorderedAnswers = async (reorderedEntities: (SelectedEntity | null)[]): Promise<boolean> => {
+    let allSuccessful = true;
+    
     const promises = reorderedEntities.map(async (entity, index) => {
       if (entity) {
         try {
-          await answersRequest({
+          const response = await answersRequest({
             question_id: question_id,
             entity_id: entity.id,
             order: index + 1, // Position starts from 1
             membership_id: membershipId as number,
             value: entity.name,
           });
+          
+          // Check for successful response (200 range)
+          if (!response.ok) {
+            allSuccessful = false;
+          }
         } catch (error) {
-          console.error(`Error making reorder request for position ${index + 1}:`, error);
+          allSuccessful = false;
         }
       }
     });
 
     await Promise.all(promises);
     
-    // Trigger debounced reload after all reorders complete
-    setNeedsReload(true);
+    // Only trigger debounced reload if all requests succeeded
+    if (allSuccessful) {
+      setNeedsReload(true);
+    }
+    
+    return allSuccessful;
   };
   return (
     <Card sx={{ bgcolor: 'transparent', borderRadius: 0 }}>
