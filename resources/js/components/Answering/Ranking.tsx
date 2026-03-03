@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import SortableItem from './SortableItem';
 import { apiGet, apiDelete, answersRequest } from '../../lib/api';
-import { handleApiOperation } from '../../lib/apiErrorHandler';
 import { useOptimisticUpdate } from '../../hooks/useOptimisticUpdate';
 import {
   DndContext,
@@ -62,13 +61,10 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   const [apiError, setApiError] = useState('');
   const membershipId = usePage().props.membershipId;
 
-  // State to track selected entities for each position with optimistic updates
-  const { 
-    state: selectedEntities, 
-    setState: setSelectedEntities,
-    updateOptimistically: updateEntitiesOptimistically,
-    revert: revertEntities 
-  } = useOptimisticUpdate<(SelectedEntity | null)[]>(Array(answer_count).fill(null));
+  // State to track selected entities for each position
+  const [selectedEntities, setSelectedEntities] = useState<(SelectedEntity | null)[]>(
+    Array(answer_count).fill(null)
+  );
 
   // State to track if we need to reload (for debouncing)
   const [needsReload, setNeedsReload] = useState(false);
@@ -77,6 +73,104 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   const [items, setItems] = useState<string[]>(
     Array.from({ length: answer_count }, (_, index) => `item-${index}`)
   );
+
+  // Mutation for deleting an answer
+  const deleteEntityMutation = useOptimisticUpdate<any, { index: number; answerId: number }, (SelectedEntity | null)[]>({
+    mutationFn: ({ answerId }) => apiDelete(`/answers/${answerId}`),
+    currentState: selectedEntities,
+    setState: setSelectedEntities,
+    getOptimisticState: (current, { index }) => {
+      const newState = [...current];
+      newState[index] = null;
+      return newState;
+    },
+    onSuccess: () => {
+      console.log('Delete response: success');
+      setNeedsReload(true);
+    },
+    onError: (error) => {
+      console.error('Error deleting answer:', error);
+      setApiError('Failed to delete answer. Please try again.');
+    },
+  });
+
+  // Mutation for creating/updating an answer
+  const updateEntityMutation = useOptimisticUpdate<any, { index: number; entity: Entity }, (SelectedEntity | null)[]>({
+    mutationFn: ({ entity, index }) => answersRequest({
+      membership_id: membershipId as number,
+      question_id: question_id,
+      entity_id: entity.id,
+      order: index + 1,
+      value: entity.name,
+    }),
+    currentState: selectedEntities,
+    setState: setSelectedEntities,
+    getOptimisticState: (current, { index, entity }) => {
+      const newState = [...current];
+      newState[index] = entity;
+      return newState;
+    },
+    onSuccess: (data, { index, entity }) => {
+      console.log('Answer created/updated:', data);
+      
+      // Update with answer ID from response
+      if (data.answer?.id) {
+        setSelectedEntities(current => {
+          const updated = [...current];
+          updated[index] = {
+            ...entity,
+            answerId: data.answer.id,
+          };
+          return updated;
+        });
+      }
+      
+      setNeedsReload(true);
+    },
+    onError: (error) => {
+      console.error('Error updating answer:', error);
+      setApiError('Failed to save answer. Please try again.');
+    },
+  });
+
+  // Mutation for reordering answers
+  const reorderMutation = useOptimisticUpdate<any, { reorderedEntities: (SelectedEntity | null)[] }, (SelectedEntity | null)[]>({
+    mutationFn: async ({ reorderedEntities }) => {
+      // Send all reorder requests
+      const promises = reorderedEntities.map((entity, index) => {
+        if (!entity) return Promise.resolve(new Response(null, { status: 204 }));
+        
+        return answersRequest({
+          question_id: question_id,
+          entity_id: entity.id,
+          order: index + 1,
+          membership_id: membershipId as number,
+          value: entity.name,
+        });
+      });
+
+      const responses = await Promise.all(promises);
+      
+      // Check if all succeeded
+      const allSucceeded = responses.every(r => r.ok);
+      if (!allSucceeded) {
+        throw new Error('Some reorder requests failed');
+      }
+      
+      // Return a successful response
+      return new Response(null, { status: 204 });
+    },
+    currentState: selectedEntities,
+    setState: setSelectedEntities,
+    getOptimisticState: (current, { reorderedEntities }) => reorderedEntities,
+    onSuccess: () => {
+      setNeedsReload(true);
+    },
+    onError: (error) => {
+      console.error('Error reordering:', error);
+      setApiError('Failed to save new order. Please try again.');
+    },
+  });
 
   // Configure sensors for drag and drop
   const sensors = useSensors(
@@ -183,57 +277,13 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     // If clearing a selection (newValue is null), delete the answer
     if (!newValue && previousEntity?.answerId) {
       console.log('Deleting answer with ID:', previousEntity.answerId);
-      
-      // Optimistically update the UI
-      const newSelectedEntities = [...selectedEntities];
-      newSelectedEntities[index] = null;
-      updateEntitiesOptimistically(newSelectedEntities);
-      
-      await handleApiOperation({
-        operation: () => apiDelete(`/answers/${previousEntity.answerId}`),
-        onSuccess: () => {
-          console.log('Delete response: success');
-          setNeedsReload(true);
-        },
-        onError: setApiError,
-        revertState: revertEntities,
-      });
-      
+      deleteEntityMutation.mutate({ index, answerId: previousEntity.answerId });
       return;
     }
     
     // Make POST request to /answers when an entity is selected
     if (newValue) {
-      // Optimistically update the UI
-      const newSelectedEntities = [...selectedEntities];
-      newSelectedEntities[index] = newValue;
-      updateEntitiesOptimistically(newSelectedEntities);
-      
-      await handleApiOperation({
-        operation: () => answersRequest({
-          membership_id: membershipId as number,
-          question_id: question_id,
-          entity_id: newValue.id,
-          order: index + 1, // Position starts from 1
-          value: newValue.name
-        }),
-        onSuccess: (data) => {
-          console.log('Answer created/updated:', data);
-          
-          if (data.answer?.id) {
-            const updatedSelectedEntities = [...selectedEntities];
-            updatedSelectedEntities[index] = {
-              ...newValue,
-              answerId: data.answer.id
-            };
-            setSelectedEntities(updatedSelectedEntities);
-          }
-          
-          setNeedsReload(true);
-        },
-        onError: setApiError,
-        revertState: revertEntities,
-      });
+      updateEntityMutation.mutate({ index, entity: newValue });
     }
   };
 
@@ -245,57 +295,30 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
       const oldIndex = items.indexOf(active.id as string);
       const newIndex = items.indexOf(over.id as string);
 
-      // Store previous state for potential revert
+      // Store previous items state
       const previousItems = [...items];
-      const previousSelectedEntities = [...selectedEntities];
 
-      // Reorder both the items and selected entities (optimistic update)
+      // Reorder items array
       const newItems = arrayMove(items, oldIndex, newIndex);
-      const newSelectedEntities = arrayMove(selectedEntities, oldIndex, newIndex);
+      const reorderedEntities = arrayMove(selectedEntities, oldIndex, newIndex);
       
       setItems(newItems);
-      setSelectedEntities(newSelectedEntities);
-
-      // Clear any previous API errors
       setApiError('');
 
-      // Send POST requests for all changed orders
-      const success = await sendReorderedAnswers(newSelectedEntities);
-      
-      // Revert if any request failed
-      if (!success) {
+      // Use mutation for reordering
+      try {
+        await reorderMutation.mutateAsync({ reorderedEntities });
+      } catch (error) {
+        // Revert items on error
         setItems(previousItems);
-        setSelectedEntities(previousSelectedEntities);
-        setApiError('Failed to save new order. Please try again.');
       }
     }
   };
 
-  // Function to send reordered answers
+  // Function to send reordered answers (no longer needed - handled by mutation)
+  // Keeping for backward compatibility but it's not used
   const sendReorderedAnswers = async (reorderedEntities: (SelectedEntity | null)[]): Promise<boolean> => {
-    const promises = reorderedEntities.map((entity, index) => {
-      if (!entity) return Promise.resolve(true);
-      
-      return handleApiOperation({
-        operation: () => answersRequest({
-          question_id: question_id,
-          entity_id: entity.id,
-          order: index + 1, // Position starts from 1
-          membership_id: membershipId as number,
-          value: entity.name,
-        }),
-      });
-    });
-
-    const results = await Promise.all(promises);
-    const allSuccessful = results.every(result => result);
-    
-    // Only trigger debounced reload if all requests succeeded
-    if (allSuccessful) {
-      setNeedsReload(true);
-    }
-    
-    return allSuccessful;
+    return true;
   };
   return (
     <Card sx={{ bgcolor: 'transparent', borderRadius: 0 }}>

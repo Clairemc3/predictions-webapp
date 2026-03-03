@@ -1,61 +1,93 @@
-import { useState, useCallback } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { Dispatch, SetStateAction } from 'react';
 
-interface UseOptimisticUpdateReturn<T> {
-  state: T;
-  setState: (value: T | ((prev: T) => T)) => void;
-  updateOptimistically: (newState: T) => void;
-  revert: () => void;
-  commit: () => void;
+interface UseOptimisticUpdateOptions<TData, TVariables, TState> {
+  mutationFn: (variables: TVariables) => Promise<Response>;
+  currentState: TState;
+  setState: Dispatch<SetStateAction<TState>>;
+  getOptimisticState: (currentState: TState, variables: TVariables) => TState;
+  onSuccess?: (data: TData, variables: TVariables) => void;
+  onError?: (error: Error, variables: TVariables) => void;
+  onSettled?: () => void;
 }
 
 /**
- * Hook for managing state with optimistic updates and the ability to revert
- * 
- * @param initialState Initial state value
- * @returns Object containing state management functions
+ * Hook that wraps TanStack's useMutation for optimistic UI updates
  * 
  * @example
- * const { state, updateOptimistically, revert } = useOptimisticUpdate([1, 2, 3]);
+ * const updateEntity = useOptimisticUpdate({
+ *   mutationFn: (data) => apiDelete(`/answers/${data.id}`),
+ *   currentState: selectedEntities,
+ *   setState: setSelectedEntities,
+ *   getOptimisticState: (current, variables) => {
+ *     const newState = [...current];
+ *     newState[variables.index] = null;
+ *     return newState;
+ *   },
+ *   onSuccess: () => setNeedsReload(true),
+ *   onError: () => setApiError('Failed to delete'),
+ * });
  * 
- * // Make an optimistic update
- * updateOptimistically([3, 2, 1]);
- * 
- * // If API call fails, revert to previous state
- * if (!success) {
- *   revert();
- * }
+ * // Use it
+ * updateEntity.mutate({ id: 123, index: 0 });
  */
-export function useOptimisticUpdate<T>(initialState: T): UseOptimisticUpdateReturn<T> {
-  const [state, setState] = useState<T>(initialState);
-  const [previousState, setPreviousState] = useState<T>(initialState);
-
-  /**
-   * Update state optimistically and save the current state for potential reversion
-   */
-  const updateOptimistically = useCallback((newState: T) => {
-    setPreviousState(state);
-    setState(newState);
-  }, [state]);
-
-  /**
-   * Revert to the previous state before the last optimistic update
-   */
-  const revert = useCallback(() => {
-    setState(previousState);
-  }, [previousState]);
-
-  /**
-   * Commit the current state, making it the new baseline for reversion
-   */
-  const commit = useCallback(() => {
-    setPreviousState(state);
-  }, [state]);
-
-  return {
-    state,
-    setState,
-    updateOptimistically,
-    revert,
-    commit,
-  };
+export function useOptimisticUpdate<TData = any, TVariables = any, TState = any>({
+  mutationFn,
+  currentState,
+  setState,
+  getOptimisticState,
+  onSuccess: customOnSuccess,
+  onError: customOnError,
+  onSettled: customOnSettled,
+}: UseOptimisticUpdateOptions<TData, TVariables, TState>) {
+  return useMutation<TData, Error, TVariables, { previousState: TState }>({
+    mutationFn: async (variables: TVariables) => {
+      const response = await mutationFn(variables);
+      
+      // Parse response data if not 204 No Content
+      const data = response.status !== 204 ? await response.json() : undefined;
+      
+      return data as TData;
+    },
+    
+    // Optimistically update before API call
+    onMutate: async (variables: TVariables) => {
+      // Save previous state for rollback
+      const previousState = currentState;
+      
+      // Apply optimistic update
+      const optimisticState = getOptimisticState(currentState, variables);
+      setState(optimisticState);
+      
+      // Return context with previous state
+      return { previousState };
+    },
+    
+    // Handle successful mutation
+    onSuccess: async (data: TData, variables: TVariables) => {
+      // Call custom onSuccess if provided
+      if (customOnSuccess) {
+        customOnSuccess(data, variables);
+      }
+    },
+    
+    // Roll back on error
+    onError: (error: Error, variables: TVariables, context) => {
+      if (context?.previousState) {
+        setState(context.previousState);
+      }
+      
+      // Call custom onError if provided
+      if (customOnError) {
+        customOnError(error, variables);
+      }
+    },
+    
+    // Always run after mutation (success or error)
+    onSettled: () => {
+      if (customOnSettled) {
+        customOnSettled();
+      }
+    },
+  });
 }
