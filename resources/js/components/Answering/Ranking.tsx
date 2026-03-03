@@ -8,7 +8,7 @@ import {
   Alert,
 } from '@mui/material';
 import SortableItem from './SortableItem';
-import { apiGet, apiDelete, answersRequest } from '../../lib/api';
+import { apiGet, apiDelete, apiPost, answersRequest } from '../../lib/api';
 import { useOptimisticUpdate } from '../../hooks/useOptimisticUpdate';
 import {
   DndContext,
@@ -136,29 +136,29 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   // Mutation for reordering answers
   const reorderMutation = useOptimisticUpdate<any, { reorderedEntities: (SelectedEntity | null)[] }, (SelectedEntity | null)[]>({
     mutationFn: async ({ reorderedEntities }) => {
-      // Send all reorder requests
-      const promises = reorderedEntities.map((entity, index) => {
-        if (!entity) return Promise.resolve(new Response(null, { status: 204 }));
-        
-        return answersRequest({
-          question_id: question_id,
-          entity_id: entity.id,
-          order: index + 1,
-          membership_id: membershipId as number,
-          value: entity.name,
-        });
+      // Build order_updates array with answer_id and new_order
+      const order_updates = reorderedEntities
+        .map((entity, index) => {
+          if (!entity?.answerId) return null;
+          return {
+            answer_id: entity.answerId,
+            new_order: index + 1,
+          };
+        })
+        .filter(update => update !== null);
+
+      // Send reorder request to backend
+      const response = await apiPost('/answers/reorder', {
+        membership_id: membershipId as number,
+        question_id: question_id,
+        order_updates: order_updates,
       });
 
-      const responses = await Promise.all(promises);
-      
-      // Check if all succeeded
-      const allSucceeded = responses.every(r => r.ok);
-      if (!allSucceeded) {
-        throw new Error('Some reorder requests failed');
+      if (!response.ok) {
+        throw new Error('Reorder request failed');
       }
-      
-      // Return a successful response
-      return new Response(null, { status: 204 });
+
+      return response;
     },
     currentState: selectedEntities,
     setState: setSelectedEntities,
