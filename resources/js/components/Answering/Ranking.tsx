@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import SortableItem from './SortableItem';
 import { apiGet, apiDelete, answersRequest } from '../../lib/api';
+import { handleApiOperation } from '../../lib/apiErrorHandler';
+import { useOptimisticUpdate } from '../../hooks/useOptimisticUpdate';
 import {
   DndContext,
   closestCenter,
@@ -60,10 +62,13 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
   const [apiError, setApiError] = useState('');
   const membershipId = usePage().props.membershipId;
 
-  // State to track selected entities for each position
-  const [selectedEntities, setSelectedEntities] = useState<(SelectedEntity | null)[]>(
-    Array(answer_count).fill(null)
-  );
+  // State to track selected entities for each position with optimistic updates
+  const { 
+    state: selectedEntities, 
+    setState: setSelectedEntities,
+    updateOptimistically: updateEntitiesOptimistically,
+    revert: revertEntities 
+  } = useOptimisticUpdate<(SelectedEntity | null)[]>(Array(answer_count).fill(null));
 
   // State to track if we need to reload (for debouncing)
   const [needsReload, setNeedsReload] = useState(false);
@@ -181,35 +186,19 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
       
       // Optimistically update the UI
       const newSelectedEntities = [...selectedEntities];
-      newSelectedEntities[index] = newValue;
-      setSelectedEntities(newSelectedEntities);
+      newSelectedEntities[index] = null;
+      updateEntitiesOptimistically(newSelectedEntities);
       
-      try {
-        const response = await apiDelete(`/answers/${previousEntity.answerId}`);
-        console.log('Delete response:', response);
-        
-        // Check for successful deletion (200 or 204)
-        if (response.status === 200 || response.status === 204) {
-          // Trigger debounced reload on success
+      await handleApiOperation({
+        operation: () => apiDelete(`/answers/${previousEntity.answerId}`),
+        onSuccess: () => {
+          console.log('Delete response: success');
           setNeedsReload(true);
-        } else {
-          // Revert the change if deletion failed
-          const revertedEntities = [...selectedEntities];
-          revertedEntities[index] = previousEntity;
-          setSelectedEntities(revertedEntities);
-          
-          // Display error message
-          const errorData = await response.json().catch(() => ({}));
-          setApiError(errorData.message || 'Failed to delete answer. Please try again.');
-        }
-      } catch (error) {
-        console.error('Error deleting answer:', error);
-        // Revert the change on error
-        const revertedEntities = [...selectedEntities];
-        revertedEntities[index] = previousEntity;
-        setSelectedEntities(revertedEntities);
-        setApiError('Failed to delete answer. Please try again.');
-      }
+        },
+        onError: setApiError,
+        revertState: revertEntities,
+      });
+      
       return;
     }
     
@@ -218,24 +207,21 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
       // Optimistically update the UI
       const newSelectedEntities = [...selectedEntities];
       newSelectedEntities[index] = newValue;
-      setSelectedEntities(newSelectedEntities);
+      updateEntitiesOptimistically(newSelectedEntities);
       
-      try {
-        const response = await answersRequest({
+      await handleApiOperation({
+        operation: () => answersRequest({
           membership_id: membershipId as number,
           question_id: question_id,
           entity_id: newValue.id,
           order: index + 1, // Position starts from 1
           value: newValue.name
-        });
-        
-        // Check for successful creation (201)
-        if (response.status === 201) {
-          const data = await response.json();
+        }),
+        onSuccess: (data) => {
           console.log('Answer created/updated:', data);
           
           if (data.answer?.id) {
-            const updatedSelectedEntities = [...newSelectedEntities];
+            const updatedSelectedEntities = [...selectedEntities];
             updatedSelectedEntities[index] = {
               ...newValue,
               answerId: data.answer.id
@@ -243,26 +229,11 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
             setSelectedEntities(updatedSelectedEntities);
           }
           
-          // Trigger debounced reload on success
           setNeedsReload(true);
-        } else {
-          // Revert the change if creation failed
-          const revertedEntities = [...selectedEntities];
-          revertedEntities[index] = previousEntity;
-          setSelectedEntities(revertedEntities);
-          
-          // Display error message
-          const errorData = await response.json().catch(() => ({}));
-          setApiError(errorData.message || 'Failed to save answer. Please try again.');
-        }
-      } catch (error) {
-        console.error('Error making request:', error);
-        // Revert the change on error
-        const revertedEntities = [...selectedEntities];
-        revertedEntities[index] = previousEntity;
-        setSelectedEntities(revertedEntities);
-        setApiError('Failed to save answer. Please try again.');
-      }
+        },
+        onError: setApiError,
+        revertState: revertEntities,
+      });
     }
   };
 
@@ -302,30 +273,22 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
 
   // Function to send reordered answers
   const sendReorderedAnswers = async (reorderedEntities: (SelectedEntity | null)[]): Promise<boolean> => {
-    let allSuccessful = true;
-    
-    const promises = reorderedEntities.map(async (entity, index) => {
-      if (entity) {
-        try {
-          const response = await answersRequest({
-            question_id: question_id,
-            entity_id: entity.id,
-            order: index + 1, // Position starts from 1
-            membership_id: membershipId as number,
-            value: entity.name,
-          });
-          
-          // Check for successful response (200 range)
-          if (!response.ok) {
-            allSuccessful = false;
-          }
-        } catch (error) {
-          allSuccessful = false;
-        }
-      }
+    const promises = reorderedEntities.map((entity, index) => {
+      if (!entity) return Promise.resolve(true);
+      
+      return handleApiOperation({
+        operation: () => answersRequest({
+          question_id: question_id,
+          entity_id: entity.id,
+          order: index + 1, // Position starts from 1
+          membership_id: membershipId as number,
+          value: entity.name,
+        }),
+      });
     });
 
-    await Promise.all(promises);
+    const results = await Promise.all(promises);
+    const allSuccessful = results.every(result => result);
     
     // Only trigger debounced reload if all requests succeeded
     if (allSuccessful) {
