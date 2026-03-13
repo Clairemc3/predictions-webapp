@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('label');
             $table->text('short_description');
             $table->text('description');
-            $table->foreignId('answer_category_id')->constrained('categories')->nullOnDelete();
+            $table->foreignId('answer_category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->string('answer_count_label')->nullable();
             $table->text('answer_count_helper_text')->nullable();
             $table->boolean('is_active')->default(true);
