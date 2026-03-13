@@ -78,6 +78,15 @@ class Question extends Model
         return $this->hasMany(QuestionResult::class)->orderBy('position');
     }
 
+    /**
+     * Get the points for this question.
+     */
+    public function points(): HasMany
+    {
+        return $this->hasMany(QuestionPoint::class)->orderBy('position');
+    }
+
+    // Cache this
     public function allOptions(): Collection
     {
         $entityQuery = new EntityQuery($this->answerCategory);

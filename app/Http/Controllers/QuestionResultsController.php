@@ -23,9 +23,6 @@ class QuestionResultsController extends Controller
     {
         Gate::authorize('viewResults', [$question, $season]);
 
-        // Eager load the sum to avoid an additional query
-        $season->loadSum('questions', 'answer_count');
-
         // Load question entities for proper title formatting
         $question->load(['entities.image', 'results.entity.image', 'answerCategory']);
 
@@ -43,9 +40,11 @@ class QuestionResultsController extends Controller
             'question' => SeasonQuestionResource::forSeason($question, $season),
             'season' => new SeasonResource($season),
             'seasonStatus' => $season->status->name(),
-            'totalRequiredAnswers' => $season->required_answers_sum,
+            'totalRequiredAnswers' => 0,
             'results' => QuestionResultResource::collection($question->results),
             'availableOptions' => $availableOptions,
+            'count_of_results' => $question->answer_count == $availableOptions->count() 
+                ? $question->answer_count : $question->answer_count + $question->points()->max('position'),
         ]);
     }
 

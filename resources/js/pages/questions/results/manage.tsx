@@ -32,10 +32,11 @@ interface PageProps extends Record<string, any> {
   totalRequiredAnswers: number;
   results: QuestionResult[];
   availableOptions: Entity[];
+  count_of_results: number;
 }
 
 const ManageQuestionResults = () => {
-  const { question, season, seasonStatus, totalRequiredAnswers, results, availableOptions } = usePage<PageProps>().props;
+  const { question, season, seasonStatus, totalRequiredAnswers, results, availableOptions, count_of_results } = usePage<PageProps>().props;
 
   const formatType = (type: string): string => {
     return type
@@ -83,7 +84,7 @@ const ManageQuestionResults = () => {
           <RankingResultsManager
             questionId={question.id}
             seasonId={season.id}
-            answerCount={question.answer_count || 20}
+            answerCount={count_of_results}
             results={results}
             availableOptions={availableOptions}
             resultsStoreRoute={route('seasons.questions.results.store', { 
