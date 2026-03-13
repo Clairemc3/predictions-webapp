@@ -3,12 +3,13 @@ import { Head, usePage } from '@inertiajs/react';
 import {
   Box,
   Typography,
+  Chip,
 } from '@mui/material';
 import SeasonManageLayout from '../../../layouts/SeasonManageLayout';
-import { Question, Season } from '../../../types/season';
+import { QuestionRow, Season } from '../../../types/season';
 
 interface PageProps extends Record<string, any> {
-  question: Question;
+  question: QuestionRow;
   season: Season;
   seasonStatus: string;
   totalRequiredAnswers: number;
@@ -16,6 +17,12 @@ interface PageProps extends Record<string, any> {
 
 const ManageQuestionResults = () => {
   const { question, season, seasonStatus, totalRequiredAnswers } = usePage<PageProps>().props;
+
+  const formatType = (type: string): string => {
+    return type
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  };
 
   return (
     <>
@@ -26,12 +33,20 @@ const ManageQuestionResults = () => {
         totalRequiredAnswers={totalRequiredAnswers}
         currentTab="results"
       >
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-            Question Results
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            {question.title}
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+            <Typography variant="h5" component="h2">
+              {question.title}
+            </Typography>
+            <Chip 
+              label={formatType(question.type || '')} 
+              size="small" 
+              color="primary" 
+              variant="outlined"
+            />
+          </Box>
+          <Typography variant="body2" color="text.secondary">
+            Results
           </Typography>
         </Box>
 
