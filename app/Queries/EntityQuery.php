@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class EntityQuery
 {
     private BelongsToMany $query;
-    
+
     public function __construct(
         private Category $category
     ) {
@@ -39,6 +39,7 @@ class EntityQuery
     public function inRandomOrder(): self
     {
         $this->query->inRandomOrder();
+
         return $this;
     }
 
@@ -54,8 +55,8 @@ class EntityQuery
 
     public function includeEntityCount(Category $category): self
     {
-        if (!$category) {
-            throw new \InvalidArgumentException("Category not found.");
+        if (! $category) {
+            throw new \InvalidArgumentException('Category not found.');
         }
 
         $entitiesInCategorySubQuery = DB::table('category_entity')
@@ -71,6 +72,7 @@ class EntityQuery
 
         $this->query->select('entities.*')
             ->selectSub($relationshipCountSubquery, 'entity_relationship_count');
-                return $this;
+
+        return $this;
     }
 }

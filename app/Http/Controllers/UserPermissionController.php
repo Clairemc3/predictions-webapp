@@ -18,7 +18,7 @@ class UserPermissionController extends Controller
         Gate::authorize('update', $user);
 
         // Validate that the permission exists
-        if (!Permission::isValid($permission)) {
+        if (! Permission::isValid($permission)) {
             return response()->json([
                 'message' => 'Invalid permission',
             ], 422);
@@ -39,5 +39,4 @@ class UserPermissionController extends Controller
 
         return redirect()->back()->with('success', "Permission '{$permission}' has been {$action} for {$user->name}");
     }
-
 }

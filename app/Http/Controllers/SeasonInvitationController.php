@@ -26,8 +26,8 @@ class SeasonInvitationController extends Controller
         return response()->json([
             'message' => 'Invitation link created successfully',
             'invitation_link' => [
-                'url' => $invitationLink->getUrl()
-            ]
+                'url' => $invitationLink->getUrl(),
+            ],
         ]);
     }
 
@@ -38,16 +38,17 @@ class SeasonInvitationController extends Controller
     {
         $invitation = app()->make(SeasonInvitationRepository::class)->findByToken($token);
 
-        if (!$invitation || !$invitation->isValid()) {
+        if (! $invitation || ! $invitation->isValid()) {
             return redirect()->route('home')->with('error', 'Invalid or expired invitation link.');
         }
 
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             // Store the invitation token in session and redirect to login
             $request->session()->put('invitation_token', $token);
             $request->session()->flash('warning', 'Please login or register to accept the invitation.');
+
             return redirect()->route('login');
         }
 
@@ -59,7 +60,7 @@ class SeasonInvitationController extends Controller
         }
 
         // Add user to season
-       $membership = SeasonMember::create([
+        $membership = SeasonMember::create([
             'season_id' => $season->id,
             'user_id' => $user->id,
             'nickname' => $user->name, // Default nickname to user's name

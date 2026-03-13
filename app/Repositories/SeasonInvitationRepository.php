@@ -5,16 +5,11 @@ namespace App\Repositories;
 use App\Models\Season;
 use App\Models\SeasonInvitation;
 use App\Models\User;
-use Illuminate\Support\Collection;
 
 class SeasonInvitationRepository
 {
     /**
      * Create a new invitation for a season.
-     *
-     * @param Season $season
-     * @param User $creator
-     * @return SeasonInvitation
      */
     public function getOrCreate(Season $season, User $creator): SeasonInvitation
     {
@@ -26,9 +21,6 @@ class SeasonInvitationRepository
 
     /**
      * Find an invitation by token.
-     *
-     * @param string $token
-     * @return SeasonInvitation|null
      */
     public function findByToken(string $token): ?SeasonInvitation
     {

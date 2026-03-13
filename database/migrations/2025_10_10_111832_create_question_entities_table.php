@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('entity_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             // Ensure unique combination of question and entity
             $table->unique(['question_id', 'entity_id']);
-            
+
             // Index for performance
             $table->index(['question_id']);
         });

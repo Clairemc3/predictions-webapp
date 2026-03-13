@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Gate;
 
 class AnswerController extends Controller
 {
-   public function store(StoreAnswerRequest $request)
-   {
+    public function store(StoreAnswerRequest $request)
+    {
         $membership = SeasonMember::find($request->membership_id);
 
         Gate::authorize('create', [Answer::class, $membership]);
@@ -25,45 +25,44 @@ class AnswerController extends Controller
         $validated = $request->validated();
 
         $answer = Answer::updateOrCreate(
-          [
-              'season_user_id' => $membership->id,
-              'question_id' => $validated['question_id'],
-              'order' => $validated['order'] ?? null,
-          ],
-          [
-              'entity_id' => $validated['entity_id'],
-              'value' => $validated['value'] ?? null,
-          ]);
+            [
+                'season_user_id' => $membership->id,
+                'question_id' => $validated['question_id'],
+                'order' => $validated['order'] ?? null,
+            ],
+            [
+                'entity_id' => $validated['entity_id'],
+                'value' => $validated['value'] ?? null,
+            ]);
 
         $answerEvent = $answer->wasRecentlyCreated ? AnswerCreated::class : AnswerUpdated::class;
         event(new $answerEvent($answer, $membership));
 
         return response()->json([
             'success' => true,
-            'answer' =>
-                new PredictionAnswerResource($answer),
-            'message' => 'Answer saved successfully'
+            'answer' => new PredictionAnswerResource($answer),
+            'message' => 'Answer saved successfully',
         ], Response::HTTP_CREATED);
-   }
+    }
 
-   public function destroy(Answer $answer)
-   {
-      $membership = $answer->member;
+    public function destroy(Answer $answer)
+    {
+        $membership = $answer->member;
 
-      Gate::authorize('delete', $answer);
+        Gate::authorize('delete', $answer);
 
-      $answer->delete();
+        $answer->delete();
 
-      event(new AnswerDeleted($answer, $membership));
+        event(new AnswerDeleted($answer, $membership));
 
-      return response()->json([
-          'success' => true,
-          'message' => 'Answer deleted successfully'
-      ], Response::HTTP_OK);
-   }
+        return response()->json([
+            'success' => true,
+            'message' => 'Answer deleted successfully',
+        ], Response::HTTP_OK);
+    }
 
-   public function reorderAnswers(ReorderAnswerRequest $request)
-   {
+    public function reorderAnswers(ReorderAnswerRequest $request)
+    {
         $membership = SeasonMember::find($request->membership_id);
 
         $validated = $request->validated();
@@ -76,7 +75,7 @@ class AnswerController extends Controller
 
         DB::transaction(function () use ($validated, $membership) {
             // Two-pass update to avoid unique constraint violations
-            
+
             // Pass 1: Set all affected orders to negative temporary values
             foreach ($validated['order_updates'] as $update) {
                 Answer::where('id', $update['answer_id'])
@@ -101,8 +100,7 @@ class AnswerController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Answers reordered successfully'
+            'message' => 'Answers reordered successfully',
         ], Response::HTTP_OK);
-   }
-
+    }
 }

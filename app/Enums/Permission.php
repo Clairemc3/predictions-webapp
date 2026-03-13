@@ -11,7 +11,7 @@ enum Permission: string
      */
     public function getDisplayName(): string
     {
-        return match($this) {
+        return match ($this) {
             self::HostASeason => 'Host a Season',
         };
     }

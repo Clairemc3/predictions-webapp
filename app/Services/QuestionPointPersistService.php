@@ -12,7 +12,7 @@ class QuestionPointPersistService
     public function sync(Question $question, array $scoreValues): void
     {
         $savedPositions = [];
-        
+
         // Update or create score values
         foreach ($scoreValues as $position => $value) {
             if ($value !== null && $value !== '') {
@@ -28,7 +28,7 @@ class QuestionPointPersistService
                 $savedPositions[] = (int) $position;
             }
         }
-        
+
         // Delete positions that arent in the set of values
         $question->pointsValues()->whereNotIn('position', $savedPositions)->delete();
     }

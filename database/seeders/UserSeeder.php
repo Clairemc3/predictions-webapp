@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -19,7 +18,7 @@ class UserSeeder extends Seeder
     {
         // Create the super admin user
         $superAdminUser = User::firstOrCreate([
-            'email' => 'super@super.com'
+            'email' => 'super@super.com',
         ], [
             'name' => 'Super Admin',
             'email' => 'super@super.com',
@@ -29,15 +28,14 @@ class UserSeeder extends Seeder
 
         // Assign the super admin role
         $superAdminRole = Role::where('name', 'super-admin')->first();
-        
+
         $superAdminUser->assignRole($superAdminRole);
         $this->command->info('Super Admin user created and role assigned successfully!');
-
 
         // Create additional test users all with the 'player' role
         $playersRole = Role::where('name', 'player')->first();
         $users = User::factory(50)->create();
-        
+
         // Bulk insert role assignments
         $roleAssignments = $users->map(function ($user) use ($playersRole) {
             return [
@@ -46,7 +44,7 @@ class UserSeeder extends Seeder
                 'model_id' => $user->id,
             ];
         })->toArray();
-        
+
         DB::table('model_has_roles')->insert($roleAssignments);
 
         // Add a host

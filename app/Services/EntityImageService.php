@@ -31,7 +31,7 @@ class EntityImageService
             if ($response->successful()) {
                 $imageData = $response->body();
                 $info = getimagesizefromstring($imageData);
-                $fileName = Str::camel($entity->value) . '_'. $entity->id . '_' . basename($entity->image->third_party_url);
+                $fileName = Str::camel($entity->value).'_'.$entity->id.'_'.basename($entity->image->third_party_url);
                 $this->getDisk()->put($fileName, $response->body());
 
                 $entity->image->path = $fileName;
@@ -43,7 +43,7 @@ class EntityImageService
         }
 
         return null;
-      
+
     }
 
     /**
@@ -53,7 +53,7 @@ class EntityImageService
     {
         $deleted = $image->deleteFile();
         $image->delete();
-        
+
         return $deleted;
     }
 
@@ -76,7 +76,7 @@ class EntityImageService
     /**
      * Return the disk.
      *
-     * @return \Illuminate\Filesystem\FilesystemAdapter 
+     * @return \Illuminate\Filesystem\FilesystemAdapter
      */
     private function getDisk()
     {

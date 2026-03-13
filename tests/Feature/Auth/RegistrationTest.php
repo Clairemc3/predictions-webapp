@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Notification;
 beforeEach(function () {
     // Set the registration code for testing
     config(['registration.code' => 'abc123']);
-    
+
     // Clear any existing users and reset mail/notification fakes
     User::query()->delete();
     Mail::fake();
     Notification::fake();
     Event::fake();
-    
+
     // Seed permissions for testing
     $this->seed(\Database\Seeders\PermissionSeeder::class);
 });
@@ -35,20 +35,20 @@ test('a user can register', function () {
 
     // Assert - user was created in database
     expect(User::count())->toBe(1);
-    
+
     $user = User::first();
     expect($user->name)->toBe('John Doe');
     expect($user->email)->toBe('john@example.com');
     expect($user->email_verified_at)->toBeNull(); // Should not be verified initially
-    
+
     // Assert - user is logged in
     $this->assertAuthenticatedAs($user);
-    
+
     // Assert - Registered event was fired (which triggers email verification)
     Event::assertDispatched(Registered::class, function ($event) use ($user) {
         return $event->user->id === $user->id;
     });
-    
+
     // Assert - redirected to intended route (profile)
     $response->assertRedirect(route('profile'));
 });
@@ -77,8 +77,7 @@ test('verification notice page loads correctly for unverified users', function (
 
     // Assert - page loads successfully
     $response->assertOk();
-    $response->assertInertia(fn ($page) => 
-        $page->component('auth/verify-email')
+    $response->assertInertia(fn ($page) => $page->component('auth/verify-email')
     );
 });
 
@@ -103,7 +102,7 @@ test('registration requires all fields', function () {
         'password_confirmation' => 'SecurePassword123!',
         'registration_code' => 'abc123',
     ]);
-    
+
     $response->assertSessionHasErrors('name');
 
     // Test missing email
@@ -113,7 +112,7 @@ test('registration requires all fields', function () {
         'password_confirmation' => 'SecurePassword123!',
         'registration_code' => 'abc123',
     ]);
-    
+
     $response->assertSessionHasErrors('email');
 
     // Test missing registration code
@@ -123,7 +122,7 @@ test('registration requires all fields', function () {
         'password' => 'SecurePassword123!',
         'password_confirmation' => 'SecurePassword123!',
     ]);
-    
+
     $response->assertSessionHasErrors('registration_code');
 });
 
@@ -135,7 +134,7 @@ test('registration requires valid registration code', function () {
         'password_confirmation' => 'SecurePassword123!',
         'registration_code' => 'INVALID',
     ]);
-    
+
     $response->assertSessionHasErrors('registration_code');
     expect(User::count())->toBe(0); // No user should be created
 });
@@ -152,7 +151,7 @@ test('email must be unique', function () {
         'password_confirmation' => 'SecurePassword123!',
         'registration_code' => 'abc123',
     ]);
-    
+
     $response->assertSessionHasErrors('email');
     expect(User::count())->toBe(1); // Only original user should exist
 });
@@ -165,7 +164,7 @@ test('password confirmation must match', function () {
         'password_confirmation' => 'DifferentPassword123!',
         'registration_code' => 'abc123',
     ]);
-    
+
     $response->assertSessionHasErrors('password');
     expect(User::count())->toBe(0);
 });
@@ -173,7 +172,7 @@ test('password confirmation must match', function () {
 test('registration works with different registration codes when config is changed', function () {
     // Test 1: Set config to NEWCODE and verify it works
     config(['registration.code' => 'NEWCODE']);
-    
+
     $response = $this->post('/register', [
         'name' => 'John Doe',
         'email' => 'john@example.com',
@@ -181,7 +180,7 @@ test('registration works with different registration codes when config is change
         'password_confirmation' => 'SecurePassword123!',
         'registration_code' => 'NEWCODE',
     ]);
-    
+
     $response->assertRedirect(route('profile'));
     expect(User::count())->toBe(1);
 });
@@ -189,7 +188,7 @@ test('registration works with different registration codes when config is change
 test('registration fails with old code after config change', function () {
     // Set a specific registration code for this test
     config(['registration.code' => 'SPECIFICCODE']);
-    
+
     $response = $this->post('/register', [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
@@ -197,9 +196,7 @@ test('registration fails with old code after config change', function () {
         'password_confirmation' => 'SecurePassword123!',
         'registration_code' => 'abc123', // Wrong code
     ]);
-    
+
     $response->assertSessionHasErrors('registration_code');
     expect(User::count())->toBe(0); // No users should be created
 });
-
-

@@ -17,13 +17,13 @@ test('number_of_answers is incremented when AnswerCreated event is dispatched', 
 });
 
 test('number_of_answers is decremented when AnswerDeleted event is dispatched', function () {
-     $answer = Answer::factory()->create(
+    $answer = Answer::factory()->create(
         ['season_user_id' => SeasonMember::factory()
             ->withAnswerCount(5)
             ->create()
             ->id,
         ]
-     );
+    );
 
     event(new AnswerDeleted($answer, $answer->member));
 

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Entity extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -32,8 +33,8 @@ class Entity extends Model
     public function entities()
     {
         return $this->belongsToMany(
-            Entity::class, 
-            'entity_relationships', 
+            Entity::class,
+            'entity_relationships',
             'child_entity_id',
             'parent_entity_id',
         )->withPivot('relation_type');

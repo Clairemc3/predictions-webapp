@@ -7,13 +7,12 @@ use App\Models\User;
 
 class UserPolicy
 {
-
     /**
      * Perform pre-authorization checks.
      */
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
-         // Allow all actions for Super Admins except changing their own permissions
+        // Allow all actions for Super Admins except changing their own permissions
         if ($ability === 'changePermissionsForUser') {
             return null;
         }
@@ -21,10 +20,9 @@ class UserPolicy
         if ($user->hasRole(Role::SuperAdmin)) {
             return true;
         }
-    
+
         return null;
     }
-
 
     /**
      * Determine whether the user can view any models.
@@ -32,8 +30,7 @@ class UserPolicy
     public function changePermissionsForUser(User $authenticatedUser, User $userWithPermission): bool
     {
         // Users cannot change their own permissions
-        if ($authenticatedUser->id === $userWithPermission->id)
-        {
+        if ($authenticatedUser->id === $userWithPermission->id) {
             return false;
         }
 
@@ -46,7 +43,6 @@ class UserPolicy
         return $authenticatedUser->hasRole(Role::SuperAdmin);
 
     }
-
 
     /**
      * Determine whether the user can view any models.

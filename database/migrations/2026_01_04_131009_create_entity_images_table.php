@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('size')->nullable();
             $table->string('alt_text')->nullable();
             $table->timestamps();
-            
+
             $table->unique('entity_id');
         });
     }

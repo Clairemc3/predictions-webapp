@@ -2,18 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class CategoryAndEntitySeeder extends Seeder
 {
     private array $playersData;
+
     private array $managersData;
+
     private array $teamsData;
+
     private array $competitionsData;
+
     private array $leaguesData;
+
     private array $countriesData;
+
     private array $allEntities;
 
     public function __construct()
@@ -26,9 +31,9 @@ class CategoryAndEntitySeeder extends Seeder
         $this->countriesData = json_decode(file_get_contents(database_path('seeders/seed-data/countries.json')), true);
 
         $this->allEntities = array_merge(
-            $this->playersData, 
-            $this->managersData, 
-            $this->teamsData, 
+            $this->playersData,
+            $this->managersData,
+            $this->teamsData,
             $this->competitionsData,
             $this->leaguesData,
             $this->countriesData
@@ -59,7 +64,7 @@ class CategoryAndEntitySeeder extends Seeder
             'player',
             'football-league',
             'competition',
-            'country'
+            'country',
         ];
 
         foreach ($categories as $category) {
@@ -108,8 +113,6 @@ class CategoryAndEntitySeeder extends Seeder
         }
     }
 
-    /**
-     */
     private function seedCategoryRelationships(): void
     {
         foreach ($this->allEntities as $entityData) {
@@ -155,5 +158,4 @@ class CategoryAndEntitySeeder extends Seeder
             }
         }
     }
-
 }

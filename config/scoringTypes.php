@@ -20,7 +20,7 @@ return [
         'name' => 'Position with Proximity',
         'short_description' => 'Close counts - earn points for near misses',
         'description' => 'Configurable points for exact position match and nearby positions. Set different point values for being 1, 2, or more positions off.',
-        'example' => 'Arsenal finishes 3rd - Host could set: exact position (3rd) = 3 points, 1 position off (2nd or 4th) = 2 points, 2 positions off (1st or 5th) = 1 point.'
+        'example' => 'Arsenal finishes 3rd - Host could set: exact position (3rd) = 3 points, 1 position off (2nd or 4th) = 2 points, 2 positions off (1st or 5th) = 1 point.',
     ],
 
     // Comparative scoring - best guess among all members wins

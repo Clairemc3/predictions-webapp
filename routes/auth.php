@@ -14,7 +14,7 @@ Route::middleware('guest')->withoutMiddleware('verified')->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
-    ->name('login');
+        ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 });
@@ -23,7 +23,7 @@ Route::middleware('guest')->withoutMiddleware('verified')->group(function () {
 Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->name('logout')->withoutMiddleware('verified');
+        ->name('logout')->withoutMiddleware('verified');
 
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice')->withoutMiddleware('verified');

@@ -71,7 +71,7 @@ test('authenticated user can update an existing answer when season is in draft s
 
 test('user cannot create answer when season is not in draft status', function (SeasonStatus $status) {
     $member = SeasonMember::factory()->create([
-        'season_id' => Season::factory()->create(['status' => $status])
+        'season_id' => Season::factory()->create(['status' => $status]),
     ]);
     $question = Question::factory()->create();
     $member->season->questions()->attach($question);
@@ -94,7 +94,7 @@ test('user cannot create answer when season is not in draft status', function (S
 test('user cannot create answer for another users membership', function () {
     $anotherUser = User::factory()->create();
     $season = Season::factory()->create(['status' => SeasonStatus::Draft]);
-    
+
     $answer = Answer::factory()->recycle($season)->create();
     $entity = Entity::factory()->create();
 
@@ -152,4 +152,3 @@ test('updating answer triggers AnswerUpdated event', function () {
 
     Event::assertDispatched(\App\Events\AnswerUpdated::class);
 });
-
