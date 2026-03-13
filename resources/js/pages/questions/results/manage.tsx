@@ -2,56 +2,47 @@ import React from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
 } from '@mui/material';
-import AuthLayout from '../../../layouts/AuthLayout';
+import SeasonManageLayout from '../../../layouts/SeasonManageLayout';
 import { Question, Season } from '../../../types/season';
 
 interface PageProps extends Record<string, any> {
   question: Question;
   season: Season;
+  seasonStatus: string;
+  totalRequiredAnswers: number;
 }
 
 const ManageQuestionResults = () => {
-  const { question, season } = usePage<PageProps>().props;
+  const { question, season, seasonStatus, totalRequiredAnswers } = usePage<PageProps>().props;
 
   return (
-    <AuthLayout>
+    <>
       <Head title={`Results - ${question.title}`} />
-      
-      <Card sx={{ width: '100%', maxWidth: 900 }}>
-        <CardContent sx={{ p: 4 }}>
-          {/* Page Header */}
-          <Box sx={{ mb: 4 }}>
-            <Typography 
-              variant="h4" 
-              component="h1" 
-              sx={{ 
-                fontFamily: '"Archivo Black", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                mb: 1
-              }}
-            >
-              Question Results
-            </Typography>
-            <Typography variant="h6" color="text.secondary">
-              {question.title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-              Season: {season.name}
-            </Typography>
-          </Box>
+      <SeasonManageLayout
+        season={season}
+        seasonStatus={seasonStatus}
+        totalRequiredAnswers={totalRequiredAnswers}
+        currentTab="results"
+      >
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+            Question Results
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            {question.title}
+          </Typography>
+        </Box>
 
-          {/* Placeholder for results content */}
-          <Box sx={{ py: 4 }}>
-            <Typography variant="body1" color="text.secondary" align="center">
-              Question results management page - coming soon
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
-    </AuthLayout>
+        {/* Placeholder for results content */}
+        <Box sx={{ py: 4 }}>
+          <Typography variant="body1" color="text.secondary" align="center">
+            Question results will be displayed here
+          </Typography>
+        </Box>
+      </SeasonManageLayout>
+    </>
   );
 };
 
