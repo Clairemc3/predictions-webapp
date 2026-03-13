@@ -17,6 +17,7 @@ class SeasonQuestionResource extends JsonResource
     {
         $instance = new self($resource);
         $instance->season = $season;
+
         return $instance;
     }
 
@@ -34,7 +35,7 @@ class SeasonQuestionResource extends JsonResource
             'permissions' => [
                 'canUpdateQuestion' => $request->user() ? $request->user()->can('update', [$this->resource, $this->season]) : false,
                 'canDeleteQuestion' => $request->user() ? $request->user()->can('delete', [$this->resource, $this->season]) : false,
-                'canViewQuestion' => true
+                'canViewQuestion' => $request->user() ? $request->user()->can('viewResults', [$this->resource, $this->season]) : false,
             ],
         ];
     }
@@ -44,8 +45,8 @@ class SeasonQuestionResource extends JsonResource
         if ($this->base_type === BaseQuestionType::Ranking) {
             $entity = $this->entities->first();
             if ($entity) {
-                return $entity->value ." ". ucfirst($this->type);
-            }   
+                return $entity->value.' '.ucfirst($this->type);
+            }
         }
 
         return $this->title;

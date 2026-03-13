@@ -61,6 +61,15 @@ class Question extends Model
         return $this->belongsTo(Category::class, 'answer_category_id');
     }
 
+    /**
+     * Get the seasons that this question belongs to.
+     */
+    public function seasons(): BelongsToMany
+    {
+        return $this->belongsToMany(Season::class, 'question_season')
+            ->withTimestamps();
+    }
+
     public function allOptions(): Collection
     {
         $entityQuery = new EntityQuery($this->answerCategory);

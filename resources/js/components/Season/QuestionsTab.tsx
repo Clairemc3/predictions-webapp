@@ -18,6 +18,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { router } from '@inertiajs/react';
 import ConfirmationDialog from '../ConfirmationDialog';
 import { QuestionsTabProps, QuestionRow } from '../../types/season';
+import { route } from '../../lib/routes';
 
 const QuestionsTab = ({ seasonId, questions, canCreateQuestions }: QuestionsTabProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -53,7 +54,7 @@ const QuestionsTab = ({ seasonId, questions, canCreateQuestions }: QuestionsTabP
   };
 
   const handleViewClick = (question: QuestionRow) => {
-    router.visit(`/seasons/${seasonId}/questions/${question.id}`);
+    router.visit(route('seasons.questions.results.manage', { season: seasonId, question: question.id }));
   };
 
   const formatType = (q: QuestionRow): string => {
