@@ -17,6 +17,7 @@ class EntityResource extends JsonResource
         return [
             'id' => $this->id,
             'value' => $this->value,
+            'image_url' => $this->image?->url,
             'count' => $this->when(
                 $request->has('count'),
                 fn () => [
