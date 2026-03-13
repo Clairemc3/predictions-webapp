@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('uses_count')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+
             $table->index(['token', 'is_active']);
         });
     }

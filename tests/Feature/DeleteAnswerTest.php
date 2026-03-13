@@ -42,7 +42,7 @@ test('user cannot delete answer that belongs to another user', function () {
     $user = User::factory()->create();
     $anotherUser = User::factory()->create();
     $season = Season::factory()->create(['status' => SeasonStatus::Draft]);
-    
+
     $answer = Answer::factory()->recycle($season)->create();
 
     $response = $this->actingAs($anotherUser)->deleteJson("/answers/{$answer->id}");
@@ -53,7 +53,7 @@ test('user cannot delete answer that belongs to another user', function () {
 
 test('deleting answer triggers AnswerDeleted event', function () {
     Event::fake();
-    
+
     $user = User::factory()->create();
     $season = Season::factory()->create(['status' => SeasonStatus::Draft]);
     $member = SeasonMember::factory()->create([
@@ -62,7 +62,7 @@ test('deleting answer triggers AnswerDeleted event', function () {
     ]);
     $question = Question::factory()->create();
     $season->questions()->attach($question);
-    
+
     $answer = Answer::factory()->create([
         'season_user_id' => $member->id,
         'question_id' => $question->id,

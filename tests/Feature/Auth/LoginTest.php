@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 beforeEach(function () {
     // Set up clean state for each test
@@ -92,8 +92,7 @@ test('login page loads correctly', function () {
 
     // Assert - page loads successfully
     $response->assertOk();
-    $response->assertInertia(fn ($page) => 
-        $page->component('auth/login')
+    $response->assertInertia(fn ($page) => $page->component('auth/login')
     );
 });
 
@@ -149,7 +148,7 @@ test('login with unverified email redirects to verification notice', function ()
 
     // Assert - user is authenticated
     $this->assertAuthenticatedAs($user);
-    
+
     // But when they try to access protected content, they should be redirected to verify email
     $profileResponse = $this->get('/profile');
     $profileResponse->assertRedirect(route('verification.notice'));
@@ -172,7 +171,7 @@ test('remember me functionality works', function () {
     // Assert - user is authenticated and remember token is set
     $this->assertAuthenticatedAs($user);
     $response->assertRedirect(route('profile'));
-    
+
     // Check that remember token was set (user should have a remember_token)
     $user->refresh();
     expect($user->remember_token)->not->toBeNull();
@@ -191,7 +190,7 @@ test('multiple failed login attempts are tracked', function () {
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
         ]);
-        
+
         $this->assertGuest();
         $response->assertSessionHasErrors('email');
     }

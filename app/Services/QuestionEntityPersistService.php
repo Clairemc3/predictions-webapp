@@ -13,7 +13,7 @@ class QuestionEntityPersistService
     {
         $mappedEntities = collect($entities)->mapWithKeys(function ($entity) {
             return [$entity['entity_id'] => [
-                'category_id' => $entity['category_id']
+                'category_id' => $entity['category_id'],
             ]];
         })->toArray();
 

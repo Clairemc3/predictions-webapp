@@ -18,7 +18,7 @@ class CheckPredictionComplete
     public function handle(Request $request, Closure $next): Response
     {
         $membershipId = $request->route('membershipId');
-        
+
         if ($membershipId) {
             $seasonMember = SeasonMember::find($membershipId);
 
@@ -28,7 +28,7 @@ class CheckPredictionComplete
                 return redirect()->route('predictions.edit', $membershipId);
             }
         }
-        
+
         return $next($request);
     }
 }

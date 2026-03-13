@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\CascadesSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -43,7 +42,6 @@ class SeasonMember extends Pivot
         'joined_at',
         'number_of_answers',
     ];
-
 
     /**
      * The attributes that should be cast.
@@ -89,7 +87,7 @@ class SeasonMember extends Pivot
      */
     public function hasAcceptedInvitation(): bool
     {
-        return !is_null($this->joined_at);
+        return ! is_null($this->joined_at);
     }
 
     public function isComplete(): bool
@@ -106,7 +104,7 @@ class SeasonMember extends Pivot
         $this->save();
     }
 
-    public function answers(): HasMany 
+    public function answers(): HasMany
     {
         return $this->hasMany(Answer::class, 'season_user_id');
     }

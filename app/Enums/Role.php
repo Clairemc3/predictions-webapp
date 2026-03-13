@@ -12,7 +12,7 @@ enum Role: string
      */
     public function getDisplayName(): string
     {
-        return match($this) {
+        return match ($this) {
             self::SuperAdmin => 'Super Admin',
             self::Admin => 'Admin',
         };

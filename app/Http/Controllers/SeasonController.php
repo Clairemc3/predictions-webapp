@@ -22,11 +22,11 @@ class SeasonController extends Controller
     public function hostIndex(): Response
     {
         $seasons = SeasonResource::collection(
-            app(SeasonRepository::class)->getSeasonsForHost(Auth::user())   
+            app(SeasonRepository::class)->getSeasonsForHost(Auth::user())
         );
 
         return Inertia::render('seasons/my-seasons/index', [
-            'seasons' => $seasons
+            'seasons' => $seasons,
         ]);
     }
 
@@ -40,7 +40,7 @@ class SeasonController extends Controller
         $seasons = Season::withCount('members')->get();
 
         return Inertia::render('seasons/index', [
-            'seasons' => $seasons
+            'seasons' => $seasons,
         ]);
     }
 
@@ -50,6 +50,7 @@ class SeasonController extends Controller
     public function create(): Response
     {
         Gate::authorize('create', Season::class);
+
         return Inertia::render('seasons/create');
     }
 
@@ -67,7 +68,7 @@ class SeasonController extends Controller
 
         $season = Season::create([
             'name' => $validated['name'],
-            'description' => $validated['description']
+            'description' => $validated['description'],
         ]);
 
         // Make the authenticated user a host of this season
@@ -83,7 +84,7 @@ class SeasonController extends Controller
      * Show the form for managing the specified season.
      */
     public function manage(Season $season): Response
-{
+    {
         Gate::authorize('update', $season);
 
         // Eager load the sum to avoid an additional query

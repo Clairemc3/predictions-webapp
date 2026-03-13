@@ -10,9 +10,6 @@ class SeasonRepository
 {
     /**
      * Get season information for the given user.
-     *
-     * @param User $user
-     * @return Collection
      */
     public function getSeasonsForUser(User $user): Collection
     {
@@ -21,15 +18,11 @@ class SeasonRepository
                 $query->where('user_id', $user->id);
             })
             ->orderBy('created_at', 'desc')
-             ->get(['id', 'name', 'status']);
+            ->get(['id', 'name', 'status']);
     }
-
 
     /**
      * Get season information for the given user.
-     *
-     * @param User $user
-     * @return Collection
      */
     public function getSeasonsForHost(User $user): Collection
     {
@@ -41,12 +34,8 @@ class SeasonRepository
             ->get(['id', 'name', 'status']);
     }
 
-
     /**
      * Get season information for the given user.
-     *
-     * @param User $user
-     * @return Collection
      */
     public function getRecentHostedSeasons(User $user, $limit = 5): Collection
     {
@@ -65,12 +54,8 @@ class SeasonRepository
             });
     }
 
-
     /**
      * Get recent seasons the user is a member of
-     *
-     * @param User $user
-     * @return Collection
      */
     public function getRecentMemberSeasons(User $user, $limit = 5): Collection
     {

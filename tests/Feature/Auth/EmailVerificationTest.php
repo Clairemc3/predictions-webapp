@@ -43,7 +43,7 @@ test('email verification notification contains correct user data', function () {
     Notification::assertSentTo(
         $user,
         VerifyEmail::class,
-        function ($notification, $channels) use ($user) {
+        function ($notification, $channels) {
             // Verify the notification is for the correct user
             return $notification instanceof VerifyEmail;
         }
@@ -79,7 +79,7 @@ test('multiple users can receive verification emails', function () {
     // Assert - verify both users received verification emails
     Notification::assertSentTo($user1, VerifyEmail::class);
     Notification::assertSentTo($user2, VerifyEmail::class);
-    
+
     // Verify total count
     Notification::assertSentTimes(VerifyEmail::class, 2);
 });

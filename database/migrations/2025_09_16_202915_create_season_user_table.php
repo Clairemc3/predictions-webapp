@@ -21,7 +21,7 @@ return new class extends Migration
             $table->float('percentage_complete')->default(0);
             $table->softDeletes();
             $table->timestamps();
-            
+
             // Ensure a user can only be in a season once
             $table->unique(['season_id', 'user_id']);
         });

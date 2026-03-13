@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     // User management routes
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    
+
     // User permission management routes
     Route::post('/users/{user}/permissions/{permission}/toggle', [UserPermissionController::class, 'toggle'])
         ->name('users.permissions.toggle');
-    
+
     // Question type management routes
     Route::resource('question-types', AdminQuestionTypeController::class)
         ->names([

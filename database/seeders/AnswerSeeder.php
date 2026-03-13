@@ -14,7 +14,7 @@ class AnswerSeeder extends Seeder
      */
     public function run(): void
     {
-        $seasons = Season::where('status','!=', SeasonStatus::Draft)->get();
+        $seasons = Season::where('status', '!=', SeasonStatus::Draft)->get();
 
         foreach ($seasons as $season) {
             foreach ($season->members as $member) {
@@ -28,8 +28,8 @@ class AnswerSeeder extends Seeder
                     }
 
                     $answerCount = $question->answer_count ?? 1;
-                    
-                    $valuesAndIds = $questionOptions->take($answerCount)->values()->map(fn($answer, $index) => [
+
+                    $valuesAndIds = $questionOptions->take($answerCount)->values()->map(fn ($answer, $index) => [
                         'entity_id' => $answer->id,
                         'value' => $answer->value,
                         'order' => $index + 1,
@@ -42,8 +42,8 @@ class AnswerSeeder extends Seeder
                             'question_id' => $question->id,
                             'season_user_id' => $member->id,
                         ]);
-                    }
                 }
+            }
         }
     }
 }

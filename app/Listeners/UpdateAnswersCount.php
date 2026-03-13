@@ -27,9 +27,9 @@ class UpdateAnswersCount
             $membership->newQuery()
                 ->where('id', $membership->id)
                 ->update([
-                    'number_of_answers' => DB::raw('CASE WHEN number_of_answers > 0 THEN number_of_answers - 1 ELSE 0 END')
+                    'number_of_answers' => DB::raw('CASE WHEN number_of_answers > 0 THEN number_of_answers - 1 ELSE 0 END'),
                 ]);
-            
+
             $membership->refresh();
 
             return;
@@ -41,7 +41,7 @@ class UpdateAnswersCount
                 ->increment('number_of_answers');
 
             $membership->refresh();
-            
+
             return;
         }
     }

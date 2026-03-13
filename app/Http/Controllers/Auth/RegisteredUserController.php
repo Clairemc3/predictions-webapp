@@ -23,8 +23,8 @@ class RegisteredUserController extends Controller
     {
         return Inertia::render('auth/register', [
             'flash' => [
-                'success' => session('success')
-            ]
+                'success' => session('success'),
+            ],
         ]);
     }
 

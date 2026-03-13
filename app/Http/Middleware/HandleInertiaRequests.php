@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\Permission;
 use App\Models\Season;
 use App\Repositories\SeasonRepository;
 use Illuminate\Http\Request;
@@ -45,12 +44,12 @@ class HandleInertiaRequests extends Middleware
                 'info' => fn () => $request->session()->get('info'),
                 'warning' => fn () => $request->session()->get('warning'),
             ],
-            'hostedSeasons' => $request->user() ? fn () => (new SeasonRepository())
+            'hostedSeasons' => $request->user() ? fn () => (new SeasonRepository)
                 ->getRecentHostedSeasons($request->user()) : null,
-            'memberSeasons' => $request->user() ? fn () => (new SeasonRepository())
+            'memberSeasons' => $request->user() ? fn () => (new SeasonRepository)
                 ->getRecentMemberSeasons($request->user()) : null,
             'canHost' => $request->user() ? fn () => $request->user()->can('create', Season::class) : false,
-            'isAdmin' => $request->user() ? fn () => $request->user()->hasRole('super-admin') : false
+            'isAdmin' => $request->user() ? fn () => $request->user()->hasRole('super-admin') : false,
         ]);
     }
 }

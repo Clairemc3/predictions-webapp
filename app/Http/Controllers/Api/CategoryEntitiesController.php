@@ -6,17 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryEntitiesRequest;
 use App\Http\Resources\EntityResource;
 use App\Models\Category;
-use App\Models\Entity;
 use Illuminate\Http\JsonResponse;
 
 class CategoryEntitiesController extends Controller
 {
-
     public function index(CategoryEntitiesRequest $request, Category $category): JsonResponse
     {
         $entityQuery = new \App\Queries\EntityQuery($category);
 
-        foreach($request->validatedFilters() as $key => $value) {
+        foreach ($request->validatedFilters() as $key => $value) {
             $entityQuery->filter($key, $value);
         }
 
@@ -32,6 +30,4 @@ class CategoryEntitiesController extends Controller
             'entities' => EntityResource::collection($entities),
         ]);
     }
-
-
 }

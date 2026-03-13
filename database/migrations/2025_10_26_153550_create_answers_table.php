@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['question_id', 'entity_id', 'season_user_id']);
-            
+
             $table->index(['question_id', 'order']);
             $table->index('entity_id');
         });

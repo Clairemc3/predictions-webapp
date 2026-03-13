@@ -14,7 +14,7 @@ Route::get('/invitations/{token}', [SeasonInvitationController::class, 'accept']
 Route::middleware(['auth', 'verified'])->group(function () {
     // Season routes
     Route::get('/my-seasons', [SeasonController::class, 'hostIndex'])->name('host.seasons.index');
-    
+
     Route::prefix('seasons')->group(function () {
         Route::get('/create', [SeasonController::class, 'create'])->name('seasons.create');
         Route::post('/', [SeasonController::class, 'store'])->name('seasons.store');
@@ -23,10 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Superadmin season routes
         Route::get('/', [SeasonController::class, 'index'])->name('seasons.index');
-        
+
         // Season invitation routes
         Route::post('/{season}/invitations', [SeasonInvitationController::class, 'store'])->name('season-invitations.store');
-        
+
         // Season member routes
         Route::delete('/{season}/members/{seasonMember}', [SeasonMemberController::class, 'destroy'])
             ->name('seasons.members.destroy');
@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('seasons.members.force-destroy')->withTrashed();
         Route::post('/{season}/members/{seasonMember}/restore', [SeasonMemberController::class, 'restore'])
             ->name('seasons.members.restore')->withTrashed();
-        
+
         // Question routes (nested under seasons)
         Route::scopeBindings()->group(function () {
             Route::get('/{season}/questions', [QuestionController::class, 'index'])->name('seasons.questions.index');

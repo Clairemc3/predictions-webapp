@@ -9,7 +9,6 @@ use App\Models\User;
 
 class SeasonPolicy
 {
-
     /**
      * Determine whether the user can view the model.
      */
@@ -37,20 +36,20 @@ class SeasonPolicy
     public function inviteMembers(User $user, Season $season): bool
     {
         return $season->questions()->count() > 0 &&
-               $season->isHost($user) && 
+               $season->isHost($user) &&
                $season->status == SeasonStatus::Draft;
     }
 
     public function updateStatus(User $user, Season $season): bool
     {
-        return $season->isHost($user) && 
-            $season->status == SeasonStatus::Draft && 
+        return $season->isHost($user) &&
+            $season->status == SeasonStatus::Draft &&
             $season->questions->count() > 0;
     }
 
     public function createQuestions(User $user, Season $season): bool
     {
-        return $season->isHost($user) && 
+        return $season->isHost($user) &&
                $season->status == SeasonStatus::Draft;
     }
 }

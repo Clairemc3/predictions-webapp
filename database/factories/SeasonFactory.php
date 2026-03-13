@@ -22,9 +22,9 @@ class SeasonFactory extends Factory
     {
         $sportTypes = ['Football', 'Basketball', 'Baseball', 'Soccer', 'Tennis', 'Hockey'];
         $seasonTypes = ['Spring', 'Summer', 'Fall', 'Winter'];
-        
+
         return [
-            'name' => $this->faker->randomElement($sportTypes) . ' ' . $this->faker->randomElement($seasonTypes) . ' ' . $this->faker->year(),
+            'name' => $this->faker->randomElement($sportTypes).' '.$this->faker->randomElement($seasonTypes).' '.$this->faker->year(),
             'description' => $this->faker->optional()->sentence(10),
             'status' => $this->faker->randomElement(SeasonStatus::cases()),
         ];

@@ -43,18 +43,19 @@ class AppServiceProvider extends ServiceProvider
             if ($ability === 'changePermissionsForUser') {
                 return null;
             }
+
             return $user->hasRole(Role::SuperAdmin) ? true : null;
         });
 
         JsonResource::withoutWrapping();
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
-        return (new MailMessage)
-            ->greeting('Hi '.$notifiable->name . ',')
-            ->subject('Verify Email Address')
-            ->line('Click the button below to verify your email address.')
-            ->action('Verify Email Address', $url)
-            ->line('If you have logged out you will be required to log in again before your email address will be verified.');
-    });
+            return (new MailMessage)
+                ->greeting('Hi '.$notifiable->name.',')
+                ->subject('Verify Email Address')
+                ->line('Click the button below to verify your email address.')
+                ->action('Verify Email Address', $url)
+                ->line('If you have logged out you will be required to log in again before your email address will be verified.');
+        });
     }
 }

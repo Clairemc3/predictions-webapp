@@ -14,7 +14,7 @@ class Season extends Model
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
     protected $casts = [
@@ -37,9 +37,9 @@ class Season extends Model
             ->using(SeasonMember::class)
             ->withPivot(
                 'id',
-                'is_host', 
-                'nickname', 
-                'joined_at', 
+                'is_host',
+                'nickname',
+                'joined_at',
                 'number_of_answers',
                 'deleted_at'
             )
@@ -57,9 +57,9 @@ class Season extends Model
             ->using(SeasonMember::class)
             ->withPivot(
                 'id',
-                'is_host', 
-                'nickname', 
-                'joined_at', 
+                'is_host',
+                'nickname',
+                'joined_at',
                 'number_of_answers',
                 'deleted_at'
             )
@@ -112,15 +112,13 @@ class Season extends Model
 
     /**
      * Get the sum of required answers for all questions in this season.
-     * 
+     *
      * WARNING: This will execute a database query if not eager loaded.
      * To avoid N+1 queries, use one of these approaches:
-     * 
+     *
      * Single model: $season->loadSum('questions', 'answer_count');
      * Multiple models: Season::withRequiredAnswersSum()->get();
      * Already loaded: Automatic if questions relationship is loaded
-     * 
-     * @return Attribute
      */
     protected function requiredAnswersSum(): Attribute
     {
@@ -145,9 +143,10 @@ class Season extends Model
     /**
      * Scope to eager load the sum of answer_count for all related questions.
      * Use this when querying multiple seasons to prevent N+1 queries.
-     * 
+     *
      * @example Season::withRequiredAnswersSum()->get()
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWithRequiredAnswersSum($query)

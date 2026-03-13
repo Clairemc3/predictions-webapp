@@ -26,8 +26,9 @@ class EntityImage extends Model
     public function url(): Attribute
     {
         return Attribute::get(function () {
-            $entityImageService = new EntityImageService();
-           return  $entityImageService->getUrl($this->entity);
+            $entityImageService = new EntityImageService;
+
+            return $entityImageService->getUrl($this->entity);
         });
     }
 

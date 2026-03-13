@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
             $table->foreignId('season_id')->constrained('seasons')->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->unique(['question_id', 'season_id']);
             $table->index('season_id');
         });
