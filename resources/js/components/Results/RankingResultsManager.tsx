@@ -25,6 +25,7 @@ import {
 interface Entity {
   id: number;
   name: string;
+  image_url?: string;
 }
 
 interface SelectedEntity extends Entity {
@@ -95,6 +96,7 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
           newSelectedEntities[result.position - 1] = {
             id: result.entity.id,
             name: result.entity.name,
+            image_url: result.entity.image_url,
             resultId: result.id,
           };
         }

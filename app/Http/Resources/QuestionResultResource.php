@@ -23,6 +23,7 @@ class QuestionResultResource extends JsonResource
                 'id' => $this->entity->id,
                 'value' => $this->entity->value,
                 'name' => $this->entity->name ?? $this->entity->value,
+                'image_url' => $this->entity->image?->url,
             ],
         ];
     }

@@ -14,6 +14,7 @@ import RankingResultsManager from '../../../components/Results/RankingResultsMan
 interface Entity {
   id: number;
   name: string;
+  image_url?: string;
 }
 
 interface QuestionResult {

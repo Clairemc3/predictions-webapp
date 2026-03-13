@@ -26,6 +26,7 @@ class CategoryEntitiesController extends Controller
         }
 
         $entities = $entityQuery->get();
+        $entities->load('image');
 
         return response()->json([
             'category' => $category->name,

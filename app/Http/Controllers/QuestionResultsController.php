@@ -27,7 +27,7 @@ class QuestionResultsController extends Controller
         $season->loadSum('questions', 'answer_count');
 
         // Load question entities for proper title formatting
-        $question->load(['entities', 'results.entity', 'answerCategory']);
+        $question->load(['entities.image', 'results.entity.image', 'answerCategory']);
 
         // Get available options for this question
         $availableOptions = $question->allOptions()->map(function ($entity) {
@@ -35,6 +35,7 @@ class QuestionResultsController extends Controller
                 'id' => $entity->id,
                 'value' => $entity->value,
                 'name' => $entity->name ?? $entity->value,
+                'image_url' => $entity->image?->url,
             ];
         });
 
