@@ -4,6 +4,7 @@ import {
   Card,
   Autocomplete,
   TextField,
+  Typography,
 } from '@mui/material';
 import { DragIndicator } from '@mui/icons-material';
 import { useSortable } from '@dnd-kit/sortable';
@@ -65,19 +66,32 @@ const SortableItem: React.FC<SortableItemProps> = ({
         }}
       >
         <Box sx={{ p: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-          {/* Drag handle - only show if entity is selected */}
+          {/* Drag handle and position - only show if entity is selected */}
           {selectedEntity && (
-            <DragIndicator 
-              {...attributes}
-              {...listeners}
-              sx={{ 
-                color: 'grey.500',
-                cursor: 'grab',
-                '&:active': {
-                  cursor: 'grabbing',
-                }
-              }} 
-            />
+            <>
+              <DragIndicator 
+                {...attributes}
+                {...listeners}
+                sx={{ 
+                  color: 'grey.500',
+                  cursor: 'grab',
+                  '&:active': {
+                    cursor: 'grabbing',
+                  }
+                }} 
+              />
+              <Typography 
+                variant="body2" 
+                sx={{ 
+                  minWidth: '24px',
+                  fontWeight: 'medium',
+                  color: 'grey.700',
+                  textAlign: 'center'
+                }}
+              >
+                {index + 1}
+              </Typography>
+            </>
           )}
           
           <Box sx={{ flex: 1 }}>

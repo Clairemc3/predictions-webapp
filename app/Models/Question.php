@@ -70,6 +70,14 @@ class Question extends Model
             ->withTimestamps();
     }
 
+    /**
+     * Get the results/standings for this question.
+     */
+    public function results(): HasMany
+    {
+        return $this->hasMany(QuestionResult::class)->orderBy('position');
+    }
+
     public function allOptions(): Collection
     {
         $entityQuery = new EntityQuery($this->answerCategory);

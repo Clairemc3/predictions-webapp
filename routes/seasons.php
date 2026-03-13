@@ -46,7 +46,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{season}/questions/{question}/edit', [QuestionController::class, 'edit'])->name('seasons.questions.edit');
             Route::put('/{season}/questions/{question}', [QuestionController::class, 'update'])->name('seasons.questions.update');
             Route::delete('/{season}/questions/{question}', [QuestionController::class, 'destroy'])->name('seasons.questions.destroy');
+
+            // Question results routes
             Route::get('/{season}/questions/{question}/results', [QuestionResultsController::class, 'manage'])->name('seasons.questions.results.manage');
+            Route::post('/{season}/questions/{question}/results', [QuestionResultsController::class, 'store'])->name('seasons.questions.results.store');
+            Route::put('/{season}/questions/{question}/results/{result}', [QuestionResultsController::class, 'update'])->name('seasons.questions.results.update');
+            Route::delete('/{season}/questions/{question}/results/{result}', [QuestionResultsController::class, 'destroy'])->name('seasons.questions.results.destroy');
         });
     });
 });
