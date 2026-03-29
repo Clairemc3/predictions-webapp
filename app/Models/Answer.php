@@ -21,6 +21,7 @@ class Answer extends Model
         'entity_id',
         'order',
         'season_user_id',
+        'points',
     ];
 
     /**
@@ -30,6 +31,7 @@ class Answer extends Model
      */
     protected $casts = [
         'order' => 'integer',
+        'points' => 'integer',
     ];
 
     /**

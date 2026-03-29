@@ -35,7 +35,7 @@ class SeasonQuestionResource extends JsonResource
             'answer_count' => $this->answer_count,
             'base_type' => $this->base_type,
             'points_values' => $this->points->map(fn ($point) => [
-                'position' => $point->position,
+                'accuracy_level' => $point->accuracy_level,
                 'value' => $point->value,
             ]),
             'permissions' => [

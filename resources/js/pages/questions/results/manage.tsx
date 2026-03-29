@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head, usePage, router } from '@inertiajs/react';
 import {
   Box,
@@ -13,6 +13,7 @@ import { QuestionRow, Season } from '../../../types/season';
 import { route } from '../../../lib/routes';
 import RankingResultsManager from '../../../components/Results/RankingResultsManager';
 import ScoringChips from '../../../components/Results/ScoringChips';
+import ConfirmationDialog from '../../../components/ConfirmationDialog';
 
 interface Entity {
   id: number;
@@ -40,6 +41,8 @@ interface PageProps extends Record<string, any> {
 
 const ManageQuestionResults = () => {
   const { question, season, seasonStatus, totalRequiredAnswers, results, availableOptions, count_of_results } = usePage<PageProps>().props;
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formatType = (type: string): string => {
     return type
@@ -53,6 +56,31 @@ const ManageQuestionResults = () => {
     router.visit(route('seasons.manage', { season: season.id }));
   };
 
+  const handleSetResultsClick = () => {
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmSetResults = () => {
+    setIsSubmitting(true);
+    router.post(
+      `/seasons/${season.id}/questions/${question.id}/results/complete`,
+      {},
+      {
+        onSuccess: () => {
+          setConfirmDialogOpen(false);
+          setIsSubmitting(false);
+        },
+        onError: () => {
+          setIsSubmitting(false);
+        },
+      }
+    );
+  };
+
+  const handleCancelSetResults = () => {
+    setConfirmDialogOpen(false);
+  };
+
   return (
     <>
       <Head title={`Results - ${question.title}`} />
@@ -63,13 +91,24 @@ const ManageQuestionResults = () => {
         currentTab="results"
       >
         {/* Back Button */}
-        <Button
-          startIcon={<ArrowBack />}
-          onClick={handleBackToQuestions}
-          sx={{ mb: 2 }}
-        >
-          Back to Questions
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={handleBackToQuestions}
+          >
+            Back to Questions
+          </Button>
+          
+          {isRankingType && results.length > 0 && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSetResultsClick}
+            >
+              Set Results
+            </Button>
+          )}
+        </Box>
 
         <Box sx={{ mb: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -128,6 +167,17 @@ const ManageQuestionResults = () => {
           />
         )}
       </SeasonManageLayout>
+
+      <ConfirmationDialog
+        open={confirmDialogOpen}
+        title="Set Results"
+        message="Points will be distributed to correct predictions."
+        confirmText="Set Results"
+        cancelText="Cancel"
+        onConfirm={handleConfirmSetResults}
+        onCancel={handleCancelSetResults}
+        isLoading={isSubmitting}
+      />
     </>
   );
 };

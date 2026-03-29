@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Chip } from '@mui/material';
 
 interface PointValue {
-  position: number;
+  accuracy_level: number;
   value: number;
 }
 
@@ -11,11 +11,11 @@ interface ScoringChipsProps {
 }
 
 const ScoringChips: React.FC<ScoringChipsProps> = ({ pointsValues }) => {
-  const getScoringLabel = (position: number): string => {
-    if (position === 1) {
+  const getScoringLabel = (accuracyLevel: number): string => {
+    if (accuracyLevel === 0) {
       return 'Exact Match';
     }
-    return `+/- ${position - 1}`;
+    return `+/- ${accuracyLevel}`;
   };
 
   if (!pointsValues || pointsValues.length === 0) {
@@ -26,8 +26,8 @@ const ScoringChips: React.FC<ScoringChipsProps> = ({ pointsValues }) => {
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
       {pointsValues.map((point) => (
         <Chip
-          key={point.position}
-          label={`${getScoringLabel(point.position)}: ${point.value} ${point.value === 1 ? 'point' : 'points'}`}
+          key={point.accuracy_level}
+          label={`${getScoringLabel(point.accuracy_level)}: ${point.value} ${point.value === 1 ? 'point' : 'points'}`}
           size="small"
           color="secondary"
           variant="filled"

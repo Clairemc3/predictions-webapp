@@ -35,7 +35,7 @@ const EditQuestion = () => {
     answer_category: question.answer_category || '',
     scoring_type: question.scoring_type || '',
     question_points: question.points_values?.reduce((acc: Record<string, number>, point: any) => {
-      acc[point.position] = point.value;
+      acc[point.accuracy_level] = point.value;
       return acc;
     }, {}) || {},
   };

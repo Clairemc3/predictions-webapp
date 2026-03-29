@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuestionLocked;
 use App\Http\Resources\QuestionResultResource;
 use App\Http\Resources\SeasonQuestionResource;
 use App\Http\Resources\SeasonResource;
@@ -21,7 +22,7 @@ class QuestionResultsController extends Controller
      */
     public function manage(Season $season, Question $question): Response
     {
-        Gate::authorize('viewResults', [$question, $season]);
+        Gate::authorize('view', [QuestionResult::class, $question, $season]);
 
         // Load question entities for proper title formatting
         $question->load(['entities.image', 'results.entity.image', 'answerCategory', 'points']);
@@ -44,7 +45,7 @@ class QuestionResultsController extends Controller
             'results' => QuestionResultResource::collection($question->results),
             'availableOptions' => $availableOptions,
             'count_of_results' => $question->answer_count == $availableOptions->count()
-                ? $question->answer_count : $question->answer_count + $question->points()->max('position'),
+                ? $question->answer_count : $question->answer_count + $question->points()->max('accuracy_level'),
         ]);
     }
 
@@ -53,7 +54,7 @@ class QuestionResultsController extends Controller
      */
     public function store(Request $request, Season $season, Question $question): RedirectResponse
     {
-        Gate::authorize('viewResults', [$question, $season]);
+        Gate::authorize('create', [QuestionResult::class, $question, $season]);
 
         $validated = $request->validate([
             'position' => 'required|integer|min:1',
@@ -71,7 +72,7 @@ class QuestionResultsController extends Controller
      */
     public function update(Request $request, Season $season, Question $question, QuestionResult $result): RedirectResponse
     {
-        Gate::authorize('viewResults', [$question, $season]);
+        Gate::authorize('update', [$result, $question, $season]);
 
         $validated = $request->validate([
             'position' => 'required|integer|min:1',
@@ -89,10 +90,26 @@ class QuestionResultsController extends Controller
      */
     public function destroy(Season $season, Question $question, QuestionResult $result): RedirectResponse
     {
-        Gate::authorize('viewResults', [$question, $season]);
+        Gate::authorize('delete', [$result, $question, $season]);
 
         $result->delete();
 
         return redirect()->back()->with('success', 'Result deleted successfully');
+    }
+
+    /**
+     * Lock the question results and distribute points to correct predictions.
+     */
+    public function complete(Season $season, Question $question): RedirectResponse
+    {
+        Gate::authorize('complete', [QuestionResult::class, $question, $season]);
+
+        $question->complete = true;
+        $question->save();
+
+        // Emit the QuestionLocked event
+        event(new QuestionLocked($question, $season));
+
+        return redirect()->back()->with('success', 'Results set successfully');
     }
 }

@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // Question results routes
             Route::get('/{season}/questions/{question}/results', [QuestionResultsController::class, 'manage'])->name('seasons.questions.results.manage');
             Route::post('/{season}/questions/{question}/results', [QuestionResultsController::class, 'store'])->name('seasons.questions.results.store');
+            Route::post('/{season}/questions/{question}/results/complete', [QuestionResultsController::class, 'complete'])->name('seasons.questions.results.complete');
             Route::put('/{season}/questions/{question}/results/{result}', [QuestionResultsController::class, 'update'])->name('seasons.questions.results.update');
             Route::delete('/{season}/questions/{question}/results/{result}', [QuestionResultsController::class, 'destroy'])->name('seasons.questions.results.destroy');
         });

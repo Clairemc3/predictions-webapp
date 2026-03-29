@@ -14,22 +14,22 @@ class QuestionPointPersistService
         $savedPositions = [];
 
         // Update or create score values
-        foreach ($scoreValues as $position => $value) {
+        foreach ($scoreValues as $accuracyLevel => $value) {
             if ($value !== null && $value !== '') {
                 $question->pointsValues()->updateOrCreate(
                     [
                         'question_id' => $question->id,
-                        'position' => (int) $position,
+                        'accuracy_level' => (int) $accuracyLevel,
                     ],
                     [
                         'value' => (int) $value,
                     ]
                 );
-                $savedPositions[] = (int) $position;
+                $savedPositions[] = (int) $accuracyLevel;
             }
         }
 
-        // Delete positions that arent in the set of values
-        $question->pointsValues()->whereNotIn('position', $savedPositions)->delete();
+        // Delete accuracy levels that arent in the set of values
+        $question->pointsValues()->whereNotIn('accuracy_level', $savedPositions)->delete();
     }
 }
