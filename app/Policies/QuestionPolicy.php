@@ -10,6 +10,15 @@ use App\Models\User;
 class QuestionPolicy
 {
     /**
+     * Determine whether the user can view question results.
+     */
+    public function viewResults(User $user, Question $question, Season $season): bool
+    {
+        // Only hosts can view results, and only when season is active
+        return $season->isHost($user) && $season->status === SeasonStatus::Active;
+    }
+
+    /**
      * Determine whether the user can create models.
      */
     public function create(User $user, Season $season): bool

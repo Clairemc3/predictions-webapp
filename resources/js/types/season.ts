@@ -62,6 +62,7 @@ export interface QuestionRow {
   title: string;
   type?: string;
   base_type?: string;
+  answer_count?: number;
   permissions: {
     canUpdateQuestion: boolean;
     canDeleteQuestion: boolean;

@@ -61,6 +61,32 @@ class Question extends Model
         return $this->belongsTo(Category::class, 'answer_category_id');
     }
 
+    /**
+     * Get the seasons that this question belongs to.
+     */
+    public function seasons(): BelongsToMany
+    {
+        return $this->belongsToMany(Season::class, 'question_season')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the results/standings for this question.
+     */
+    public function results(): HasMany
+    {
+        return $this->hasMany(QuestionResult::class)->orderBy('position');
+    }
+
+    /**
+     * Get the points for this question.
+     */
+    public function points(): HasMany
+    {
+        return $this->hasMany(QuestionPoint::class)->orderBy('position');
+    }
+
+    // Cache this
     public function allOptions(): Collection
     {
         $entityQuery = new EntityQuery($this->answerCategory);

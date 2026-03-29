@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SeasonMemberResource;
-use App\Http\Resources\SeasonQuestionResource;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
 use App\Repositories\SeasonRepository;
@@ -78,29 +76,5 @@ class SeasonController extends Controller
 
         return redirect()->route('seasons.manage', $season)
             ->with('success', 'Season created successfully!');
-    }
-
-    /**
-     * Show the form for managing the specified season.
-     */
-    public function manage(Season $season): Response
-    {
-        Gate::authorize('update', $season);
-
-        // Eager load the sum to avoid an additional query
-        $season->loadSum('questions', 'answer_count');
-
-        $season->load('members', 'excludedMembers', 'questions');
-
-        return Inertia::render('seasons/manage', [
-            'season' => new SeasonResource($season),
-            'seasonStatus' => $season->status->name(),
-            'questions' => $season->questions
-                ->map(fn ($question) => SeasonQuestionResource::forSeason($question, $season)),
-            'totalRequiredAnswers' => $season->required_answers_sum,
-            'members' => SeasonMemberResource::collection($season->members),
-            'excludedMembers' => SeasonMemberResource::collection($season->excludedMembers),
-            'excludedMembersCount' => $season->excludedMembers->count(),
-        ]);
     }
 }

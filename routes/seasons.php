@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\QuestionResultsController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SeasonInvitationController;
+use App\Http\Controllers\SeasonManageController;
 use App\Http\Controllers\SeasonMemberController;
 use App\Http\Controllers\SeasonStatusController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('seasons')->group(function () {
         Route::get('/create', [SeasonController::class, 'create'])->name('seasons.create');
         Route::post('/', [SeasonController::class, 'store'])->name('seasons.store');
-        Route::get('/{season}', [SeasonController::class, 'manage'])->name('seasons.manage');
+        Route::get('/{season}', [SeasonManageController::class, 'index'])->name('seasons.manage');
+        Route::get('/{season}/members', [SeasonManageController::class, 'members'])->name('seasons.members.index');
         Route::patch('/{season}/status', [SeasonStatusController::class, 'updateStatus'])->name('seasons.status.update');
 
         // Superadmin season routes
@@ -37,12 +40,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Question routes (nested under seasons)
         Route::scopeBindings()->group(function () {
-            Route::get('/{season}/questions', [QuestionController::class, 'index'])->name('seasons.questions.index');
+            Route::get('/{season}/questions', [SeasonManageController::class, 'questions'])->name('seasons.questions.index');
             Route::get('/{season}/questions/create', [QuestionController::class, 'create'])->name('seasons.questions.create');
             Route::post('/{season}/questions', [QuestionController::class, 'store'])->name('seasons.questions.store');
             Route::get('/{season}/questions/{question}/edit', [QuestionController::class, 'edit'])->name('seasons.questions.edit');
             Route::put('/{season}/questions/{question}', [QuestionController::class, 'update'])->name('seasons.questions.update');
             Route::delete('/{season}/questions/{question}', [QuestionController::class, 'destroy'])->name('seasons.questions.destroy');
+
+            // Question results routes
+            Route::get('/{season}/questions/{question}/results', [QuestionResultsController::class, 'manage'])->name('seasons.questions.results.manage');
+            Route::post('/{season}/questions/{question}/results', [QuestionResultsController::class, 'store'])->name('seasons.questions.results.store');
+            Route::put('/{season}/questions/{question}/results/{result}', [QuestionResultsController::class, 'update'])->name('seasons.questions.results.update');
+            Route::delete('/{season}/questions/{question}/results/{result}', [QuestionResultsController::class, 'destroy'])->name('seasons.questions.results.destroy');
         });
     });
 });

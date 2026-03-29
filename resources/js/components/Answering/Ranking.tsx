@@ -32,6 +32,7 @@ const RELOAD_DEBOUNCE_DELAY = 1000;
 interface Entity {
   id: number;
   name: string; // Keep as 'name' to match SortableItem expectations
+  image_url?: string;
 }
 
 interface SelectedEntity extends Entity {
@@ -206,7 +207,8 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
             // Transform API response to match Entity interface (value -> name)
             const transformedEntities = data.entities.map((entity: any) => ({
               id: entity.id,
-              name: entity.value // Transform 'value' to 'name'
+              name: entity.value, // Transform 'value' to 'name'
+              image_url: entity.image_url
             }));
             setEntities(transformedEntities);
             
@@ -370,12 +372,11 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
               <SortableContext items={items} strategy={verticalListSortingStrategy}>
                 {/* Create select fields for each answer count */}
                 {items.map((itemId, index) => {
-                  const actualIndex = parseInt(itemId.split('-')[1]);
                   return (
                     <SortableItem
                       key={itemId}
                       id={itemId}
-                      index={actualIndex}
+                      index={index}
                       selectedEntity={selectedEntities[index]}
                       availableEntities={getAvailableAnswerEntities(index)}
                       onEntitySelect={(_, value) => handleEntitySelect(index, value)}
