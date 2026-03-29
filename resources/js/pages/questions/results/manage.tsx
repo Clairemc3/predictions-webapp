@@ -1,15 +1,18 @@
 import React from 'react';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import {
   Box,
   Typography,
   Chip,
   Alert,
+  Button,
 } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import SeasonManageLayout from '../../../layouts/SeasonManageLayout';
 import { QuestionRow, Season } from '../../../types/season';
 import { route } from '../../../lib/routes';
 import RankingResultsManager from '../../../components/Results/RankingResultsManager';
+import ScoringChips from '../../../components/Results/ScoringChips';
 
 interface Entity {
   id: number;
@@ -46,6 +49,10 @@ const ManageQuestionResults = () => {
 
   const isRankingType = question.base_type === 'ranking';
 
+  const handleBackToQuestions = () => {
+    router.visit(route('seasons.manage', { season: season.id }));
+  };
+
   return (
     <>
       <Head title={`Results - ${question.title}`} />
@@ -55,6 +62,15 @@ const ManageQuestionResults = () => {
         totalRequiredAnswers={totalRequiredAnswers}
         currentTab="results"
       >
+        {/* Back Button */}
+        <Button
+          startIcon={<ArrowBack />}
+          onClick={handleBackToQuestions}
+          sx={{ mb: 2 }}
+        >
+          Back to Questions
+        </Button>
+
         <Box sx={{ mb: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography variant="h5" component="h2">
@@ -67,6 +83,12 @@ const ManageQuestionResults = () => {
               variant="outlined"
             />
           </Box>
+
+          {/* Scoring Chips */}
+          {isRankingType && question.points_values && (
+            <ScoringChips pointsValues={question.points_values} />
+          )}
+
           <Typography variant="body2" color="text.secondary">
             {isRankingType ? 'Drag and drop to reorder the standings' : 'Results management'}
           </Typography>

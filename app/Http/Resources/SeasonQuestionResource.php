@@ -34,6 +34,10 @@ class SeasonQuestionResource extends JsonResource
             'type' => $this->type,
             'answer_count' => $this->answer_count,
             'base_type' => $this->base_type,
+            'points_values' => $this->points->map(fn ($point) => [
+                'position' => $point->position,
+                'value' => $point->value,
+            ]),
             'permissions' => [
                 'canUpdateQuestion' => $request->user() ? $request->user()->can('update', [$this->resource, $this->season]) : false,
                 'canDeleteQuestion' => $request->user() ? $request->user()->can('delete', [$this->resource, $this->season]) : false,

@@ -24,7 +24,7 @@ class QuestionResultsController extends Controller
         Gate::authorize('viewResults', [$question, $season]);
 
         // Load question entities for proper title formatting
-        $question->load(['entities.image', 'results.entity.image', 'answerCategory']);
+        $question->load(['entities.image', 'results.entity.image', 'answerCategory', 'points']);
 
         // Get available options for this question
         $availableOptions = $question->allOptions()->map(function ($entity) {
@@ -43,7 +43,7 @@ class QuestionResultsController extends Controller
             'totalRequiredAnswers' => 0,
             'results' => QuestionResultResource::collection($question->results),
             'availableOptions' => $availableOptions,
-            'count_of_results' => $question->answer_count == $availableOptions->count() 
+            'count_of_results' => $question->answer_count == $availableOptions->count()
                 ? $question->answer_count : $question->answer_count + $question->points()->max('position'),
         ]);
     }
