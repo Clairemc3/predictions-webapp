@@ -10,8 +10,8 @@ use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Resources\PredictionAnswerResource;
 use App\Models\Answer;
 use App\Models\SeasonMember;
+use App\Services\PositionReorderService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class AnswerController extends Controller
@@ -73,30 +73,26 @@ class AnswerController extends Controller
         // Authorize reordering with policy (validates ownership and question)
         Gate::authorize('reorder', [Answer::class, $membership, $validated['question_id'], $answerIds]);
 
-        DB::transaction(function () use ($validated, $membership) {
-            // Two-pass update to avoid unique constraint violations
+        // Transform updates to match service API
+        $updates = collect($validated['order_updates'])->map(fn ($update) => [
+            'id' => $update['answer_id'],
+            'position' => $update['new_order'],
+        ])->toArray();
 
-            // Pass 1: Set all affected orders to negative temporary values
-            foreach ($validated['order_updates'] as $update) {
-                Answer::where('id', $update['answer_id'])
-                    ->where('season_user_id', $membership->id)
-                    ->where('question_id', $validated['question_id'])
-                    ->update(['order' => -($update['new_order'])]);
+        // Use the reorder service
+        app(PositionReorderService::class)->reorder(
+            modelClass: Answer::class,
+            updates: $updates,
+            idColumn: 'id',
+            positionColumn: 'order',
+            whereConditions: [
+                'season_user_id' => $membership->id,
+                'question_id' => $validated['question_id'],
+            ],
+            afterUpdate: function ($answer) use ($membership) {
+                event(new AnswerUpdated($answer, $membership));
             }
-
-            // Pass 2: Set to actual positive order values
-            foreach ($validated['order_updates'] as $update) {
-                $answer = Answer::where('id', $update['answer_id'])
-                    ->where('season_user_id', $membership->id)
-                    ->where('question_id', $validated['question_id'])
-                    ->first();
-
-                if ($answer) {
-                    $answer->update(['order' => $update['new_order']]);
-                    event(new AnswerUpdated($answer, $membership));
-                }
-            }
-        });
+        );
 
         return response()->json([
             'success' => true,

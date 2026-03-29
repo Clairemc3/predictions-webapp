@@ -322,52 +322,6 @@ test('host can reorder question results', function () {
     ]);
 });
 
-test('reorder validates duplicate entities are not allowed', function () {
-    $host = User::factory()->create();
-    $season = Season::factory()->create(['status' => SeasonStatus::Active]);
-    SeasonMember::factory()->host()->create([
-        'season_id' => $season->id,
-        'user_id' => $host->id,
-    ]);
-    $question = Question::factory()->create();
-    $season->questions()->attach($question);
-    $entity1 = Entity::factory()->create();
-    $entity2 = Entity::factory()->create();
-
-    $result1 = QuestionResult::factory()->create([
-        'question_id' => $question->id,
-        'position' => 1,
-        'entity_id' => $entity1->id,
-    ]);
-    $result2 = QuestionResult::factory()->create([
-        'question_id' => $question->id,
-        'position' => 2,
-        'entity_id' => $entity2->id,
-    ]);
-
-    // Try to reorder with duplicate entity_id
-    $response = $this->actingAs($host)->postJson(
-        "/seasons/{$season->id}/questions/{$question->id}/results/reorder",
-        [
-            'updates' => [
-                [
-                    'result_id' => $result1->id,
-                    'position' => 1,
-                    'entity_id' => $entity1->id, // Same entity twice
-                ],
-                [
-                    'result_id' => $result2->id,
-                    'position' => 2,
-                    'entity_id' => $entity1->id, // Same entity twice
-                ],
-            ],
-        ]
-    );
-
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['updates.1.entity_id']);
-});
-
 test('non-host cannot reorder question results', function () {
     $host = User::factory()->create();
     $nonHost = User::factory()->create();

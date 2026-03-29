@@ -25,7 +25,6 @@ class ReorderQuestionResultsRequest extends FormRequest
             'updates' => ['required', 'array', 'min:1'],
             'updates.*.result_id' => ['required', 'integer', 'exists:question_results,id'],
             'updates.*.position' => ['required', 'integer', 'min:1'],
-            'updates.*.entity_id' => ['required', 'integer', 'exists:entities,id', 'distinct'],
         ];
     }
 
@@ -43,9 +42,6 @@ class ReorderQuestionResultsRequest extends FormRequest
             'updates.*.result_id.exists' => 'Result ID does not exist.',
             'updates.*.position.required' => 'Each update must have a position value.',
             'updates.*.position.min' => 'Position value must be at least 1.',
-            'updates.*.entity_id.required' => 'Each update must have an entity ID.',
-            'updates.*.entity_id.exists' => 'Entity ID does not exist.',
-            'updates.*.entity_id.distinct' => 'Each entity can only appear once.',
         ];
     }
 }

@@ -10,10 +10,10 @@ use App\Http\Resources\SeasonResource;
 use App\Models\Question;
 use App\Models\QuestionResult;
 use App\Models\Season;
+use App\Services\PositionReorderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -111,28 +111,22 @@ class QuestionResultsController extends Controller
 
         $validated = $request->validated();
 
-        DB::transaction(function () use ($validated, $question) {
-            // Two-pass update to avoid unique constraint violations
+        // Transform updates to match service API
+        $updates = collect($validated['updates'])->map(fn ($update) => [
+            'id' => $update['result_id'],
+            'position' => $update['position'],
+        ])->toArray();
 
-            // Pass 1: Set all affected positions to negative temporary values
-            foreach ($validated['updates'] as $update) {
-                QuestionResult::where('id', $update['result_id'])
-                    ->where('question_id', $question->id)
-                    ->update([
-                        'position' => -($update['position']),
-                    ]);
-            }
-
-            // Pass 2: Set to actual positive position values and update entity_id
-            foreach ($validated['updates'] as $update) {
-                QuestionResult::where('id', $update['result_id'])
-                    ->where('question_id', $question->id)
-                    ->update([
-                        'position' => $update['position'],
-                        'entity_id' => $update['entity_id'],
-                    ]);
-            }
-        });
+        // Use the reorder service
+        app(PositionReorderService::class)->reorder(
+            modelClass: QuestionResult::class,
+            updates: $updates,
+            idColumn: 'id',
+            positionColumn: 'position',
+            whereConditions: [
+                'question_id' => $question->id,
+            ]
+        );
 
         return response()->json([
             'success' => true,

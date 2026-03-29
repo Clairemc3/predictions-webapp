@@ -102,7 +102,6 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
           return {
             result_id: entity.resultId,
             position: index + 1,
-            entity_id: entity.id,
           };
         })
         .filter(update => update !== null);
