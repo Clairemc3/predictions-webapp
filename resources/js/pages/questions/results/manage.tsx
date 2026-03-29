@@ -157,6 +157,10 @@ const ManageQuestionResults = () => {
               question: question.id,
               result: '{result}'
             })}
+            resultsReorderRoute={route('seasons.questions.results.reorder', {
+              season: season.id,
+              question: question.id
+            })}
             resultsDestroyRoute={(resultId: number) => 
               route('seasons.questions.results.destroy', { 
                 season: season.id, 

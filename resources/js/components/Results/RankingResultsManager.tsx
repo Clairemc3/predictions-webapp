@@ -6,6 +6,8 @@ import {
   CardContent,
 } from '@mui/material';
 import SortableItem from '../Answering/SortableItem';
+import { apiPost } from '../../lib/api';
+import { useOptimisticUpdate } from '../../hooks/useOptimisticUpdate';
 import {
   DndContext,
   closestCenter,
@@ -49,6 +51,7 @@ interface RankingResultsManagerProps {
   resultsUpdateRoute: string;
   resultsStoreRoute: string;
   resultsDestroyRoute: (resultId: number) => string;
+  resultsReorderRoute: string;
 }
 
 const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
@@ -60,6 +63,7 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
   resultsUpdateRoute,
   resultsStoreRoute,
   resultsDestroyRoute,
+  resultsReorderRoute,
 }) => {
   // Use the answer_count from the question
   const maxPositions = answerCount;
@@ -74,6 +78,9 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
     Array.from({ length: maxPositions }, (_, index) => `item-${index}`)
   );
 
+  // State to track if we need to reload
+  const [needsReload, setNeedsReload] = useState(false);
+
   // Configure sensors for drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -85,6 +92,51 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  // Mutation for reordering results
+  const reorderMutation = useOptimisticUpdate<any, { reorderedEntities: (SelectedEntity | null)[] }, (SelectedEntity | null)[]>({
+    mutationFn: async ({ reorderedEntities }) => {
+      const updates = reorderedEntities
+        .map((entity, index) => {
+          if (!entity?.resultId) return null;
+          return {
+            result_id: entity.resultId,
+            position: index + 1,
+            entity_id: entity.id,
+          };
+        })
+        .filter(update => update !== null);
+
+      const response = await apiPost(resultsReorderRoute, { updates });
+
+      if (!response.ok) {
+        throw new Error('Reorder request failed');
+      }
+
+      return response;
+    },
+    currentState: selectedEntities,
+    setState: setSelectedEntities,
+    getOptimisticState: (current, { reorderedEntities }) => reorderedEntities,
+    onSuccess: () => {
+      setNeedsReload(true);
+    },
+    onError: (error) => {
+      console.error('Error reordering:', error);
+    },
+  });
+
+  // Debounced reload effect
+  useEffect(() => {
+    if (!needsReload) return;
+
+    const timeoutId = setTimeout(() => {
+      router.reload({ only: ['results'] });
+      setNeedsReload(false);
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [needsReload]);
 
   // Initialize selected entities from results prop
   useEffect(() => {
@@ -182,6 +234,7 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
   };
 
   // Function to handle drag end
+  // Function to handle drag end
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -189,63 +242,22 @@ const RankingResultsManager: React.FC<RankingResultsManagerProps> = ({
       const oldIndex = items.indexOf(active.id as string);
       const newIndex = items.indexOf(over.id as string);
 
+      // Store previous items state
+      const previousItems = [...items];
+
       // Reorder both the items and selected entities
       const newItems = arrayMove(items, oldIndex, newIndex);
-      const newSelectedEntities = arrayMove(selectedEntities, oldIndex, newIndex);
+      const reorderedEntities = arrayMove(selectedEntities, oldIndex, newIndex);
       
       setItems(newItems);
-      setSelectedEntities(newSelectedEntities);
 
-      // Update all positions
-      await sendReorderedResults(newSelectedEntities);
-    }
-  };
-
-  // Function to send reordered results
-  const sendReorderedResults = async (reorderedEntities: (SelectedEntity | null)[]) => {
-    const updates = reorderedEntities
-      .map((entity, index) => {
-        if (entity?.resultId) {
-          return {
-            resultId: entity.resultId,
-            position: index + 1,
-            entity_id: entity.id,
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
-
-    // Send all updates without reloading, then reload once at the end
-    const promises = updates.map((update) => {
-      if (update) {
-        return new Promise<void>((resolve, reject) => {
-          router.put(
-            resultsUpdateRoute.replace('{result}', update.resultId.toString()),
-            {
-              position: update.position,
-              entity_id: update.entity_id,
-              result: null,
-            },
-            {
-              preserveScroll: true,
-              preserveState: true,
-              only: [], // Don't fetch any props during intermediate updates
-              onSuccess: () => resolve(),
-              onError: () => reject(),
-            }
-          );
-        });
+      // Use mutation for reordering
+      try {
+        await reorderMutation.mutateAsync({ reorderedEntities });
+      } catch (error) {
+        // Revert items on error
+        setItems(previousItems);
       }
-      return Promise.resolve();
-    });
-
-    // Wait for all updates to complete, then reload once
-    try {
-      await Promise.all(promises);
-      router.reload({ only: ['results'] });
-    } catch (error) {
-      console.error('Error updating results:', error);
     }
   };
 

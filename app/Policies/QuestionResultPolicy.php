@@ -47,6 +47,15 @@ class QuestionResultPolicy
     }
 
     /**
+     * Determine whether the user can reorder question results.
+     */
+    public function reorder(User $user, Question $question, Season $season): bool
+    {
+        // Only hosts can reorder results, and only when season is active
+        return $season->isHost($user) && $season->status === SeasonStatus::Active;
+    }
+
+    /**
      * Determine whether the user can complete/lock the question results.
      */
     public function complete(User $user, Question $question, Season $season): bool

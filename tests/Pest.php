@@ -13,9 +13,9 @@
 
 /**
  * @template TTestCase of Tests\TestCase
+ *
  * @mixin Tests\TestCase
  */
-
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');

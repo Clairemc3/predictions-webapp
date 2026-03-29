@@ -3,24 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Events\QuestionLocked;
+use App\Http\Requests\ReorderQuestionResultsRequest;
 use App\Http\Resources\QuestionResultResource;
 use App\Http\Resources\SeasonQuestionResource;
 use App\Http\Resources\SeasonResource;
 use App\Models\Question;
 use App\Models\QuestionResult;
 use App\Models\Season;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\Response as InertiaResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class QuestionResultsController extends Controller
 {
     /**
      * Show the question results management page.
      */
-    public function manage(Season $season, Question $question): Response
+    public function manage(Season $season, Question $question): InertiaResponse
     {
         Gate::authorize('view', [QuestionResult::class, $question, $season]);
 
@@ -95,6 +99,45 @@ class QuestionResultsController extends Controller
         $result->delete();
 
         return redirect()->back()->with('success', 'Result deleted successfully');
+    }
+
+    /**
+     * Reorder question results (batch update to avoid constraint violations).
+     */
+    public function reorder(ReorderQuestionResultsRequest $request, Season $season, Question $question): JsonResponse
+    {
+        // Authorize: user must be host and season must be active
+        Gate::authorize('reorder', [QuestionResult::class, $question, $season]);
+
+        $validated = $request->validated();
+
+        DB::transaction(function () use ($validated, $question) {
+            // Two-pass update to avoid unique constraint violations
+
+            // Pass 1: Set all affected positions to negative temporary values
+            foreach ($validated['updates'] as $update) {
+                QuestionResult::where('id', $update['result_id'])
+                    ->where('question_id', $question->id)
+                    ->update([
+                        'position' => -($update['position']),
+                    ]);
+            }
+
+            // Pass 2: Set to actual positive position values and update entity_id
+            foreach ($validated['updates'] as $update) {
+                QuestionResult::where('id', $update['result_id'])
+                    ->where('question_id', $question->id)
+                    ->update([
+                        'position' => $update['position'],
+                        'entity_id' => $update['entity_id'],
+                    ]);
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Results reordered successfully',
+        ], Response::HTTP_OK);
     }
 
     /**
