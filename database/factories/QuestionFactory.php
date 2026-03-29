@@ -22,7 +22,8 @@ class QuestionFactory extends Factory
      */
     public function definition(): array
     {
-        $footballTeamCategory = Category::where('name', 'football-team')->first();
+        $footballTeamCategory = Category::where('name', 'football-team')->first()
+            ?? Category::factory()->create(['name' => 'football-team']);
 
         return [
             'type' => 'standings',
@@ -31,7 +32,7 @@ class QuestionFactory extends Factory
             'short_title' => $this->faker->words(3, true),
             'answer_count' => $this->faker->numberBetween(6, 20),
             'created_by' => User::factory(),
-            'answer_category_id' => $footballTeamCategory?->id,
+            'answer_category_id' => $footballTeamCategory->id,
         ];
     }
 
