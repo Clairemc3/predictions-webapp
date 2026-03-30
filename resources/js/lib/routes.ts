@@ -36,8 +36,14 @@ export const buildRoute = (name: string, params: RouteParams = {}): string => {
     case 'seasons.questions.results.store':
       return `/seasons/${params.season}/questions/${params.question}/results`;
     
+    case 'seasons.questions.results.complete':
+      return `/seasons/${params.season}/questions/${params.question}/results/complete`;
+    
     case 'seasons.questions.results.update':
       return `/seasons/${params.season}/questions/${params.question}/results/${params.result}`;
+    
+    case 'seasons.questions.results.reorder':
+      return `/seasons/${params.season}/questions/${params.question}/results/reorder`;
     
     case 'seasons.questions.results.destroy':
       return `/seasons/${params.season}/questions/${params.question}/results/${params.result}`;
@@ -79,7 +85,9 @@ export type RouteName =
   | 'seasons.status.update'
   | 'seasons.questions.results.manage'
   | 'seasons.questions.results.store'
+  | 'seasons.questions.results.complete'
   | 'seasons.questions.results.update'
+  | 'seasons.questions.results.reorder'
   | 'seasons.questions.results.destroy'
   | 'admin.question-types.index'
   | 'admin.question-types.create'

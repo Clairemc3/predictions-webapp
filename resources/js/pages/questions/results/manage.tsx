@@ -1,15 +1,19 @@
-import React from 'react';
-import { Head, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { Head, usePage, router } from '@inertiajs/react';
 import {
   Box,
   Typography,
   Chip,
   Alert,
+  Button,
 } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import SeasonManageLayout from '../../../layouts/SeasonManageLayout';
 import { QuestionRow, Season } from '../../../types/season';
 import { route } from '../../../lib/routes';
 import RankingResultsManager from '../../../components/Results/RankingResultsManager';
+import ScoringChips from '../../../components/Results/ScoringChips';
+import ConfirmationDialog from '../../../components/ConfirmationDialog';
 
 interface Entity {
   id: number;
@@ -37,6 +41,8 @@ interface PageProps extends Record<string, any> {
 
 const ManageQuestionResults = () => {
   const { question, season, seasonStatus, totalRequiredAnswers, results, availableOptions, count_of_results } = usePage<PageProps>().props;
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formatType = (type: string): string => {
     return type
@@ -45,6 +51,35 @@ const ManageQuestionResults = () => {
   };
 
   const isRankingType = question.base_type === 'ranking';
+
+  const handleBackToQuestions = () => {
+    router.visit(route('seasons.manage', { season: season.id }));
+  };
+
+  const handleSetResultsClick = () => {
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmSetResults = () => {
+    setIsSubmitting(true);
+    router.post(
+      `/seasons/${season.id}/questions/${question.id}/results/complete`,
+      {},
+      {
+        onSuccess: () => {
+          setConfirmDialogOpen(false);
+          setIsSubmitting(false);
+        },
+        onError: () => {
+          setIsSubmitting(false);
+        },
+      }
+    );
+  };
+
+  const handleCancelSetResults = () => {
+    setConfirmDialogOpen(false);
+  };
 
   return (
     <>
@@ -55,6 +90,26 @@ const ManageQuestionResults = () => {
         totalRequiredAnswers={totalRequiredAnswers}
         currentTab="results"
       >
+        {/* Back Button */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={handleBackToQuestions}
+          >
+            Back to Questions
+          </Button>
+          
+          {isRankingType && results.length > 0 && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSetResultsClick}
+            >
+              Set Results
+            </Button>
+          )}
+        </Box>
+
         <Box sx={{ mb: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography variant="h5" component="h2">
@@ -67,6 +122,12 @@ const ManageQuestionResults = () => {
               variant="outlined"
             />
           </Box>
+
+          {/* Scoring Chips */}
+          {isRankingType && question.points_values && (
+            <ScoringChips pointsValues={question.points_values} />
+          )}
+
           <Typography variant="body2" color="text.secondary">
             {isRankingType ? 'Drag and drop to reorder the standings' : 'Results management'}
           </Typography>
@@ -96,6 +157,10 @@ const ManageQuestionResults = () => {
               question: question.id,
               result: '{result}'
             })}
+            resultsReorderRoute={route('seasons.questions.results.reorder', {
+              season: season.id,
+              question: question.id
+            })}
             resultsDestroyRoute={(resultId: number) => 
               route('seasons.questions.results.destroy', { 
                 season: season.id, 
@@ -106,6 +171,17 @@ const ManageQuestionResults = () => {
           />
         )}
       </SeasonManageLayout>
+
+      <ConfirmationDialog
+        open={confirmDialogOpen}
+        title="Set Results"
+        message="Points will be distributed to correct predictions."
+        confirmText="Set Results"
+        cancelText="Cancel"
+        onConfirm={handleConfirmSetResults}
+        onCancel={handleCancelSetResults}
+        isLoading={isSubmitting}
+      />
     </>
   );
 };

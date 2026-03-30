@@ -9,14 +9,14 @@ class QuestionPoint extends Model
 {
     protected $fillable = [
         'question_id',
-        'position',
+        'accuracy_level',
         'value',
     ];
 
     protected function casts(): array
     {
         return [
-            'position' => 'integer',
+            'accuracy_level' => 'integer',
             'value' => 'integer',
         ];
     }

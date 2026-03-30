@@ -22,10 +22,12 @@ class Question extends Model
         'short_title',
         'answer_count',
         'scoring_type',
+        'complete',
     ];
 
     protected $casts = [
         'base_type' => BaseQuestionType::class,
+        'complete' => 'boolean',
     ];
 
     /**
@@ -83,7 +85,7 @@ class Question extends Model
      */
     public function points(): HasMany
     {
-        return $this->hasMany(QuestionPoint::class)->orderBy('position');
+        return $this->hasMany(QuestionPoint::class)->orderBy('accuracy_level');
     }
 
     // Cache this

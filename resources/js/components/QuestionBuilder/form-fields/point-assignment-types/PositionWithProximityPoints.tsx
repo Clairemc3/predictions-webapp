@@ -43,7 +43,7 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
         ...prevData,
         question_points: {
           ...(prevData.question_points || {}),
-          [offset + 1]: value === '' ? '' : parseInt(value, 10),
+          [offset]: value === '' ? '' : parseInt(value, 10),
         },
       }));
     }
@@ -66,13 +66,13 @@ const PositionWithProximityPoints: React.FC<PositionWithProximityPointsProps> = 
                 </Typography>
                 <TextField
                   label="Points"
-                  name={`question_points_${offset + 1}`}
+                  name={`question_points_${offset}`}
                   type="number"
-                  value={currentScoringPoints[offset + 1] ?? ''}
+                  value={currentScoringPoints[offset] ?? ''}
                   onChange={(event) => handleOffsetChange(offset, event.target.value)}
                   size="small"
-                  error={!!errors[`question_points.${offset + 1}`]}
-                  helperText={errors[`question_points.${offset + 1}`]}
+                  error={!!errors[`question_points.${offset}`]}
+                  helperText={errors[`question_points.${offset}`]}
                   slotProps={{
                     htmlInput: {
                       min: 0,

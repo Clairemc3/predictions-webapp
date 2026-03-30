@@ -26,7 +26,7 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
         ...prevData,
         question_points: {
           ...(prevData.question_points || {}),
-          1: value === '' ? '' : parseInt(value, 10),
+          0: value === '' ? '' : parseInt(value, 10),
         },
       }));
     }
@@ -34,20 +34,20 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
 
   return (
     <Box sx={{ mt: 3 }}>
-      <FormControl component="fieldset" fullWidth>
+      <FormControl component="fieldset\" fullWidth>
         <FormLabel component="legend">Point Assignment</FormLabel>
         <FormHelperText sx={{ mb: 2 }}>
           Choose how many points a correct answer is worth.
         </FormHelperText>
         <TextField
           label="Points for correct answer"
-          name="question_points_1"
+          name="question_points_0"
           type="number"
-          value={currentScoringPoints[1] ?? ''}
+          value={currentScoringPoints[0] ?? ''}
           onChange={handleExactChange}
           size="small"
-          error={!!errors['question_points.1']}
-          helperText={errors['question_points.1']}
+          error={!!errors['question_points.0']}
+          helperText={errors['question_points.0']}
           slotProps={{
             htmlInput: {
               min: 0,

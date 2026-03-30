@@ -45,7 +45,7 @@ export interface Question {
   answer_category?: string;
   scoring_type?: string;
   points_values?: Array<{
-    position: number;
+    accuracy_level: number;
     value: number;
   }>;
   entities?: Array<{
@@ -63,6 +63,10 @@ export interface QuestionRow {
   type?: string;
   base_type?: string;
   answer_count?: number;
+  points_values?: Array<{
+    accuracy_level: number;
+    value: number;
+  }>;
   permissions: {
     canUpdateQuestion: boolean;
     canDeleteQuestion: boolean;
