@@ -67,6 +67,7 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             selectedQuestionType={selectedQuestionType}
             setData={setData}
             currentEntities={currentEntities}
+            currentAnswerCount={currentAnswerCount}
           />
         )}
       </Box>
