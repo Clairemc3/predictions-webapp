@@ -7,13 +7,13 @@ import {
   TextField,
 } from '@mui/material';
 
-interface ExactMatchPointsProps {
+interface ClosestWinsPointsProps {
   setData?: (callback: (prevData: any) => any) => void;
   currentScoringPoints?: Record<string, number | string>;
   errors?: Record<string, string>;
 }
 
-const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
+const ClosestWinsPoints: React.FC<ClosestWinsPointsProps> = ({
   setData,
   currentScoringPoints = {},
   errors = {},
@@ -37,10 +37,10 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
       <FormControl component="fieldset" fullWidth>
         <FormLabel component="legend">Point Assignment</FormLabel>
         <FormHelperText sx={{ mb: 2 }}>
-          Choose how many points a correct answer is worth.
+          Choose how many points the member(s) with the closest answer will receive.
         </FormHelperText>
         <TextField
-          label="Points for correct answer"
+          label="Points for closest answer"
           name="question_points_0"
           type="number"
           value={currentScoringPoints[0] ?? ''}
@@ -60,4 +60,4 @@ const ExactMatchPoints: React.FC<ExactMatchPointsProps> = ({
   );
 };
 
-export default ExactMatchPoints;
+export default ClosestWinsPoints;

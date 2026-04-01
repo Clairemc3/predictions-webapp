@@ -25,8 +25,8 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
   currentScoringPoints
 }) => {
   const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
-  const hasAnswerCount = currentAnswerCount !== undefined && currentAnswerCount !== '' && currentAnswerCount !== null;
-  const hasScoringType = currentScoringType !== undefined && currentScoringType !== '' && currentScoringType !== null;
+  const hasAnswerCount = Boolean(currentAnswerCount);
+  const hasScoringType = Boolean(currentScoringType);
 
   const handleEntityChange = (count: number) => {
     setMaxAnswerCount(count);

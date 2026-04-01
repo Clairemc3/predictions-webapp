@@ -19,17 +19,19 @@ interface AnswerCountProps {
   errorText?: string;
   setData?: (callback: (prevData: any) => any) => void;
   currentAnswerCount?: number | string;
+  showAll?: boolean;
 }
 
 const AnswerCount: React.FC<AnswerCountProps> = ({
   label = 'Number to predict',
-  helperText = "Choose either 'all' to predict all rankings, or specify a number.",
+  helperText = "Enter the number of choices the player can make",
   maxValue,
   required = false,
   error = false,
   errorText,
   setData,
-  currentAnswerCount
+  currentAnswerCount,
+  showAll = true,
 }) => {
   // Determine current values based on currentAnswerCount
   const currentIsAll = currentAnswerCount === maxValue;
@@ -73,17 +75,19 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
         </FormHelperText>
         
         <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={currentIsAll}
-                onChange={handleAllChange}
-                name="answer_count_all"
-                disabled={!maxValue}
-              />
-            }
-            label={maxValue ? `All (${maxValue})` : "All"}
-          />
+          {showAll && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={currentIsAll}
+                  onChange={handleAllChange}
+                  name="answer_count_all"
+                  disabled={!maxValue}
+                />
+              }
+              label={maxValue ? `All (${maxValue})` : "All"}
+            />
+          )}
           
           <TextField
             label={`Number (1-${maxValue || '?'})`}
@@ -91,9 +95,9 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
             type="number"
             value={currentNumberValue}
             onChange={handleNumberChange}
-            disabled={currentIsAll || !maxValue}
-            required={required && !currentIsAll}
-            error={error && !currentIsAll && !currentNumberValue}
+            disabled={(showAll && currentIsAll) || !maxValue}
+            required={required && !(showAll && currentIsAll)}
+            error={error && !(showAll && currentIsAll) && !currentNumberValue}
             slotProps={{
               htmlInput: {
                 min: 1,
