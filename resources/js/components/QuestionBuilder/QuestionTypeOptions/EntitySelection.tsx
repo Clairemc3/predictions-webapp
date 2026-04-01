@@ -70,7 +70,7 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
             <EntitySelect
               key={index}
               category={filter?.name || ''}
-              category_id={selectedQuestionType?.answerCategoryId}
+              category_id={filter?.category_id}
               filters={filter?.filters || {}}
               label={filter?.label || 'Select an option'}
               description={filter?.description}
