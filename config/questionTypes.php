@@ -60,6 +60,18 @@ return [
                     'filters' => [],
                 ],
             ],
+            'scoring_types' => [
+                [
+                    'value' => ScoringTypes::ExactMatch->value,
+                    'label' => 'Exact Match',
+                    'description' => 'Points awarded only for an exact correct selection',
+                ],
+                [
+                    'value' => ScoringTypes::ClosestWins->value,
+                    'label' => 'Closest Wins',
+                    'description' => 'Points awarded to the member(s) whose selection is closest to the result',
+                ],
+            ],
         ],
         'players' => [
             'base' => BaseQuestionType::EntitySelection,
@@ -73,6 +85,18 @@ return [
                     'label' => 'Select a League',
                     'description' => 'Select the league the player should work within',
                     'filters' => [],
+                ],
+            ],
+            'scoring_types' => [
+                [
+                    'value' => ScoringTypes::ExactMatch->value,
+                    'label' => 'Exact Match',
+                    'description' => 'Points awarded only for an exact correct selection',
+                ],
+                [
+                    'value' => ScoringTypes::ClosestWins->value,
+                    'label' => 'Closest Wins',
+                    'description' => 'Points awarded to the member(s) whose selection is closest to the result',
                 ],
             ],
         ],
