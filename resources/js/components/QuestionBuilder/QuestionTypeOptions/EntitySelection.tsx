@@ -90,6 +90,9 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
           <AnswerCount
             label={selectedQuestionType?.answerCountLabel || undefined}
             helperText={selectedQuestionType?.answerCountHelperText || undefined}
+            required={true}
+            error={!!errors.answer_count}
+            errorText={errors.answer_count}
             setData={setData}
             currentAnswerCount={currentAnswerCount}
             maxValue={maxAnswerCount}

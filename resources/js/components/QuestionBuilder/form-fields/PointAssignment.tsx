@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormHelperText } from '@mui/material';
 import ExactMatchPoints from './point-assignment-types/ExactMatchPoints';
 import ClosestWinsPoints from './point-assignment-types/ClosestWinsPoints';
 import PositionWithProximityPoints from './point-assignment-types/PositionWithProximityPoints';
@@ -35,12 +36,17 @@ const PointAssignment: React.FC<PointAssignmentProps> = ({
   }
 
   return (
-    <Component
-      answerCount={answerCount}
-      setData={setData}
-      currentScoringPoints={currentScoringPoints}
-      errors={errors}
-    />
+    <>
+      <Component
+        answerCount={answerCount}
+        setData={setData}
+        currentScoringPoints={currentScoringPoints}
+        errors={errors}
+      />
+      {errors.question_points && (
+        <FormHelperText error>{errors.question_points}</FormHelperText>
+      )}
+    </>
   );
 };
 
