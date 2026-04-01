@@ -21,6 +21,7 @@ interface EntitySelectProps {
   required?: boolean;
   error?: boolean;
   helperText?: string;
+  errors?: Record<string, string>;
   setData?: (callback: (prevData: any) => any) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   onChange?: (count: number) => void;
@@ -40,12 +41,21 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   required = false,
   error = false,
   helperText,
+  errors,
   setData,
   currentEntities = [],
   onChange,
   answerCategory
 }) => {
   const { entityOptions, entityCounts, loading, fetchEntitiesForCategory } = useEntityFetcher();
+
+  const entityError = errors
+    ? errors[`entities.${index}.entity_id`] || errors[`entities.${index}.category_id`] || (index === 0 ? errors['entities'] : undefined)
+    : undefined;
+  const resolvedError = errors ? !!entityError : error;
+  const resolvedHelperText = errors
+    ? (index === 0 && errors['entities'] ? label : entityError)
+    : helperText;
   
   // Use currentEntities value if setData is provided
   const value = currentEntities[index]?.entity_id || '';
@@ -117,7 +127,7 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
   };
 
   return (
-    <FormControl fullWidth={fullWidth} margin={margin} required={required} error={error}>
+    <FormControl fullWidth={fullWidth} margin={margin} required={required} error={resolvedError}>
       <InputLabel id={labelId}>
         {label}
       </InputLabel>
@@ -154,8 +164,8 @@ const EntitySelect: React.FC<EntitySelectProps> = ({
           </MenuItem>
         ))}
       </Select>
-      {(helperText || description) && (
-        <FormHelperText>{helperText || description}</FormHelperText>
+      {(resolvedHelperText || description) && (
+        <FormHelperText>{resolvedHelperText || description}</FormHelperText>
       )}
     </FormControl>
   );

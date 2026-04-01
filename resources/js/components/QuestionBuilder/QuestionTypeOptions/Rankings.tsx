@@ -41,35 +41,24 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
       {/* Render select dropdowns based on answerCategoryFilters */}
       {selectedQuestionType?.answerCategoryFilters && Array.isArray(selectedQuestionType.answerCategoryFilters) && selectedQuestionType.answerCategoryFilters.length > 0 && (
         <Box sx={{ mt: 3 }}>
-          {selectedQuestionType.answerCategoryFilters.map((filter, index) => {
-            const hasError = !!errors[`entities.${index}.entity_id`] || !!errors[`entities.${index}.category_id`] || (index === 0 && !!errors['entities']);
-            const errorMessage = errors[`entities.${index}.entity_id`] || errors[`entities.${index}.category_id`] || (index === 0 ? errors['entities'] : undefined);
-            
-            // If there's a generic entities error on the first field, customize the message with the label
-            const displayError = (index === 0 && errors['entities']) 
-              ? `${filter?.label || 'Entity'}` 
-              : errorMessage;
-            
-            return (
-              <EntitySelect
-                key={index}
-                category={filter?.name || ''}
-                category_id={filter.category_id}
-                filters={filter?.filters || {}}
-                label={filter?.label || 'Select an option'}
-                description={filter?.description}
-                index={index}
-                required={true}
-                error={hasError}
-                helperText={displayError}
-                name={`entities[${index}]`}
-                setData={setData}
-                currentEntities={currentEntities}
-                onChange={handleEntityChange}
-                answerCategory={selectedQuestionType?.answerCategory || undefined}
-              />
-            );
-          })}
+          {selectedQuestionType.answerCategoryFilters.map((filter, index) => (
+            <EntitySelect
+              key={index}
+              category={filter?.name || ''}
+              category_id={filter.category_id}
+              filters={filter?.filters || {}}
+              label={filter?.label || 'Select an option'}
+              description={filter?.description}
+              index={index}
+              required={true}
+              errors={errors}
+              name={`entities[${index}]`}
+              setData={setData}
+              currentEntities={currentEntities}
+              onChange={handleEntityChange}
+              answerCategory={selectedQuestionType?.answerCategory || undefined}
+            />
+          ))}
         </Box>
       )}
 
