@@ -233,7 +233,6 @@ it('filter() matches entities 1 hop away from the filter value', function () {
 
 it('filter() matches entities 2 hops away from the filter value', function () {
     $leagueCategory = Category::factory()->create(['name' => 'football-league']);
-    $teamCategory = Category::factory()->create(['name' => 'football-team']);
     $managerCategory = Category::factory()->create(['name' => 'manager']);
 
     $premierLeague = Entity::factory()->create(['value' => 'Premier League']);
@@ -242,7 +241,6 @@ it('filter() matches entities 2 hops away from the filter value', function () {
 
     $teamA = Entity::factory()->create(['value' => 'Team A']); // Premier League
     $teamB = Entity::factory()->create(['value' => 'Team B']); // Bundesliga
-    $teamCategory->entities()->attach([$teamA->id, $teamB->id]);
 
     $managerA = Entity::factory()->create(['value' => 'Manager A']); // manages Team A
     $managerB = Entity::factory()->create(['value' => 'Manager B']); // manages Team B
