@@ -203,3 +203,62 @@ it('works correctly with different categories for includeEntityCount', function 
 
     expect($entityInCategory1->entities_count)->toBeGreaterThan(0);
 });
+
+// filter() depth
+
+it('filter() matches entities 1 hop away from the filter value', function () {
+    $leagueCategory = Category::factory()->create(['name' => 'football-league']);
+    $teamsCategory = Category::factory()->create(['name' => 'football-team']);
+
+    $premierLeague = Entity::factory()->create(['value' => 'Premier League']);
+    $bundesliga = Entity::factory()->create(['value' => 'Bundesliga']);
+    $leagueCategory->entities()->attach([$premierLeague->id, $bundesliga->id]);
+
+    $teamA = Entity::factory()->create(['value' => 'Team A']); // in Premier League
+    $teamB = Entity::factory()->create(['value' => 'Team B']); // in Bundesliga
+    $teamsCategory->entities()->attach([$teamA->id, $teamB->id]);
+
+    \Illuminate\Support\Facades\DB::table('entity_relationships')->insert([
+        ['parent_entity_id' => $premierLeague->id, 'child_entity_id' => $teamA->id, 'relation_type' => 'in_league'],
+        ['parent_entity_id' => $bundesliga->id, 'child_entity_id' => $teamB->id, 'relation_type' => 'in_league'],
+    ]);
+
+    $result = (new EntityQuery($teamsCategory))
+        ->filter('football-league', 'Premier League')
+        ->get();
+
+    expect($result)->toHaveCount(1);
+    expect($result->first()->id)->toBe($teamA->id);
+});
+
+it('filter() matches entities 2 hops away from the filter value', function () {
+    $leagueCategory = Category::factory()->create(['name' => 'football-league']);
+    $teamCategory = Category::factory()->create(['name' => 'football-team']);
+    $managerCategory = Category::factory()->create(['name' => 'manager']);
+
+    $premierLeague = Entity::factory()->create(['value' => 'Premier League']);
+    $bundesliga = Entity::factory()->create(['value' => 'Bundesliga']);
+    $leagueCategory->entities()->attach([$premierLeague->id, $bundesliga->id]);
+
+    $teamA = Entity::factory()->create(['value' => 'Team A']); // Premier League
+    $teamB = Entity::factory()->create(['value' => 'Team B']); // Bundesliga
+    $teamCategory->entities()->attach([$teamA->id, $teamB->id]);
+
+    $managerA = Entity::factory()->create(['value' => 'Manager A']); // manages Team A
+    $managerB = Entity::factory()->create(['value' => 'Manager B']); // manages Team B
+    $managerCategory->entities()->attach([$managerA->id, $managerB->id]);
+
+    \Illuminate\Support\Facades\DB::table('entity_relationships')->insert([
+        ['parent_entity_id' => $premierLeague->id, 'child_entity_id' => $teamA->id, 'relation_type' => 'in_league'],
+        ['parent_entity_id' => $bundesliga->id, 'child_entity_id' => $teamB->id, 'relation_type' => 'in_league'],
+        ['parent_entity_id' => $teamA->id, 'child_entity_id' => $managerA->id, 'relation_type' => 'manages'],
+        ['parent_entity_id' => $teamB->id, 'child_entity_id' => $managerB->id, 'relation_type' => 'manages'],
+    ]);
+
+    $result = (new EntityQuery($managerCategory))
+        ->filter('football-league', 'Premier League')
+        ->get();
+
+    expect($result)->toHaveCount(1);
+    expect($result->first()->id)->toBe($managerA->id);
+});

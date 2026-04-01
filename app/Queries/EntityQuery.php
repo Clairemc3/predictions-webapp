@@ -22,18 +22,28 @@ class EntityQuery
     }
 
     /**
-     * Apply a filter to the query based on entity relationships
+     * Apply a filter to the query based on entity relationships.
+     * Checks both 1-step (direct) and 2-step (through an intermediate entity) relationships,
+     * so the same filter works regardless of how many hops away the target is (max 2)
      */
     public function filter(string $category, string $entityValue): self
     {
-        $this->query->whereHas('entities', function (Builder $entQuery) use ($category, $entityValue) {
-            $entQuery->where('value', $entityValue);
-            $entQuery->whereHas('categories', function (Builder $catQuery) use ($category) {
-                $catQuery->where('name', $category);
-            });
+        $match = $this->entityMatchCallback($category, $entityValue);
+
+        $this->query->where(function (Builder $query) use ($match) {
+            $query->whereHas('entities', $match)
+                ->orWhereHas('entities', fn (Builder $hop) => $hop->whereHas('entities', $match));
         });
 
         return $this;
+    }
+
+    private function entityMatchCallback(string $category, string $entityValue): \Closure
+    {
+        return function (Builder $query) use ($category, $entityValue) {
+            $query->where('value', $entityValue)
+                ->whereHas('categories', fn (Builder $catQuery) => $catQuery->where('name', $category));
+        };
     }
 
     public function inRandomOrder(): self
