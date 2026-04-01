@@ -8,10 +8,6 @@
       {
         "relation_type": "manages",
         "entity": "Manchester City"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Premier League"
       }
     ]
   },
@@ -24,10 +20,6 @@
       {
         "relation_type": "manages",
         "entity": "Liverpool"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Premier League"
       }
     ]
   },
@@ -40,10 +32,6 @@
       {
         "relation_type": "manages",
         "entity": "Real Madrid"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "La Liga"
       }
     ]
   },
@@ -68,10 +56,6 @@
       {
         "relation_type": "manages",
         "entity": "Napoli"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Serie A"
       }
     ]
   },
@@ -84,10 +68,6 @@
       {
         "relation_type": "manages",
         "entity": "Arsenal"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Premier League"
       }
     ]
   },
@@ -100,10 +80,6 @@
       {
         "relation_type": "manages",
         "entity": "Manchester United"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Premier League"
       }
     ]
   },
@@ -116,10 +92,6 @@
       {
         "relation_type": "manages",
         "entity": "Barcelona"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "La Liga"
       }
     ]
   },
@@ -132,10 +104,6 @@
       {
         "relation_type": "manages",
         "entity": "Paris Saint-Germain"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Ligue 1"
       }
     ]
   },
@@ -148,10 +116,6 @@
       {
         "relation_type": "manages",
         "entity": "Atlético Madrid"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "La Liga"
       }
     ]
   },
@@ -164,10 +128,6 @@
       {
         "relation_type": "manages",
         "entity": "Real Madrid"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "La Liga"
       }
     ]
   },
@@ -180,10 +140,6 @@
       {
         "relation_type": "manages",
         "entity": "AS Roma"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Serie A"
       }
     ]
   },
@@ -196,10 +152,6 @@
       {
         "relation_type": "manages",
         "entity": "Juventus"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Serie A"
       }
     ]
   },
@@ -212,10 +164,6 @@
       {
         "relation_type": "manages",
         "entity": "Bayern Munich"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Bundesliga"
       }
     ]
   },
@@ -232,10 +180,6 @@
       {
         "relation_type": "manages",
         "entity": "Bayern Munich"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Bundesliga"
       }
     ]
   },
@@ -252,10 +196,6 @@
       {
         "relation_type": "manages",
         "entity": "Manchester City"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Premier League"
       }
     ]
   },
@@ -280,10 +220,6 @@
       {
         "relation_type": "manages",
         "entity": "Chelsea"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Premier League"
       }
     ]
   },
@@ -308,10 +244,6 @@
       {
         "relation_type": "manages",
         "entity": "RC Strasbourg"
-      },
-      {
-        "relation_type": "in_league",
-        "entity": "Ligue 1"
       }
     ]
   }
