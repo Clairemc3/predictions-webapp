@@ -27,7 +27,7 @@ class CategoryEntitiesRequest extends FormRequest
             'country' => 'sometimes|string|exists:entities,value',
             'football-league' => 'sometimes|string|exists:entities,value',
             'team' => 'sometimes|string|exists:entities,value',
-            'count' => 'sometimes|string|in:football-team,football-league,country,manager',
+            'count' => 'sometimes|string|in:football-team,football-league,country,manager,player',
         ];
     }
 
