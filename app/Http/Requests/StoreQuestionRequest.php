@@ -28,7 +28,6 @@ class StoreQuestionRequest extends FormRequest
     {
         return [
             'title' => ['nullable', 'string', 'max:255'],
-            'short_title' => ['nullable', 'string', 'max:50'],
             'base_type' => ['required', 'bail', Rule::in(BaseQuestionType::values())],
             'type' => ['required', Rule::in($this->questionTypeService->allTypes())],
             'entities' => ['required', 'array'],

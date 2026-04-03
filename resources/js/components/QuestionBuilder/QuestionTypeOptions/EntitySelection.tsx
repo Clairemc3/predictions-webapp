@@ -14,7 +14,6 @@ interface EntitySelectionExtendedProps extends EntitySelectionProps {
   currentScoringPoints?: Record<string, number | string>;
   errors?: Record<string, string>;
   currentTitle?: string;
-  currentShortTitle?: string;
 }
 
 const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({ 
@@ -26,7 +25,6 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
   currentScoringPoints,
   errors = {},
   currentTitle = '',
-  currentShortTitle = '',
 }) => {
   const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
 
@@ -49,17 +47,6 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
           fullWidth
           error={!!errors.title}
           helperText={errors.title}
-        />
-        <TextField
-          label="Short Title"
-          name="short_title"
-          value={currentShortTitle}
-          onChange={(e) => setData?.((prev) => ({ ...prev, short_title: e.target.value }))}
-          required
-          fullWidth
-          error={!!errors.short_title}
-          helperText={errors.short_title || 'A brief version of the title used in compact views'}
-          inputProps={{ maxLength: 50 }}
         />
       </Box>
 

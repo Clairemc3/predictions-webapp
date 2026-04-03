@@ -15,8 +15,9 @@ You are the orchestrator for a multi-agent PR review. Your job is to coordinate 
 Check for feature context in this order:
 
 1. If the user provided a description as an argument to this prompt, use that.
-2. Otherwise, check if `.github/feature.md` exists and read it.
-3. If neither exists, note that no feature description was provided.
+2. If the user provided a link to a features/<feature>.md file, use that.
+3. Otherwise, check if `.github/feature.md` exists and read it.
+4. If neither exists, note that no feature description was provided.
 
 Store the feature context as a variable to pass to each reviewer.
 

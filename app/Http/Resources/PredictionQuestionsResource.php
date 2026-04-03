@@ -21,6 +21,7 @@ class PredictionQuestionsResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'short_title' => $this->short_title,
             'base_type' => $this->base_type,
             'type' => $this->type,
             'answer_count' => $this->answer_count,

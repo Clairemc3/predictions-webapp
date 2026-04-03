@@ -16,7 +16,6 @@ interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
   currentScoringType?: string;
   currentScoringPoints?: Record<string, number | string>;
   currentTitle?: string;
-  currentShortTitle?: string;
 }
 
 const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({ 
@@ -28,7 +27,6 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
   currentScoringType,
   currentScoringPoints,
   currentTitle,
-  currentShortTitle,
 }) => {
   const [shouldRenderOptions, setShouldRenderOptions] = React.useState(false);
   
@@ -76,7 +74,6 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             currentScoringPoints={currentScoringPoints}
             errors={errors}
             currentTitle={currentTitle}
-            currentShortTitle={currentShortTitle}
           />
         )}
       </Box>
