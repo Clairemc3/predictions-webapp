@@ -37,11 +37,7 @@ class GenerateQuestionShortTitle implements ShouldQueue
 
         $shortTitle = (string) (new ShortTitleGenerator)->prompt('"""'.$this->question->title.'"""');
 
-        if (! preg_match('/^[A-Za-z\/\- ]+$/', $shortTitle)) {
-            throw new UnexpectedValueException(
-                "AI returned an invalid short title for question [{$this->question->id}]: \"{$shortTitle}\""
-            );
-        }
+        $this->validateShortTitle($shortTitle);
 
         QuestionTitleCache::create([
             'title' => $this->question->title,
@@ -49,5 +45,32 @@ class GenerateQuestionShortTitle implements ShouldQueue
         ]);
 
         $this->question->updateQuietly(['short_title' => $shortTitle]);
+    }
+
+    private function validateShortTitle(string $shortTitle): void
+    {
+        $id = $this->question->id;
+
+        if (! preg_match('/^[A-Za-z\/\- ]+$/', $shortTitle)) {
+            throw new UnexpectedValueException(
+                "AI returned an invalid short title for question [{$id}]: \"{$shortTitle}\""
+            );
+        }
+
+        $words = array_filter(explode(' ', $shortTitle));
+
+        if (count($words) > 4) {
+            throw new UnexpectedValueException(
+                "AI returned a short title with more than 4 words for question [{$id}]: \"{$shortTitle}\""
+            );
+        }
+
+        foreach ($words as $word) {
+            if (strlen($word) > 7) {
+                throw new UnexpectedValueException(
+                    "AI returned a short title with a word longer than 7 characters for question [{$id}]: \"{$shortTitle}\""
+                );
+            }
+        }
     }
 }
