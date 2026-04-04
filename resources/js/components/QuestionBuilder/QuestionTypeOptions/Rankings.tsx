@@ -44,7 +44,7 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
         <Box sx={{ mt: 3 }}>
           {selectedQuestionType.answerCategoryFilters.map((filter, index) => (
             <EntitySelect
-              key={index}
+              key={filter.category_id}
               category={filter?.name || ''}
               category_id={filter.category_id}
               filters={filter?.filters || {}}
