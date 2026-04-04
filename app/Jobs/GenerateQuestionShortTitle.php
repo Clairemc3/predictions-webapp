@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\QuestionTitleCache;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use UnexpectedValueException;
 
 class GenerateQuestionShortTitle implements ShouldQueue
 {
@@ -34,7 +35,13 @@ class GenerateQuestionShortTitle implements ShouldQueue
             return;
         }
 
-        $shortTitle = (string) (new ShortTitleGenerator)->prompt($this->question->title);
+        $shortTitle = (string) (new ShortTitleGenerator)->prompt('"""'.$this->question->title.'"""');
+
+        if (! preg_match('/^[A-Za-z\/\- ]+$/', $shortTitle)) {
+            throw new UnexpectedValueException(
+                "AI returned an invalid short title for question [{$this->question->id}]: \"{$shortTitle}\""
+            );
+        }
 
         QuestionTitleCache::create([
             'title' => $this->question->title,
