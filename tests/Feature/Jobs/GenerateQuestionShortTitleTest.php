@@ -44,7 +44,7 @@ it('calls the agent on a cache miss and stores the result', function () {
 
     (new GenerateQuestionShortTitle($question))->handle();
 
-    ShortTitleGenerator::assertPrompted($title);
+    ShortTitleGenerator::assertPrompted('"""'.$title.'"""');
 
     expect($question->fresh()->short_title)->toBe('Prem Leag Final');
     expect(QuestionTitleCache::where('title', $title)->first()->short_title)->toBe('Prem Leag Final');
