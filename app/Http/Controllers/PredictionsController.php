@@ -14,7 +14,7 @@ class PredictionsController extends Controller
     {
         $membership = SeasonMember::findOrFail($membershipId);
 
-        $season = $membership->season()->with('questions.entities')->first();
+        $season = $membership->season()->with('questions.entities', 'questions.answerCategory')->first();
 
         $questions = $season->questions;
 
@@ -40,7 +40,7 @@ class PredictionsController extends Controller
     {
         $membership = SeasonMember::findOrFail($membershipId);
 
-        $season = $membership->season()->with('questions.entities')->first();
+        $season = $membership->season()->with('questions.entities', 'questions.answerCategory')->first();
 
         $questions = $season->questions;
 
