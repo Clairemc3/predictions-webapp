@@ -1,4 +1,5 @@
 import React from 'react';
+import { QuestionFormData } from '../../Season/Question/useQuestionForm';
 import {
   FormControl,
   FormHelperText,
@@ -21,8 +22,8 @@ interface EntitySelectProps {
   required?: boolean;
   error?: boolean;
   helperText?: string;
-  errors?: Record<string, string>;
-  setData?: (callback: (prevData: any) => any) => void;
+  errors?: Partial<Record<string, string>>;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   onChange?: (count: number) => void;
   answerCategory?: string;

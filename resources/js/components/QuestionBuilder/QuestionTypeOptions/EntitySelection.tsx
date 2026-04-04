@@ -5,14 +5,15 @@ import AnswerCount from '../form-fields/AnswerCount';
 import ScoringOption from '../form-fields/ScoringOption';
 import PointAssignment from '../form-fields/PointAssignment';
 import { EntitySelectionProps } from '../../../types/question';
+import { QuestionFormData } from '../../Season/Question/useQuestionForm';
 
 interface EntitySelectionExtendedProps extends EntitySelectionProps {
-  setData?: (callback: (prevData: any) => any) => void;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
   currentScoringType?: string;
   currentScoringPoints?: Record<string, number | string>;
-  errors?: Record<string, string>;
+  errors?: Partial<Record<string, string>>;
   currentTitle?: string;
 }
 

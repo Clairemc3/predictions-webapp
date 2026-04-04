@@ -1,4 +1,5 @@
 import React from 'react';
+import { QuestionFormData } from '../../Season/Question/useQuestionForm';
 import {
   Box,
   FormControl,
@@ -20,7 +21,7 @@ interface ScoringOptionProps {
   required?: boolean;
   error?: boolean;
   errorText?: string;
-  setData?: (callback: (prevData: any) => any) => void;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentScoringType?: string;
 }
 

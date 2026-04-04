@@ -1,4 +1,5 @@
 import React from 'react';
+import { QuestionFormData } from '../../Season/Question/useQuestionForm';
 import { FormHelperText } from '@mui/material';
 import ExactMatchPoints from './point-assignment-types/ExactMatchPoints';
 import ClosestWinsPoints from './point-assignment-types/ClosestWinsPoints';
@@ -7,9 +8,9 @@ import PositionWithProximityPoints from './point-assignment-types/PositionWithPr
 interface PointAssignmentProps {
   scoringType?: string;
   answerCount?: number | string;
-  setData?: (callback: (prevData: any) => any) => void;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentScoringPoints?: Record<string, number | string>;
-  errors?: Record<string, string>;
+  errors?: Partial<Record<string, string>>;
 }
 
 const componentMap: Record<string, React.ComponentType<any>> = {

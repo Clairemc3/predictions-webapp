@@ -1,4 +1,5 @@
 import React from 'react';
+import { QuestionFormData } from '../../../Season/Question/useQuestionForm';
 import {
   Box,
   Button,
@@ -11,7 +12,7 @@ import {
 
 interface PositionWithProximityPointsProps {
   answerCount?: number | string;
-  setData?: (callback: (prevData: any) => any) => void;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentScoringPoints?: Record<string, number | string>;
   errors?: Record<string, string>;
 }

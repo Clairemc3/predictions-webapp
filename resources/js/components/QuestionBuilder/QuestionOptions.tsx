@@ -7,10 +7,11 @@ import {
 import Rankings from './QuestionTypeOptions/Rankings';
 import EntitySelection from './QuestionTypeOptions/EntitySelection';
 import { QuestionOptionsProps } from '../../types/question';
+import { QuestionFormData } from '../Season/Question/useQuestionForm';
 
 interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
   errors?: Partial<Record<string, string>>;
-  setData: (callback: (prevData: any) => any) => void;
+  setData: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
   currentScoringType?: string;
