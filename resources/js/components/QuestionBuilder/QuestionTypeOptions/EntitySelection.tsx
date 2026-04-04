@@ -39,6 +39,7 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
     <Box>      
       <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <TextField
+          variant="filled"
           label="Question Title"
           name="title"
           value={currentTitle}
