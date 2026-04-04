@@ -13,13 +13,6 @@ When a host creates a new question or updates an existing question's title, the 
 
 Questions in the predictions game can have long descriptive titles (e.g. "Which team will finish in the top 4 of the Premier League?"). When members view their answer cards, space is at a premium. Each answer card on a ranking question shows a position number on the left; each answer card on an entity selection question shows a short label on the left.
 
-Previously, hosts were expected to manually enter a `short_title` for entity selection questions. This was:
-- Error-prone (inconsistent abbreviation styles)
-- An extra burden on the host
-- Not enforced in terms of word length or character limits
-
-This feature removes the manual step entirely and ensures all short titles are generated consistently.
-
 ---
 
 ## Requirements
@@ -38,7 +31,7 @@ This feature removes the manual step entirely and ensures all short titles are g
 ### Short Title Format Rules
 
 The AI agent is instructed to produce a short title that:
-- Contains a **minimum of 4 words**
+- Contains a **maximum of 4 words**
 - Has each word at a **maximum of 7 characters** (abbreviate longer words where needed)
 - Contains no punctuation or surrounding quotes
 - Is plain text only
