@@ -41,7 +41,6 @@ interface PageProps extends Record<string, any> {
 const PredictionsEdit = () => {
   const { questions, completedPercentage, answers } = usePage<PageProps>().props;
 
-  console.log('Questions:', questions);
   return (
     <AuthLayout>
       <Head title="Make your Predictions" />
