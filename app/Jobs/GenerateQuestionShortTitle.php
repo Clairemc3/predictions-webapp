@@ -33,22 +33,15 @@ class GenerateQuestionShortTitle implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        $cached = QuestionTitleCache::where('title', $this->question->title)->first();
+        $shortTitle = QuestionTitleCache::resolveShortTitle(
+            $this->question->title,
+            function () {
+                $shortTitle = (string) (new ShortTitleGenerator)->prompt('"""'.$this->question->title.'"""');
+                $this->validateShortTitle($shortTitle);
 
-        if ($cached) {
-            $this->question->updateQuietly(['short_title' => $cached->short_title]);
-
-            return;
-        }
-
-        $shortTitle = (string) (new ShortTitleGenerator)->prompt('"""'.$this->question->title.'"""');
-
-        $this->validateShortTitle($shortTitle);
-
-        QuestionTitleCache::create([
-            'title' => $this->question->title,
-            'short_title' => $shortTitle,
-        ]);
+                return $shortTitle;
+            }
+        );
 
         $this->question->updateQuietly(['short_title' => $shortTitle]);
     }

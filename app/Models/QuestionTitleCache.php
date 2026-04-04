@@ -10,4 +10,22 @@ class QuestionTitleCache extends Model
         'title',
         'short_title',
     ];
+
+    public static function resolveShortTitle(string $title, callable $generate): string
+    {
+        $cachedEntry = static::where('title', $title)->first();
+
+        if ($cachedEntry) {
+            return $cachedEntry->short_title;
+        }
+
+        $shortTitle = $generate();
+
+        static::create([
+            'title' => $title,
+            'short_title' => $shortTitle,
+        ]);
+
+        return $shortTitle;
+    }
 }

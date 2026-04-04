@@ -8,14 +8,6 @@ use App\Models\Question;
 class QuestionObserver
 {
     /**
-     * Handle the Question "creating" event.
-     */
-    public function creating(Question $question): void
-    {
-        //
-    }
-
-    /**
      * Handle the Question "created" event.
      */
     public function created(Question $question): void
