@@ -29,17 +29,6 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
   currentScoringPoints,
   currentTitle,
 }) => {
-  const [shouldRenderOptions, setShouldRenderOptions] = React.useState(false);
-  
-  React.useEffect(() => {
-    // Defer rendering the heavy EntitySelection component until after initial paint
-    const timer = setTimeout(() => {
-      setShouldRenderOptions(true);
-    }, 0);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
   return (
     <>
       <Divider sx={{ my: 3 }} />
@@ -65,7 +54,7 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             currentScoringPoints={currentScoringPoints}
           />
         )}
-        {shouldRenderOptions && selectedQuestionType?.base === 'entity_selection' && (
+        {selectedQuestionType?.base === 'entity_selection' && (
           <EntitySelection 
             selectedQuestionType={selectedQuestionType}
             setData={setData}
