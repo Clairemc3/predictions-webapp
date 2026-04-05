@@ -5,12 +5,12 @@ namespace App\Jobs;
 use App\Ai\Agents\ShortTitleGenerator;
 use App\Models\Question;
 use App\Models\QuestionTitleCache;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use UnexpectedValueException;
 
-class GenerateQuestionShortTitle implements ShouldBeUnique, ShouldQueue
+class GenerateQuestionShortTitle implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
     use Queueable;
 
