@@ -8,6 +8,12 @@ use App\Models\User;
 
 class SeasonMemberPolicy
 {
+    public function view(User $user, SeasonMember $seasonMember): bool
+    {
+        return $seasonMember->user_id === $user->id ||
+            $seasonMember->season->isHost($user);
+    }
+
     public function delete(User $user, SeasonMember $seasonMember): bool
     {
         $season = $seasonMember->season;

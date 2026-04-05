@@ -1,4 +1,5 @@
 import React from 'react';
+import { QuestionFormData } from '../../../Season/Question/useQuestionForm';
 import {
   Box,
   FormControl,
@@ -8,7 +9,7 @@ import {
 } from '@mui/material';
 
 interface ExactMatchPointsProps {
-  setData?: (callback: (prevData: any) => any) => void;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentScoringPoints?: Record<string, number | string>;
   errors?: Record<string, string>;
 }

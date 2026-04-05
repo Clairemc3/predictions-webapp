@@ -80,7 +80,7 @@ Use ```php artisan schedule:list``` to look for scheduled commands and scheduled
 
 ### Permissions in the front end
 
-Models sent to the front end via inertia/axios should include a permissions object with boolean
+Models sent to the front end via inertia/axios should include a permissions object with boolean when there are permissions on the front end which need to be checked
 values for each action the user can take on that model, e.g.
 'permissions': {
    'canUpdateQuestion': true,

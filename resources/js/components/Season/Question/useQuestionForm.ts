@@ -3,10 +3,9 @@ import { useForm } from '@inertiajs/react';
 import axios from 'axios';
 import { QuestionType } from '../../../types/question';
 
-interface QuestionFormData {
+export interface QuestionFormData {
   type: string;
   title: string;
-  short_title: string;
   base_type: string;
   entities: Array<{entity_id: number; category_id: number}>;
   answer_count: string;
@@ -25,7 +24,6 @@ export const useQuestionForm = ({
   const defaultData: QuestionFormData = {
     type: '',
     title: '',
-    short_title: '',
     base_type: '',
     entities: [],
     answer_count: '',

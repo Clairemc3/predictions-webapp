@@ -24,7 +24,6 @@ const EditQuestion = () => {
   const initialData = {
     type: question.type || '',
     title: question.title || '',
-    short_title: question.short_title || '',
     base_type: question.base_type || '',
     entities: question.entities?.map(e => ({
       entity_id: e.id,
@@ -89,7 +88,6 @@ const EditQuestion = () => {
               currentScoringType={data.scoring_type}
               currentScoringPoints={data.question_points}
               currentTitle={data.title}
-              currentShortTitle={data.short_title}
             />
           )}
 

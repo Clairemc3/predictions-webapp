@@ -2,15 +2,28 @@
 
 namespace App\Observers;
 
+use App\Jobs\GenerateQuestionShortTitle;
 use App\Models\Question;
 
 class QuestionObserver
 {
     /**
-     * Handle the Question "creating" event.
+     * Handle the Question "created" event.
      */
-    public function creating(Question $question): void
+    public function created(Question $question): void
     {
-        //
+        if ($question->title) {
+            GenerateQuestionShortTitle::dispatch($question)->afterCommit();
+        }
+    }
+
+    /**
+     * Handle the Question "updated" event.
+     */
+    public function updated(Question $question): void
+    {
+        if ($question->wasChanged('title') && $question->title) {
+            GenerateQuestionShortTitle::dispatch($question)->afterCommit();
+        }
     }
 }

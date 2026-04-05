@@ -69,7 +69,6 @@ const CreateQuestion = () => {
               currentScoringType={data.scoring_type}
               currentScoringPoints={data.question_points}
               currentTitle={data.title}
-              currentShortTitle={data.short_title}
             />
           )}
 

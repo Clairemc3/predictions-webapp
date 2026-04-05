@@ -1,14 +1,15 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import EntitySelect from '../form-fields/EntitySelect';
+import { QuestionFormData } from '../../Season/Question/useQuestionForm';
 import AnswerCount from '../form-fields/AnswerCount';
 import ScoringOption from '../form-fields/ScoringOption';
 import PointAssignment from '../form-fields/PointAssignment';
 import { RankingsProps } from '../../../types/question';
 
 interface RankingsExtendedProps extends RankingsProps {
-  errors?: Record<string, string>;
-  setData: (callback: (prevData: any) => any) => void;
+  errors?: Partial<Record<string, string>>;
+  setData: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
   currentScoringType?: string;
@@ -43,7 +44,7 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
         <Box sx={{ mt: 3 }}>
           {selectedQuestionType.answerCategoryFilters.map((filter, index) => (
             <EntitySelect
-              key={index}
+              key={filter.category_id}
               category={filter?.name || ''}
               category_id={filter.category_id}
               filters={filter?.filters || {}}

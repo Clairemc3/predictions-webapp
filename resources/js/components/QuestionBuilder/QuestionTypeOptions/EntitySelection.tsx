@@ -5,16 +5,16 @@ import AnswerCount from '../form-fields/AnswerCount';
 import ScoringOption from '../form-fields/ScoringOption';
 import PointAssignment from '../form-fields/PointAssignment';
 import { EntitySelectionProps } from '../../../types/question';
+import { QuestionFormData } from '../../Season/Question/useQuestionForm';
 
 interface EntitySelectionExtendedProps extends EntitySelectionProps {
-  setData?: (callback: (prevData: any) => any) => void;
+  setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
   currentScoringType?: string;
   currentScoringPoints?: Record<string, number | string>;
-  errors?: Record<string, string>;
+  errors?: Partial<Record<string, string>>;
   currentTitle?: string;
-  currentShortTitle?: string;
 }
 
 const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({ 
@@ -26,7 +26,6 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
   currentScoringPoints,
   errors = {},
   currentTitle = '',
-  currentShortTitle = '',
 }) => {
   const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
 
@@ -41,6 +40,7 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
     <Box>      
       <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <TextField
+          variant="filled"
           label="Question Title"
           name="title"
           value={currentTitle}
@@ -50,17 +50,6 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
           error={!!errors.title}
           helperText={errors.title}
         />
-        <TextField
-          label="Short Title"
-          name="short_title"
-          value={currentShortTitle}
-          onChange={(e) => setData?.((prev) => ({ ...prev, short_title: e.target.value }))}
-          required
-          fullWidth
-          error={!!errors.short_title}
-          helperText={errors.short_title || 'A brief version of the title used in compact views'}
-          inputProps={{ maxLength: 50 }}
-        />
       </Box>
 
       {/* Render select dropdowns based on answerCategoryFilters */}
@@ -68,7 +57,7 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
         <Box sx={{ mt: 3 }}>
           {selectedQuestionType.answerCategoryFilters.map((filter, index) => (
             <EntitySelect
-              key={index}
+              key={filter.category_id}
               category={filter?.name || ''}
               category_id={filter?.category_id}
               filters={filter?.filters || {}}

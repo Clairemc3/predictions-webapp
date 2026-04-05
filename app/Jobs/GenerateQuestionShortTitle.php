@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Ai\Agents\ShortTitleGenerator;
+use App\Models\Question;
+use App\Models\QuestionTitleCache;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use UnexpectedValueException;
+
+class GenerateQuestionShortTitle implements ShouldBeUniqueUntilProcessing, ShouldQueue
+{
+    use Queueable;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(public Question $question) {}
+
+    public function uniqueId(): string
+    {
+        return $this->question->title;
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        if (! $this->question->title) {
+            return;
+        }
+
+        $shortTitle = QuestionTitleCache::resolveShortTitle(
+            $this->question->title,
+            function () {
+                $shortTitle = (string) (new ShortTitleGenerator)->prompt('"""'.$this->question->title.'"""');
+                $this->validateShortTitle($shortTitle);
+
+                return $shortTitle;
+            }
+        );
+
+        $this->question->short_title = $shortTitle;
+        $this->question->saveQuietly();
+    }
+
+    private function validateShortTitle(string $shortTitle): void
+    {
+        $id = $this->question->id;
+
+        if (! preg_match('/^[A-Za-z0-9\/\- ]+$/', $shortTitle)) {
+            throw new UnexpectedValueException(
+                "AI returned an invalid short title for question [{$id}]: \"{$shortTitle}\""
+            );
+        }
+
+        $words = array_filter(explode(' ', $shortTitle));
+
+        if (count($words) > 4) {
+            throw new UnexpectedValueException(
+                "AI returned a short title with more than 4 words for question [{$id}]: \"{$shortTitle}\""
+            );
+        }
+
+        foreach ($words as $word) {
+            if (strlen($word) > 7) {
+                throw new UnexpectedValueException(
+                    "AI returned a short title with a word longer than 7 characters for question [{$id}]: \"{$shortTitle}\""
+                );
+            }
+        }
+    }
+}

@@ -27,8 +27,7 @@ class StoreQuestionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['nullable', 'string', 'max:255'],
-            'short_title' => ['nullable', 'string', 'max:50'],
+            'title' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9 ?,.\'\\-]*$/'],
             'base_type' => ['required', 'bail', Rule::in(BaseQuestionType::values())],
             'type' => ['required', Rule::in($this->questionTypeService->allTypes())],
             'entities' => ['required', 'array'],
@@ -48,6 +47,7 @@ class StoreQuestionRequest extends FormRequest
     {
         return [
             'entities.required' => 'Please select at least one entity.',
+            'title.regex' => "The title may only contain letters, numbers, spaces, and the following characters: ? . , ' -",
             'entities.*.entity_id.required' => 'Please select an entity.',
             'entities.*.entity_id.exists' => 'The selected entity is invalid.',
             'entities.*.category_id.exists' => 'The selected entity category is invalid.',

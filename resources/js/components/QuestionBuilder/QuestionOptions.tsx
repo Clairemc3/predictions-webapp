@@ -7,16 +7,16 @@ import {
 import Rankings from './QuestionTypeOptions/Rankings';
 import EntitySelection from './QuestionTypeOptions/EntitySelection';
 import { QuestionOptionsProps } from '../../types/question';
+import { QuestionFormData } from '../Season/Question/useQuestionForm';
 
 interface QuestionOptionsExtendedProps extends QuestionOptionsProps {
   errors?: Partial<Record<string, string>>;
-  setData: (callback: (prevData: any) => any) => void;
+  setData: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentEntities?: Array<{entity_id: number; category_id: number}>;
   currentAnswerCount?: number | string;
   currentScoringType?: string;
   currentScoringPoints?: Record<string, number | string>;
   currentTitle?: string;
-  currentShortTitle?: string;
 }
 
 const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({ 
@@ -28,19 +28,7 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
   currentScoringType,
   currentScoringPoints,
   currentTitle,
-  currentShortTitle,
 }) => {
-  const [shouldRenderOptions, setShouldRenderOptions] = React.useState(false);
-  
-  React.useEffect(() => {
-    // Defer rendering the heavy EntitySelection component until after initial paint
-    const timer = setTimeout(() => {
-      setShouldRenderOptions(true);
-    }, 0);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
   return (
     <>
       <Divider sx={{ my: 3 }} />
@@ -66,7 +54,7 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             currentScoringPoints={currentScoringPoints}
           />
         )}
-        {shouldRenderOptions && selectedQuestionType?.base === 'entity_selection' && (
+        {selectedQuestionType?.base === 'entity_selection' && (
           <EntitySelection 
             selectedQuestionType={selectedQuestionType}
             setData={setData}
@@ -76,7 +64,6 @@ const QuestionOptions: React.FC<QuestionOptionsExtendedProps> = ({
             currentScoringPoints={currentScoringPoints}
             errors={errors}
             currentTitle={currentTitle}
-            currentShortTitle={currentShortTitle}
           />
         )}
       </Box>
