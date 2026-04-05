@@ -19,7 +19,6 @@ class Question extends Model
         'type',
         'base_type',
         'title',
-        'short_title',
         'answer_count',
         'scoring_type',
         'complete',
