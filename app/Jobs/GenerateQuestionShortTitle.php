@@ -43,7 +43,8 @@ class GenerateQuestionShortTitle implements ShouldBeUnique, ShouldQueue
             }
         );
 
-        $this->question->updateQuietly(['short_title' => $shortTitle]);
+        $this->question->short_title = $shortTitle;
+        $this->question->saveQuietly();
     }
 
     private function validateShortTitle(string $shortTitle): void
