@@ -21,8 +21,9 @@ class QuestionTitleCache extends Model
 
         $shortTitle = $generate();
 
-        static::create([
+        static::firstOrCreate([
             'title' => $title,
+        ], [
             'short_title' => $shortTitle,
         ]);
 
