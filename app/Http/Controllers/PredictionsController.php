@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PredictionAnswerResource;
 use App\Http\Resources\PredictionQuestionsResource;
 use App\Models\SeasonMember;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class PredictionsController extends Controller
@@ -13,6 +14,8 @@ class PredictionsController extends Controller
     public function edit($membershipId)
     {
         $membership = SeasonMember::findOrFail($membershipId);
+
+        Gate::authorize('view', $membership);
 
         $season = $membership->season()->with('questions.entities', 'questions.answerCategory')->first();
 
@@ -39,6 +42,8 @@ class PredictionsController extends Controller
     public function show($membershipId)
     {
         $membership = SeasonMember::findOrFail($membershipId);
+
+        Gate::authorize('view', $membership);
 
         $season = $membership->season()->with('questions.entities', 'questions.answerCategory')->first();
 
