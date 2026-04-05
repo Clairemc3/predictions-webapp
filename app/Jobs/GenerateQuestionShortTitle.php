@@ -50,7 +50,7 @@ class GenerateQuestionShortTitle implements ShouldBeUnique, ShouldQueue
     {
         $id = $this->question->id;
 
-        if (! preg_match('/^[A-Za-z\/\- ]+$/', $shortTitle)) {
+        if (! preg_match('/^[A-Za-z0-9\/\- ]+$/', $shortTitle)) {
             throw new UnexpectedValueException(
                 "AI returned an invalid short title for question [{$id}]: \"{$shortTitle}\""
             );

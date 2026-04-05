@@ -24,7 +24,7 @@ class ShortTitleGenerator implements Agent
     {
         $examples = [
             'Top goalscorer' => 'Top G/S',
-            'First manager sacked' => '1st Mgr Sackd',
+            'First manager sacked' => '1st Manager Sacked',
         ];
 
         $exampleText = collect($examples)
