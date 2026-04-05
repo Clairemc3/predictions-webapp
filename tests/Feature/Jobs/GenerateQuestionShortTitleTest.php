@@ -65,3 +65,30 @@ it('reuses a cached result for a second question with the same title', function 
     expect($question2->fresh()->short_title)->toBe('Prem Leag Final');
     expect(QuestionTitleCache::where('title', $title)->count())->toBe(1);
 });
+
+it('throws when the agent returns a short title with invalid characters', function () {
+    ShortTitleGenerator::fake(['Top G$al!']);
+
+    $question = Question::factory()->create(['title' => 'Top goalscorer']);
+
+    expect(fn () => (new GenerateQuestionShortTitle($question))->handle())
+        ->toThrow(UnexpectedValueException::class);
+});
+
+it('throws when the agent returns a short title with more than 4 words', function () {
+    ShortTitleGenerator::fake(['One Two Three Four Five']);
+
+    $question = Question::factory()->create(['title' => 'Top goalscorer in the league']);
+
+    expect(fn () => (new GenerateQuestionShortTitle($question))->handle())
+        ->toThrow(UnexpectedValueException::class);
+});
+
+it('throws when the agent returns a short title with a word longer than 7 characters', function () {
+    ShortTitleGenerator::fake(['Standings Leader']);
+
+    $question = Question::factory()->create(['title' => 'Final league standings']);
+
+    expect(fn () => (new GenerateQuestionShortTitle($question))->handle())
+        ->toThrow(UnexpectedValueException::class);
+});
