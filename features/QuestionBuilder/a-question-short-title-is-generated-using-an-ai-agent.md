@@ -33,10 +33,10 @@ Questions in the predictions game can have long descriptive titles (e.g. "Which 
 The AI agent is instructed to produce a short title that:
 - Contains a **maximum of 4 words**
 - Has each word at a **maximum of 7 characters** (abbreviate longer words where needed)
-- Contains no punctuation or surrounding quotes
+- Uses only plain-text letters, numbers, spaces, `/`, and `-`, with no surrounding quotes
 - Is plain text only
 
-Examples are provided in the agent's system instructions to guide abbreviation style (e.g. `Top goalscorer` → `Top G/S`).
+Examples are provided in the agent's system instructions to guide abbreviation style and permitted punctuation usage (e.g. `Top goalscorer` → `Top G/S`).
 
 ---
 
