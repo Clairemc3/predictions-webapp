@@ -13,7 +13,7 @@ class QuestionObserver
     public function created(Question $question): void
     {
         if ($question->title) {
-            GenerateQuestionShortTitle::dispatch($question);
+            GenerateQuestionShortTitle::dispatch($question)->afterCommit();
         }
     }
 
@@ -23,7 +23,7 @@ class QuestionObserver
     public function updated(Question $question): void
     {
         if ($question->wasChanged('title') && $question->title) {
-            GenerateQuestionShortTitle::dispatch($question);
+            GenerateQuestionShortTitle::dispatch($question)->afterCommit();
         }
     }
 }
