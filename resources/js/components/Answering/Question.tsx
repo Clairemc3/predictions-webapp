@@ -1,6 +1,6 @@
 import React from 'react';
-import Ranking from './Ranking';
-import EntitySelection from './EntitySelection';
+import { Typography } from '@mui/material';
+import AnswerPicker from './AnswerPicker';
 
 export interface Entity {
   id: number;
@@ -14,6 +14,10 @@ export interface Answer {
   order: number;
   value?: string;
   question_id: number;
+}
+
+export interface SelectedEntity extends Entity {
+  answerId?: number;
 }
 
 interface BaseQuestion {
@@ -42,36 +46,38 @@ interface QuestionProps {
   answers: Answer[];
 }
 
+const pickerConfig: Record<string, { draggable: boolean; searchable: boolean }> = {
+  ranking: { draggable: true, searchable: false },
+  entity_selection: { draggable: false, searchable: true },
+};
+
 const Question: React.FC<QuestionProps> = ({ question, answers }) => {
+  const config = pickerConfig[question.base_type];
 
-  const isRankingQuestion = (q: QuestionData): q is RankingQuestion => {
-    return q.base_type === 'ranking';
-  };
-
-  const isEntitySelectionQuestion = (q: QuestionData): q is EntitySelectionQuestion => {
-    return q.base_type === 'entity_selection';
-  };
+  if (!config) return null;
 
   return (
     <>
-      {/* Dynamic component based on base_type */}
-      {isRankingQuestion(question) && (
-        <Ranking
-          heading={question.type}
-          answer_count={question.answer_count}
-          question_id={question.id}
-          answer_entities_route={question.answer_entities_route}
-          answers={answers}
-        />
-      )}
-      {isEntitySelectionQuestion(question) && (
-        <EntitySelection
-          heading={question.type}
-          question_id={question.id}
-          answer_entities_route={question.answer_entities_route}
-          answers={answers}
-        />
-      )}
+      <Typography
+        variant="h6"
+        sx={{
+          textAlign: 'center',
+          color: 'primary.contrastText',
+          textTransform: 'uppercase',
+          mt: 1,
+          mb: 2,
+        }}
+      >
+        {question.title}
+      </Typography>
+      <AnswerPicker
+        question_id={question.id}
+      answer_count={question.answer_count}
+      answer_entities_route={question.answer_entities_route}
+      answers={answers}
+      draggable={config.draggable}
+        searchable={config.searchable}
+      />
     </>
   );
 };

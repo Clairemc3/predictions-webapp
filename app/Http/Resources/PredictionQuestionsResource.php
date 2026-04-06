@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Enums\BaseQuestionType;
 
 class PredictionQuestionsResource extends JsonResource
 {
@@ -19,7 +20,7 @@ class PredictionQuestionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'title' => $this->generateTitle(),
             'short_title' => $this->short_title,
             'base_type' => $this->base_type,
             'type' => $this->type,
@@ -42,5 +43,14 @@ class PredictionQuestionsResource extends JsonResource
         }
 
         return route('api.category-entities.index', $routeParams);
+    }
+
+    private function generateTitle(): string
+    {
+        if ($this->base_type === BaseQuestionType::Ranking) {
+            return $this->type;
+        }
+
+        return $this->title;
     }
 }
