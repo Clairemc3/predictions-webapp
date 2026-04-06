@@ -1,13 +1,14 @@
 import React from 'react';
 import Ranking from './Ranking';
-import { usePage } from '@inertiajs/react';
+import EntitySelection from './EntitySelection';
 
-interface Entity {
+export interface Entity {
   id: number;
   name: string;
+  image_url?: string;
 }
 
-interface Answer {
+export interface Answer {
   id: number;
   entity_id: number;
   order: number;
@@ -30,11 +31,11 @@ interface RankingQuestion extends BaseQuestion {
   base_type: 'ranking';
 }
 
-interface OtherQuestion extends BaseQuestion {
-  base_type: Exclude<string, 'ranking'>; // Any base_type except 'ranking'
+interface EntitySelectionQuestion extends BaseQuestion {
+  base_type: 'entity_selection';
 }
 
-type QuestionData = RankingQuestion | OtherQuestion;
+type QuestionData = RankingQuestion | EntitySelectionQuestion;
 
 interface QuestionProps {
   question: QuestionData;
@@ -47,13 +48,25 @@ const Question: React.FC<QuestionProps> = ({ question, answers }) => {
     return q.base_type === 'ranking';
   };
 
+  const isEntitySelectionQuestion = (q: QuestionData): q is EntitySelectionQuestion => {
+    return q.base_type === 'entity_selection';
+  };
+
   return (
     <>
       {/* Dynamic component based on base_type */}
       {isRankingQuestion(question) && (
-        <Ranking 
+        <Ranking
           heading={question.type}
           answer_count={question.answer_count}
+          question_id={question.id}
+          answer_entities_route={question.answer_entities_route}
+          answers={answers}
+        />
+      )}
+      {isEntitySelectionQuestion(question) && (
+        <EntitySelection
+          heading={question.type}
           question_id={question.id}
           answer_entities_route={question.answer_entities_route}
           answers={answers}

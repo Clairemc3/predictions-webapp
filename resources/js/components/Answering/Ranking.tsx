@@ -10,6 +10,8 @@ import {
 import SortableItem from './SortableItem';
 import { apiGet, apiDelete, apiPost, answersRequest } from '../../lib/api';
 import { useOptimisticUpdate } from '../../hooks/useOptimisticUpdate';
+import { useDebounceReload } from '../../hooks/useDebounceReload';
+import { Entity, Answer } from './Question';
 import {
   DndContext,
   closestCenter,
@@ -25,25 +27,10 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { usePage, router } from '@inertiajs/react';
-
-const RELOAD_DEBOUNCE_DELAY = 1000;
-
-interface Entity {
-  id: number;
-  name: string; // Keep as 'name' to match SortableItem expectations
-  image_url?: string;
-}
+import { usePage } from '@inertiajs/react';
 
 interface SelectedEntity extends Entity {
   answerId?: number; // Store the answer ID for deletion
-}
-
-interface Answer {
-  id: number;
-  entity_id: number;
-  order: number;
-  value?: string;
 }
 
 interface RankingProps {
@@ -55,22 +42,17 @@ interface RankingProps {
 }
 
 const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, answer_entities_route, answers }) => {
-  // State to track entities from the backend
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [apiError, setApiError] = useState('');
   const membershipId = usePage().props.membershipId;
+  const { triggerReload } = useDebounceReload();
 
-  // State to track selected entities for each position
   const [selectedEntities, setSelectedEntities] = useState<(SelectedEntity | null)[]>(
     Array(answer_count).fill(null)
   );
 
-  // State to track if we need to reload (for debouncing)
-  const [needsReload, setNeedsReload] = useState(false);
-
-  // State to track the order of items
   const [items, setItems] = useState<string[]>(
     Array.from({ length: answer_count }, (_, index) => `item-${index}`)
   );
@@ -87,7 +69,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     },
     onSuccess: () => {
       console.log('Delete response: success');
-      setNeedsReload(true);
+      triggerReload();
     },
     onError: (error) => {
       console.error('Error deleting answer:', error);
@@ -126,7 +108,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
         });
       }
       
-      setNeedsReload(true);
+      triggerReload();
     },
     onError: (error) => {
       console.error('Error updating answer:', error);
@@ -165,7 +147,7 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     setState: setSelectedEntities,
     getOptimisticState: (current, { reorderedEntities }) => reorderedEntities,
     onSuccess: () => {
-      setNeedsReload(true);
+      triggerReload();
     },
     onError: (error) => {
       console.error('Error reordering:', error);
@@ -247,18 +229,6 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     fetchEntities();
   }, []); // Only run once on mount
 
-  // Debounced reload effect - waits after the last change
-  useEffect(() => {
-    if (!needsReload) return;
-
-    const timeoutId = setTimeout(() => {
-      router.reload({ only: ['questions', 'completedPercentage'] });
-      setNeedsReload(false);
-    }, RELOAD_DEBOUNCE_DELAY);
-
-    return () => clearTimeout(timeoutId);
-  }, [needsReload]);
-
   // Function to get available entities for a specific position
   const getAvailableAnswerEntities = (currentIndex: number) => {
     const selectedIds = selectedEntities
@@ -317,11 +287,6 @@ const Ranking: React.FC<RankingProps> = ({ heading, answer_count, question_id, a
     }
   };
 
-  // Function to send reordered answers (no longer needed - handled by mutation)
-  // Keeping for backward compatibility but it's not used
-  const sendReorderedAnswers = async (reorderedEntities: (SelectedEntity | null)[]): Promise<boolean> => {
-    return true;
-  };
   return (
     <Card sx={{ bgcolor: 'transparent', borderRadius: 0 }}>
       <Typography

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BaseQuestionType;
 use App\Enums\SeasonStatus;
 use App\Models\Answer;
 use App\Models\Entity;
@@ -9,6 +10,7 @@ use App\Models\SeasonMember;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
 
@@ -151,4 +153,67 @@ test('updating answer triggers AnswerUpdated event', function () {
     ]);
 
     Event::assertDispatched(\App\Events\AnswerUpdated::class);
+});
+
+test('member can create an answer for an entity selection question without an order', function () {
+    Queue::fake();
+
+    $member = SeasonMember::factory()->create([
+        'season_id' => Season::factory()->create(['status' => SeasonStatus::Draft])->id,
+    ]);
+    $question = Question::factory()->create(['base_type' => BaseQuestionType::EntitySelection]);
+    $member->season->questions()->attach($question);
+    $entity = Entity::factory()->create();
+
+    $response = $this->actingAs($member->user)->postJson('/answers', [
+        'membership_id' => $member->id,
+        'question_id' => $question->id,
+        'entity_id' => $entity->id,
+        'value' => $entity->value,
+    ]);
+
+    $response->assertCreated();
+    $response->assertJson([
+        'success' => true,
+        'message' => 'Answer saved successfully',
+    ]);
+    $this->assertDatabaseHas('answers', [
+        'season_user_id' => $member->id,
+        'question_id' => $question->id,
+        'entity_id' => $entity->id,
+        'order' => 1,
+    ]);
+});
+
+test('member can update an entity selection answer by re-submitting without an order', function () {
+    Queue::fake();
+
+    $oldEntity = Entity::factory()->create();
+    $newEntity = Entity::factory()->create();
+    $season = Season::factory()->create(['status' => SeasonStatus::Draft]);
+
+    $answer = Answer::factory()->recycle($season)->create([
+        'entity_id' => $oldEntity->id,
+        'order' => 1,
+        'question_id' => Question::factory()->create(['base_type' => BaseQuestionType::EntitySelection])->id,
+    ]);
+    $answer->question->seasons()->sync([$season->id]);
+
+    $response = $this->actingAs($answer->member->user)->postJson('/answers', [
+        'membership_id' => $answer->member->id,
+        'question_id' => $answer->question_id,
+        'entity_id' => $newEntity->id,
+        'value' => $newEntity->value,
+    ]);
+
+    $response->assertCreated();
+    $this->assertDatabaseHas('answers', [
+        'id' => $answer->id,
+        'entity_id' => $newEntity->id,
+        'order' => 1,
+    ]);
+    $this->assertDatabaseMissing('answers', [
+        'id' => $answer->id,
+        'entity_id' => $oldEntity->id,
+    ]);
 });
