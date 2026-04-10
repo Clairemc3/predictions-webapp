@@ -1,8 +1,5 @@
 # Feature: AI-Generated Question Short Title
 
-## Status
-Implemented
-
 ## Summary
 
 When a host creates a new question or updates an existing question's title, the application automatically generates a short title for that question using an AI agent (Google Gemini). The short title is displayed to members when they view their predictions and points. Hosts cannot manually set or edit the short title — it is always AI-generated.

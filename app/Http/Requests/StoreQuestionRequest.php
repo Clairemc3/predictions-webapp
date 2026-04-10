@@ -27,7 +27,10 @@ class StoreQuestionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9 ?,.\'\\-]*$/'],
+            'title' => [
+                $this->input('base_type') === BaseQuestionType::EntitySelection->value ? 'required' : 'nullable',
+                     'string', 'max:255', 'regex:/^[A-Za-z0-9 ?,.\'\\-]*$/'
+            ],
             'base_type' => ['required', 'bail', Rule::in(BaseQuestionType::values())],
             'type' => ['required', Rule::in($this->questionTypeService->allTypes())],
             'entities' => ['required', 'array'],
