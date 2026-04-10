@@ -16,7 +16,7 @@ class Question extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type',
+        'question_type_id',
         'base_type',
         'title',
         'answer_count',
@@ -35,6 +35,16 @@ class Question extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function questionType(): BelongsTo
+    {
+        return $this->belongsTo(QuestionType::class);
+    }
+
+    public function getTypeAttribute(): ?string
+    {
+        return $this->questionType?->key;
     }
 
     public function answers(): HasMany

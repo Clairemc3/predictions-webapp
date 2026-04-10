@@ -29,7 +29,7 @@ class QuestionResultsController extends Controller
         Gate::authorize('view', [QuestionResult::class, $question, $season]);
 
         // Load question entities for proper title formatting
-        $question->load(['entities.image', 'results.entity.image', 'answerCategory', 'points']);
+        $question->load(['entities.image', 'results.entity.image', 'answerCategory', 'points', 'questionType']);
 
         // Get available options for this question
         $availableOptions = $question->allOptions()->map(function ($entity) {

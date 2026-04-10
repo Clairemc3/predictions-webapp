@@ -10,8 +10,14 @@ class GenerateShortTitle
 {
     public function handle(QuestionCreated|QuestionUpdated $event): void
     {
-        if ($event->question->wasChanged('title')) {
-            GenerateQuestionShortTitle::dispatch($event->question)->afterCommit();
+        $question = $event->question;
+
+        $shouldDispatch = $event instanceof QuestionCreated
+            ? $question->title !== null
+            : $question->wasChanged('title');
+
+        if ($shouldDispatch) {
+            GenerateQuestionShortTitle::dispatch($question)->afterCommit();
         }
     }
 }

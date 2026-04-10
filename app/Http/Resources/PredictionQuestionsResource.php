@@ -23,7 +23,7 @@ class PredictionQuestionsResource extends JsonResource
             'title' => $this->generateTitle(),
             'short_title' => $this->short_title,
             'base_type' => $this->base_type,
-            'type' => $this->type,
+            'type' => $this->questionType->key,
             'answer_count' => $this->answer_count,
             'entities' => EntityResource::collection($this->whenLoaded('entities')),
             'answer_entities_route' => $this->generateCategoryEntitiesRoute(),
@@ -50,7 +50,7 @@ class PredictionQuestionsResource extends JsonResource
     private function generateTitle(): string
     {
         if ($this->base_type === BaseQuestionType::Ranking) {
-            return $this->type;
+            return $this->questionType->label;
         }
 
         return $this->title;

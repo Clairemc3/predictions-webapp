@@ -51,6 +51,7 @@ class QuestionController extends Controller
             $question->fill($request->validated());
             $question->created_by = Auth::id();
             $question->answer_category_id = $questionType->answer_category_id;
+            $question->question_type_id = $questionType->id;
             $season->questions()->save($question);
 
             app(QuestionEntityPersistService::class)->syncEntities($question, $request->entities);
@@ -82,7 +83,7 @@ class QuestionController extends Controller
 
         return Inertia::render('seasons/questions/edit', [
             'season' => new SeasonResource($season),
-            'question' => $question->load(['entities', 'pointsValues']),
+            'question' => $question->load(['entities', 'pointsValues', 'questionType']),
             'questionTypes' => $questionTypes,
         ]);
     }
@@ -102,6 +103,7 @@ class QuestionController extends Controller
             if ($request->has('type')) {
                 $questionType = $this->questionTypeService->getModelByKey($request->input('type'));
                 $question->answer_category_id = $questionType->answer_category_id;
+                $question->question_type_id = $questionType->id;
             }
 
             $question->save();
