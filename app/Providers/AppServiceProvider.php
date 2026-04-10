@@ -3,9 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\Role;
-use App\Models\Question;
 use App\Models\SeasonMember;
-use App\Observers\QuestionObserver;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -35,9 +33,6 @@ class AppServiceProvider extends ServiceProvider
                 ->where('id', $value)->withTrashed()
                 ->firstOrFail();
         });
-
-        // Register model observers
-        Question::observe(QuestionObserver::class);
 
         Gate::before(function ($user, $ability) {
             if ($ability === 'changePermissionsForUser') {

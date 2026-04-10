@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuestionCreated;
+use App\Events\QuestionUpdated;
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
 use App\Http\Resources\SeasonResource;
@@ -64,6 +66,8 @@ class QuestionController extends Controller
             return $question;
         });
 
+        QuestionCreated::dispatch($question);
+
         return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }
 
@@ -115,6 +119,8 @@ class QuestionController extends Controller
                 );
             }
         });
+
+        QuestionUpdated::dispatch($question);
 
         return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }
