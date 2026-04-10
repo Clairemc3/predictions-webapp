@@ -6,6 +6,7 @@ use App\Enums\BaseQuestionType;
 use App\Models\Question;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreAnswerRequest extends FormRequest
 {
@@ -26,7 +27,16 @@ class StoreAnswerRequest extends FormRequest
     {
         $rules = [
             'membership_id' => 'required|integer|exists:season_user,id',
-            'question_id' => 'bail|required|integer|exists:questions,id',
+            'question_id' => [
+                'bail',
+                'required',
+                'integer',
+                'exists:questions,id',
+                Rule::exists('question_season', 'question_id')->where(function ($query) {
+                    $member = \App\Models\SeasonMember::find($this->membership_id);
+                    $query->where('season_id', $member?->season_id);
+                }),
+            ],
             'entity_id' => 'required|integer|exists:entities,id',
             'value' => 'required|string|max:255',
         ];

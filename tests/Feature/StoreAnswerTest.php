@@ -53,6 +53,7 @@ test('authenticated user can update an existing answer when season is in draft s
         'entity_id' => $oldEntity->id,
         'order' => 1,
     ]);
+    $answer->question->seasons()->attach($season);
 
     $response = $this->actingAs($answer->member->user)->postJson('/answers', [
         'membership_id' => $answer->member->id,
@@ -102,6 +103,7 @@ test('user cannot create answer for another users membership', function () {
     $season = Season::factory()->create(['status' => SeasonStatus::Draft]);
 
     $answer = Answer::factory()->recycle($season)->create();
+    $answer->question->seasons()->attach($season);
     $entity = Entity::factory()->create();
 
     $response = $this->actingAs($anotherUser)->postJson('/answers', [
@@ -147,6 +149,7 @@ test('updating answer triggers AnswerUpdated event', function () {
         'entity_id' => $oldEntity->id,
         'order' => 1,
     ]);
+    $answer->question->seasons()->attach($season);
 
     $this->actingAs($answer->member->user)->postJson('/answers', [
         'membership_id' => $answer->member->id,
