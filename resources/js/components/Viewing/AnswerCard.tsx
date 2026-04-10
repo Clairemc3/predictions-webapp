@@ -6,10 +6,12 @@ interface AnswerCardProps {
   shortDescription: string;
   value: string;
   points?: number;
+  accuracyLevel?: number | null;
+  hasResult?: boolean;
   icon?: string;
 }
 
-const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription, value, points, icon }) => {
+const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription, value, points, accuracyLevel, hasResult, icon }) => {
   return (
     <>
       {/* Position and Value Box - First Grid Column */}
@@ -71,17 +73,17 @@ const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription,
             width: 35,
             height: 35,
             borderRadius: '50%',
-            bgcolor: 'white',
+            bgcolor: hasResult === false ? 'white' : accuracyLevel === 0 ? 'error.main' : accuracyLevel != null ? 'warning.main' : 'white',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             justifySelf: { xs: 'end', sm: 'center' },
-            color: 'primary.main',
+            color: hasResult === false ? 'text.disabled' : accuracyLevel != null ? 'white' : 'primary.main',
             fontWeight: 700,
             fontSize: '0.875rem',
           }}
         >
-          {points}
+          {hasResult === false ? '—' : points}
         </Box>
       )}
     </>

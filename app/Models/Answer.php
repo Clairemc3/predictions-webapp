@@ -22,6 +22,7 @@ class Answer extends Model
         'order',
         'season_user_id',
         'points',
+        'accuracy_level',
     ];
 
     /**
@@ -32,6 +33,7 @@ class Answer extends Model
     protected $casts = [
         'order' => 'integer',
         'points' => 'integer',
+        'accuracy_level' => 'integer',
     ];
 
     /**

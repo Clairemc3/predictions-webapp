@@ -60,7 +60,7 @@ class DistributePoints
                     })
                     ->where('entity_id', $entityId)
                     ->whereIn('order', $predictedPositions)
-                    ->update(['points' => $points]);
+                    ->update(['points' => $points, 'accuracy_level' => $accuracyLevel]);
             }
         }
     }

@@ -20,6 +20,9 @@ class PredictionAnswerResource extends JsonResource
             'order' => $this->order,
             'entity_id' => $this->entity_id,
             'value' => $this->value,
+            'points' => $this->points,
+            'accuracy_level' => $this->accuracy_level,
+            'has_a_result' => $this->question->hasResult($this->order),
             'entity_value' => $this->whenLoaded('entity', function () {
                 return $this->entity ? $this->entity->value : null;
             }),
