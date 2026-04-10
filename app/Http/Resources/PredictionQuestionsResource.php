@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\BaseQuestionType;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Enums\BaseQuestionType;
 
 class PredictionQuestionsResource extends JsonResource
 {
@@ -39,7 +39,9 @@ class PredictionQuestionsResource extends JsonResource
 
         foreach ($this->entities as $entity) {
             $category = $categories->get($entity->pivot->category_id);
-            $routeParams[$category->name] = $entity->value;
+            if (in_array($category->name, Category::FILTER_KEYS, strict: true)) {
+                $routeParams[$category->name] = $entity->value;
+            }
         }
 
         return route('api.category-entities.index', $routeParams);
