@@ -49,8 +49,8 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
 }) => {
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [apiError, setApiError] = useState('');
+  const [fetchError, setFetchError] = useState('');
+  const [saveError, setSaveError] = useState('');
   const membershipId = usePage().props.membershipId;
   const { triggerReload } = useDebounceReload();
 
@@ -78,7 +78,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
     onSuccess: () => triggerReload(),
     onError: (err) => {
       console.error('Error deleting answer:', err);
-      setApiError('Failed to delete answer. Please try again.');
+      setSaveError('Failed to delete answer. Please try again.');
     },
   });
 
@@ -114,7 +114,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
     },
     onError: (err) => {
       console.error('Error updating answer:', err);
-      setApiError('Failed to save answer. Please try again.');
+      setSaveError('Failed to save answer. Please try again.');
     },
   });
 
@@ -146,7 +146,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
     onSuccess: () => triggerReload(),
     onError: (err) => {
       console.error('Error reordering:', err);
-      setApiError('Failed to save new order. Please try again.');
+      setSaveError('Failed to save new order. Please try again.');
     },
   });
 
@@ -158,14 +158,14 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
   useEffect(() => {
     const fetchEntities = async () => {
       if (!answer_entities_route) {
-        setError('No entities route provided');
+        setFetchError('No entities route provided');
         setLoading(false);
         return;
       }
 
       try {
         setLoading(true);
-        setError('');
+        setFetchError('');
 
         const response = await apiGet(answer_entities_route);
 
@@ -192,13 +192,13 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
               setSelectedEntities(initial);
             }
           } else {
-            setError('Invalid entities data received');
+            setFetchError('Invalid entities data received');
           }
         } else {
-          setError('Failed to load entities');
+          setFetchError('Failed to load entities');
         }
       } catch {
-        setError('Failed to load entities');
+        setFetchError('Failed to load entities');
       } finally {
         setLoading(false);
       }
@@ -215,7 +215,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
   };
 
   const handleEntitySelect = (index: number, newValue: Entity | null) => {
-    setApiError('');
+    setSaveError('');
     const previous = selectedEntities[index];
 
     if (!newValue && previous?.answerId) {
@@ -239,7 +239,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
       const reorderedEntities = arrayMove(selectedEntities, oldIndex, newIndex);
 
       setItems(newItems);
-      setApiError('');
+      setSaveError('');
 
       try {
         await reorderMutation.mutateAsync({ reorderedEntities });
@@ -261,19 +261,19 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
           </Box>
         )}
 
-        {error && (
+        {fetchError && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
+            {fetchError}
           </Alert>
         )}
 
-        {apiError && (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setApiError('')}>
-            {apiError}
+        {saveError && (
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setSaveError('')}>
+            {saveError}
           </Alert>
         )}
 
-        {!loading && !error && entities.length > 0 && (
+        {!loading && !fetchError && entities.length > 0 && (
           draggable ? (
             <DndContext
               sensors={sensors}
@@ -313,7 +313,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
           )
         )}
 
-        {!loading && !error && entities.length === 0 && (
+        {!loading && !fetchError && entities.length === 0 && (
           <Alert severity="info">No options available for this question.</Alert>
         )}
       </CardContent>
