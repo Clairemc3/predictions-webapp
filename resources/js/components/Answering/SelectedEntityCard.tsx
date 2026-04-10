@@ -7,9 +7,10 @@ interface SelectedEntityCardProps {
   entity: Entity;
   position?: number;
   onClear: () => void;
+  disabled?: boolean;
 }
 
-const SelectedEntityCard: React.FC<SelectedEntityCardProps> = ({ entity, position, onClear }) => {
+const SelectedEntityCard: React.FC<SelectedEntityCardProps> = ({ entity, position, onClear, disabled = false }) => {
   return (
     <Box
       sx={{
@@ -52,6 +53,7 @@ const SelectedEntityCard: React.FC<SelectedEntityCardProps> = ({ entity, positio
 
       <IconButton
         size="small"
+        disabled={disabled}
         onClick={(e) => {
           e.stopPropagation();
           onClear();

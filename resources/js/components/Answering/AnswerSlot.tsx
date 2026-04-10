@@ -13,6 +13,7 @@ interface AnswerSlotProps {
   searchable: boolean;
   showPosition?: boolean;
   dragHandleProps?: Record<string, any>;
+  isPending?: boolean;
 }
 
 const AnswerSlot: React.FC<AnswerSlotProps> = ({
@@ -23,6 +24,7 @@ const AnswerSlot: React.FC<AnswerSlotProps> = ({
   searchable,
   showPosition = false,
   dragHandleProps,
+  isPending = false,
 }) => {
   const isDraggable = dragHandleProps !== undefined;
 
@@ -54,6 +56,7 @@ const AnswerSlot: React.FC<AnswerSlotProps> = ({
             entity={selectedEntity}
             position={showPosition ? index + 1 : undefined}
             onClear={() => onEntitySelect(index, null)}
+            disabled={isPending}
           />
         ) : (
           <EntityInput

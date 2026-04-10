@@ -11,6 +11,7 @@ interface SortableItemProps {
   selectedEntity: SelectedEntity | null;
   availableEntities: Entity[];
   onEntitySelect: (index: number, value: Entity | null) => void;
+  isPending?: boolean;
 }
 
 const SortableItem: React.FC<SortableItemProps> = ({
@@ -19,6 +20,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
   selectedEntity,
   availableEntities,
   onEntitySelect,
+  isPending = false,
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
@@ -38,6 +40,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
         searchable={false}
         showPosition={true}
         dragHandleProps={{ ...attributes, ...listeners }}
+        isPending={isPending}
       />
     </Box>
   );

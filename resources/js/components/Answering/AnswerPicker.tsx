@@ -289,6 +289,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
                     selectedEntity={selectedEntities[index]}
                     availableEntities={getAvailableEntities(index)}
                     onEntitySelect={handleEntitySelect}
+                    isPending={updateEntityMutation.isPending}
                   />
                 ))}
               </SortableContext>
@@ -304,6 +305,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
                     onEntitySelect={handleEntitySelect}
                     searchable={searchable}
                     showPosition={answer_count > 1}
+                    isPending={updateEntityMutation.isPending}
                   />
                 </Box>
               ))}
