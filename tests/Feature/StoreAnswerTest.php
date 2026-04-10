@@ -23,6 +23,7 @@ test('authenticated user can create an answer when season is in draft status', f
     $question = Question::factory()->create();
     $member->season->questions()->attach($question);
     $entity = Entity::factory()->create();
+    $entity->categories()->attach($question->answer_category_id);
 
     $response = $this->actingAs($member->user)->postJson('/answers', [
         'membership_id' => $member->id,
@@ -54,6 +55,7 @@ test('authenticated user can update an existing answer when season is in draft s
         'order' => 1,
     ]);
     $answer->question->seasons()->attach($season);
+    $newEntity->categories()->attach($answer->question->answer_category_id);
 
     $response = $this->actingAs($answer->member->user)->postJson('/answers', [
         'membership_id' => $answer->member->id,
@@ -83,6 +85,7 @@ test('user cannot create answer when season is not in draft status', function (S
     $question = Question::factory()->create();
     $member->season->questions()->attach($question);
     $entity = Entity::factory()->create();
+    $entity->categories()->attach($question->answer_category_id);
 
     $response = $this->actingAs($member->user)->postJson('/answers', [
         'membership_id' => $member->id,
@@ -105,6 +108,7 @@ test('user cannot create answer for another users membership', function () {
     $answer = Answer::factory()->recycle($season)->create();
     $answer->question->seasons()->attach($season);
     $entity = Entity::factory()->create();
+    $entity->categories()->attach($answer->question->answer_category_id);
 
     $response = $this->actingAs($anotherUser)->postJson('/answers', [
         'membership_id' => $answer->member->id,
@@ -126,6 +130,7 @@ test('creating answer triggers AnswerCreated event', function () {
     $question = Question::factory()->create();
     $member->season->questions()->attach($question);
     $entity = Entity::factory()->create();
+    $entity->categories()->attach($question->answer_category_id);
 
     $this->actingAs($member->user)->postJson('/answers', [
         'membership_id' => $member->id,
@@ -150,6 +155,7 @@ test('updating answer triggers AnswerUpdated event', function () {
         'order' => 1,
     ]);
     $answer->question->seasons()->attach($season);
+    $newEntity->categories()->attach($answer->question->answer_category_id);
 
     $this->actingAs($answer->member->user)->postJson('/answers', [
         'membership_id' => $answer->member->id,
@@ -171,6 +177,7 @@ test('member can create an answer for an entity selection question without an or
     $question = Question::factory()->create(['base_type' => BaseQuestionType::EntitySelection]);
     $member->season->questions()->attach($question);
     $entity = Entity::factory()->create();
+    $entity->categories()->attach($question->answer_category_id);
 
     $response = $this->actingAs($member->user)->postJson('/answers', [
         'membership_id' => $member->id,
@@ -205,6 +212,7 @@ test('member can update an entity selection answer by re-submitting without an o
         'question_id' => Question::factory()->create(['base_type' => BaseQuestionType::EntitySelection])->id,
     ]);
     $answer->question->seasons()->sync([$season->id]);
+    $newEntity->categories()->attach($answer->question->answer_category_id);
 
     $response = $this->actingAs($answer->member->user)->postJson('/answers', [
         'membership_id' => $answer->member->id,
@@ -234,6 +242,7 @@ test('ranking question returns 422 when order is omitted', function () {
     $question = Question::factory()->create(['base_type' => BaseQuestionType::Ranking]);
     $member->season->questions()->attach($question);
     $entity = Entity::factory()->create();
+    $entity->categories()->attach($question->answer_category_id);
 
     $response = $this->actingAs($member->user)->postJson('/answers', [
         'membership_id' => $member->id,

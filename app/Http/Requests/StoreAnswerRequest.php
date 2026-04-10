@@ -37,7 +37,15 @@ class StoreAnswerRequest extends FormRequest
                     $query->where('season_id', $member?->season_id);
                 }),
             ],
-            'entity_id' => 'required|integer|exists:entities,id',
+            'entity_id' => [
+                'bail',
+                'required',
+                'integer',
+                Rule::exists('category_entity', 'entity_id')->where(function ($query) {
+                    $question = Question::find($this->question_id);
+                    $query->where('category_id', $question?->answer_category_id);
+                }),
+            ],
             'value' => 'required|string|max:255',
         ];
 
