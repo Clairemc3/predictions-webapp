@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Enums\BaseQuestionType;
+use App\Models\Category;
+use App\Models\Entity;
 use App\Services\QuestionTypeService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -19,6 +21,12 @@ class StoreQuestionRequest extends FormRequest
         return true;
     }
 
+    /** @var array<int> */
+    protected array $validEntityIds = [];
+
+    /** @var array<int> */
+    protected array $validCategoryIds = [];
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,13 +37,29 @@ class StoreQuestionRequest extends FormRequest
         return [
             'title' => [
                 $this->input('base_type') === BaseQuestionType::EntitySelection->value ? 'required' : 'nullable',
-                     'string', 'max:255', 'regex:/^[A-Za-z0-9 ?,.\'\\-]*$/'
+                'string', 'max:255', 'regex:/^[A-Za-z0-9 ?,.\'\\-]*$/',
             ],
             'base_type' => ['required', 'bail', Rule::in(BaseQuestionType::values())],
             'type' => ['required', Rule::in($this->questionTypeService->allTypes())],
             'entities' => ['required', 'array'],
-            'entities.*.entity_id' => ['required', 'integer', 'exists:entities,id'],
-            'entities.*.category_id' => ['required', 'integer', 'exists:categories,id'],
+            'entities.*.entity_id' => [
+                'required',
+                'integer',
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    if (! in_array($value, $this->validEntityIds, true)) {
+                        $fail('The selected entity is invalid.');
+                    }
+                },
+            ],
+            'entities.*.category_id' => [
+                'required',
+                'integer',
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    if (! in_array($value, $this->validCategoryIds, true)) {
+                        $fail('The selected entity category is invalid.');
+                    }
+                },
+            ],
             'answer_count' => ['required', 'integer', 'min:1', 'max:20'],
             'question_points' => ['required', 'array', 'min:1'],
             'question_points.*' => ['required', 'integer', 'min:0'],
@@ -52,8 +76,6 @@ class StoreQuestionRequest extends FormRequest
             'entities.required' => 'Please select at least one entity.',
             'title.regex' => "The title may only contain letters, numbers, spaces, and the following characters: ? . , ' -",
             'entities.*.entity_id.required' => 'Please select an entity.',
-            'entities.*.entity_id.exists' => 'The selected entity is invalid.',
-            'entities.*.category_id.exists' => 'The selected entity category is invalid.',
         ];
     }
 
@@ -91,5 +113,12 @@ class StoreQuestionRequest extends FormRequest
             });
             $this->merge(['entities' => array_values($entities)]);
         }
+
+        // Prefetch valid IDs for array validation — one query each instead of N+1
+        $submittedEntityIds = collect($this->input('entities', []))->pluck('entity_id')->filter()->unique();
+        $submittedCategoryIds = collect($this->input('entities', []))->pluck('category_id')->filter()->unique();
+
+        $this->validEntityIds = Entity::whereIn('id', $submittedEntityIds)->pluck('id')->all();
+        $this->validCategoryIds = Category::whereIn('id', $submittedCategoryIds)->pluck('id')->all();
     }
 }

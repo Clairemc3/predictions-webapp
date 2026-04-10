@@ -10,6 +10,8 @@ use Illuminate\Validation\Rule;
 
 class StoreAnswerRequest extends FormRequest
 {
+    protected ?\App\Models\Question $resolvedQuestion = null;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -42,16 +44,14 @@ class StoreAnswerRequest extends FormRequest
                 'required',
                 'integer',
                 Rule::exists('category_entity', 'entity_id')->where(function ($query) {
-                    $question = Question::find($this->question_id);
-                    $query->where('category_id', $question?->answer_category_id);
+                    $query->where('category_id', $this->resolvedQuestion?->answer_category_id);
                 }),
             ],
             'value' => 'required|string|max:255',
         ];
 
         // Only require order if the question base_type is 'ranking'
-        $question = Question::find($this->question_id);
-        if ($question->base_type === BaseQuestionType::Ranking) {
+        if ($this->resolvedQuestion?->base_type === BaseQuestionType::Ranking) {
             $rules['order'] = 'required|integer|min:1';
         } else {
             $rules['order'] = 'sometimes|integer|min:1';
@@ -71,5 +71,10 @@ class StoreAnswerRequest extends FormRequest
             'selected_entity_id' => 'entity',
             'order' => 'position',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->resolvedQuestion = Question::find($this->question_id);
     }
 }
