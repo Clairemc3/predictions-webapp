@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Queue;
 uses(RefreshDatabase::class);
 
 test('authenticated user can create an answer when season is in draft status', function () {
+    Queue::fake();
+
     $member = SeasonMember::factory()->create([
         'season_id' => Season::factory()->create(['status' => SeasonStatus::Draft])->id,
     ]);
@@ -72,6 +74,8 @@ test('authenticated user can update an existing answer when season is in draft s
 });
 
 test('user cannot create answer when season is not in draft status', function (SeasonStatus $status) {
+    Queue::fake();
+
     $member = SeasonMember::factory()->create([
         'season_id' => Season::factory()->create(['status' => $status]),
     ]);
@@ -216,4 +220,25 @@ test('member can update an entity selection answer by re-submitting without an o
         'id' => $answer->id,
         'entity_id' => $oldEntity->id,
     ]);
+});
+
+test('ranking question returns 422 when order is omitted', function () {
+    Queue::fake();
+
+    $member = SeasonMember::factory()->create([
+        'season_id' => Season::factory()->create(['status' => SeasonStatus::Draft])->id,
+    ]);
+    $question = Question::factory()->create(['base_type' => BaseQuestionType::Ranking]);
+    $member->season->questions()->attach($question);
+    $entity = Entity::factory()->create();
+
+    $response = $this->actingAs($member->user)->postJson('/answers', [
+        'membership_id' => $member->id,
+        'question_id' => $question->id,
+        'entity_id' => $entity->id,
+        'value' => $entity->value,
+    ]);
+
+    $response->assertUnprocessable();
+    $response->assertJsonValidationErrors(['order']);
 });

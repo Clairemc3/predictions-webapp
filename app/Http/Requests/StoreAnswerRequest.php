@@ -33,7 +33,7 @@ class StoreAnswerRequest extends FormRequest
 
         // Only require order if the question base_type is 'ranking'
         $question = Question::find($this->question_id);
-        if ($question->base_type === BaseQuestionType::Ranking->value) {
+        if ($question->base_type === BaseQuestionType::Ranking) {
             $rules['order'] = 'required|integer|min:1';
         } else {
             $rules['order'] = 'sometimes|integer|min:1';
