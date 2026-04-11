@@ -17,6 +17,31 @@ it('distributes points and sets accuracy_level 0 for exact match answers', funct
     $question = Question::factory()->create(['short_title' => 'Test Q']);
     $entity = Entity::factory()->create();
     $member = SeasonMember::factory()->create(['season_id' => $season->id]);
+
+    QuestionResult::factory()->create([
+        'question_id' => $question->id,
+        'entity_id' => $entity->id,
+        'position' => 2,
+    ]);
+
+    QuestionPoint::create([
+        'question_id' => $question->id,
+        'accuracy_level' => 0,
+        'value' => 10,
+    ]);
+
+    $answer = Answer::factory()->create([
+        'question_id' => $question->id,
+        'entity_id' => $entity->id,
+        'season_user_id' => $member->id,
+        'order' => 2,
+    ]);
+
+    event(new QuestionLocked($question, $season));
+
+    $answer->refresh();
+    expect($answer->points)->toBe(10);
+    expect($answer->accuracy_level)->toBe(0);
 });
 
 it('distributes points and sets accuracy_level 1 for answers within +/-1', function () {
