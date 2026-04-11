@@ -65,19 +65,20 @@ class EntityQuery
 
     public function includeEntityCount(Category $category): self
     {
-        if (! $category) {
-            throw new \InvalidArgumentException('Category not found.');
-        }
-
         $entitiesInCategorySubQuery = DB::table('category_entity')
             ->select('entity_id')
             ->where('category_id', $category->id);
 
         $relationshipCountSubquery = DB::table('entity_relationships')
             ->selectRaw('COUNT(*)')
-            ->where(function ($query) use ($entitiesInCategorySubQuery) {
+            ->whereIn('child_entity_id', $entitiesInCategorySubQuery)
+            ->where(function ($query) {
                 $query->whereColumn('parent_entity_id', 'entities.id')
-                    ->whereIn('child_entity_id', $entitiesInCategorySubQuery);
+                    ->orWhereIn('parent_entity_id', function ($subQuery) {
+                        $subQuery->select('child_entity_id')
+                            ->from('entity_relationships')
+                            ->whereColumn('parent_entity_id', 'entities.id');
+                    });
             });
 
         $this->query->select('entities.*')

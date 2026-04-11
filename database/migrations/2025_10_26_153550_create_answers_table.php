@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('entity_id')->constrained()->nullable();
             $table->foreignId('season_user_id')->constrained('season_user')->onDelete('cascade');
             $table->integer('order');
+            $table->integer('points')->default(0);
+            $table->integer('accuracy_level')->nullable();
             $table->timestamps();
 
             $table->unique(['question_id', 'entity_id', 'season_user_id']);

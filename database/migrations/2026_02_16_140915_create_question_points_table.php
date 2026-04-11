@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('question_points', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->constrained()->cascadeOnDelete();
-            $table->unsignedInteger('position')->default(1);
+            $table->unsignedInteger('accuracy_level')->default(0);
             $table->unsignedInteger('value');
             $table->timestamps();
 
-            $table->unique(['question_id', 'position']);
+            $table->unique(['question_id', 'accuracy_level']);
         });
     }
 

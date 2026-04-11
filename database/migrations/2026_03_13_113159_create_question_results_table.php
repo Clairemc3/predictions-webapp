@@ -14,15 +14,13 @@ return new class extends Migration
         Schema::create('question_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->constrained('questions')->onDelete('cascade');
-            $table->unsignedInteger('position'); // Standing/rank position
-            $table->string('result')->nullable(); // Result description/value
+            $table->integer('position');
+            $table->string('result')->nullable();
             $table->foreignId('entity_id')->constrained('entities')->onDelete('cascade');
             $table->timestamps();
 
-            // Ensure unique position per question
             $table->unique(['question_id', 'position']);
-            // Index for query performance
-            $table->index('question_id');
+            $table->unique(['question_id', 'entity_id']);
         });
     }
 

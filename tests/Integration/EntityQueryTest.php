@@ -109,7 +109,7 @@ it('returns empty collection when filter matches no entities', function () {
     expect($result)->toHaveCount(0);
 });
 
-it('includes entities_count when includeEntityCount is called', function () {
+it('includes entity_relationship_count when includeEntityCount is called', function () {
     // Create a counting category with entities
     $countingCategory = Category::factory()->create(['name' => 'teams']);
 
@@ -125,10 +125,9 @@ it('includes entities_count when includeEntityCount is called', function () {
 
     expect($result)->toHaveCount(5); // 3 original + 2 shared
 
-    // Check that entities_count attribute is present on all entities
+    // Check that entity_relationship_count attribute is present on all entities
     $result->each(function ($entity) {
-        expect($entity)->toHaveAttribute('entities_count');
-        expect($entity->entities_count)->toBeInt();
+        expect($entity->entity_relationship_count)->toBeInt();
     });
 });
 
@@ -143,7 +142,7 @@ it('returns zero count for entities not in the specified category when using inc
 
     // All entities should have zero count since they don't belong to 'other-teams'
     $result->each(function ($entity) {
-        expect($entity->entities_count)->toBe(0);
+        expect($entity->entity_relationship_count)->toBe(0);
     });
 });
 
@@ -166,13 +165,12 @@ it('can chain includeEntityCount with filters', function () {
         ->filter('country', 'United Kingdom')
         ->get();
 
-    // Test that chaining works and returns a collection with entities_count
+    // Test that chaining works and returns a collection with entity_relationship_count
     expect($result)->toBeInstanceOf(Collection::class);
 
-    // Each result should have the entities_count attribute
+    // Each result should have the entity_relationship_count attribute
     $result->each(function ($entity) {
-        expect($entity)->toHaveAttribute('entities_count');
-        expect($entity->entities_count)->toBeInt();
+        expect($entity->entity_relationship_count)->toBeInt();
     });
 });
 
@@ -184,9 +182,15 @@ it('works correctly with different categories for includeEntityCount', function 
     // Create entities and attach to different categories
     $entity1 = Entity::factory()->create();
     $entity2 = Entity::factory()->create();
+    $childOfEntity1 = Entity::factory()->create();
 
-    $category1->entities()->attach([$entity1->id]);
+    $category1->entities()->attach([$entity1->id, $childOfEntity1->id]);
     $category2->entities()->attach([$entity2->id]);
+
+    // entity1 is the parent of childOfEntity1
+    \Illuminate\Support\Facades\DB::table('entity_relationships')->insert([
+        ['parent_entity_id' => $entity1->id, 'child_entity_id' => $childOfEntity1->id, 'relation_type' => 'test'],
+    ]);
 
     // Both entities should be in our main category too
     $this->category->entities()->attach([$entity1->id, $entity2->id]);
@@ -196,12 +200,13 @@ it('works correctly with different categories for includeEntityCount', function 
 
     expect($result)->toHaveCount(5); // 3 original + 2 new
 
-    // Find the entity that belongs to category1
-    $entityInCategory1 = $result->first(function ($entity) use ($entity1) {
-        return $entity->id === $entity1->id;
-    });
+    // entity1 is the parent of childOfEntity1 (which is in category1), so its count should be 1
+    $entityInCategory1 = $result->first(fn ($entity) => $entity->id === $entity1->id);
+    expect($entityInCategory1->entity_relationship_count)->toBe(1);
 
-    expect($entityInCategory1->entities_count)->toBeGreaterThan(0);
+    // entity2 has no relationships to category1 entities
+    $entityNotInCategory1 = $result->first(fn ($entity) => $entity->id === $entity2->id);
+    expect($entityNotInCategory1->entity_relationship_count)->toBe(0);
 });
 
 // filter() depth
@@ -259,4 +264,39 @@ it('filter() matches entities 2 hops away from the filter value', function () {
 
     expect($result)->toHaveCount(1);
     expect($result->first()->id)->toBe($managerA->id);
+});
+
+it('includeEntityCount counts entities 2 hops away', function () {
+    $leagueCategory = Category::factory()->create(['name' => 'football-league']);
+    $teamCategory = Category::factory()->create(['name' => 'football-team']);
+    $managerCategory = Category::factory()->create(['name' => 'manager']);
+
+    $premierLeague = Entity::factory()->create(['value' => 'Premier League']);
+    $bundesliga = Entity::factory()->create(['value' => 'Bundesliga']);
+    $leagueCategory->entities()->attach([$premierLeague->id, $bundesliga->id]);
+
+    $teamA = Entity::factory()->create(['value' => 'Team A']);
+    $teamB = Entity::factory()->create(['value' => 'Team B']);
+    $teamCategory->entities()->attach([$teamA->id, $teamB->id]);
+
+    $managerA = Entity::factory()->create(['value' => 'Manager A']);
+    $managerB = Entity::factory()->create(['value' => 'Manager B']);
+    $managerCategory->entities()->attach([$managerA->id, $managerB->id]);
+
+    \Illuminate\Support\Facades\DB::table('entity_relationships')->insert([
+        ['parent_entity_id' => $premierLeague->id, 'child_entity_id' => $teamA->id, 'relation_type' => 'in_league'],
+        ['parent_entity_id' => $bundesliga->id, 'child_entity_id' => $teamB->id, 'relation_type' => 'in_league'],
+        ['parent_entity_id' => $teamA->id, 'child_entity_id' => $managerA->id, 'relation_type' => 'manages'],
+        ['parent_entity_id' => $teamB->id, 'child_entity_id' => $managerB->id, 'relation_type' => 'manages'],
+    ]);
+
+    $result = (new EntityQuery($leagueCategory))
+        ->includeEntityCount($managerCategory)
+        ->get();
+
+    $plResult = $result->firstWhere('id', $premierLeague->id);
+    $bundesligaResult = $result->firstWhere('id', $bundesliga->id);
+
+    expect($plResult->entity_relationship_count)->toBe(1);
+    expect($bundesligaResult->entity_relationship_count)->toBe(1);
 });
