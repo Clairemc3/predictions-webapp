@@ -81,6 +81,10 @@ class Question extends Model
 
     public function hasResult(int $position): bool
     {
+        if ($this->relationLoaded('results')) {
+            return $this->results->contains('position', $position);
+        }
+
         return $this->results()->where('position', $position)->exists();
     }
 
