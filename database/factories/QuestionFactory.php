@@ -6,6 +6,7 @@ use App\Enums\BaseQuestionType;
 use App\Models\Category;
 use App\Models\Question;
 use App\Models\QuestionType;
+use App\Models\Season;
 use App\Models\User;
 use App\Queries\EntityQuery;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -126,5 +127,17 @@ class QuestionFactory extends Factory
         }
 
         return $entityQuery->inRandomOrder()->first();
+    }
+
+    /**
+     * Attach the question to a season after creation.
+     * Creates a new season if none is provided.
+     */
+    public function withSeason(?Season $season = null): static
+    {
+        return $this->afterCreating(function (Question $question) use ($season) {
+            $season ??= Season::factory()->create();
+            $question->seasons()->attach($season->id);
+        });
     }
 }
