@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Answer;
 use App\Models\Entity;
 use App\Models\Question;
+use App\Models\QuestionResult;
 use App\Models\SeasonMember;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -53,6 +54,17 @@ class AnswerFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'value' => $value,
+        ]);
+    }
+
+    /**
+     * Set the question and entity from an existing QuestionResult.
+     */
+    public function forResult(QuestionResult $result): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'question_id' => $result->question_id,
+            'entity_id' => $result->entity_id,
         ]);
     }
 }
