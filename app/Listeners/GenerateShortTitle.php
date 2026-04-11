@@ -13,8 +13,8 @@ class GenerateShortTitle
         $question = $event->question;
 
         $shouldDispatch = $event instanceof QuestionCreated
-            ? $question->title !== null
-            : $question->wasChanged('title');
+            ? filled($question->title)
+            : $question->wasChanged('title') && filled($question->title);
 
         if ($shouldDispatch) {
             GenerateQuestionShortTitle::dispatch($question)->afterCommit();

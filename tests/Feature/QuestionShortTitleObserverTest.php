@@ -38,6 +38,16 @@ it('dispatches the job when a question title is changed', function () {
     });
 });
 
+it('does not dispatch the job when a question title is changed to null', function () {
+    $question = Question::factory()->create(['title' => 'Original Title']);
+
+    $question->title = null;
+    $question->save();
+    QuestionUpdated::dispatch($question);
+
+    Queue::assertNotPushed(GenerateQuestionShortTitle::class);
+});
+
 it('does not dispatch the job when a question is updated without changing the title', function () {
     $question = Question::factory()->create(['title' => 'Unchanged Title']);
 
