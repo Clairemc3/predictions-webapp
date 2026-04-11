@@ -52,7 +52,7 @@ const AnswerPicker: React.FC<AnswerPickerProps> = ({
   const [fetchError, setFetchError] = useState('');
   const [saveError, setSaveError] = useState('');
   const membershipId = usePage().props.membershipId;
-  const { triggerReload } = useDebounceReload();
+  const { triggerReload } = useDebounceReload(['questions', 'completedPercentage']);
 
   const [selectedEntities, setSelectedEntities] = useState<(SelectedEntity | null)[]>(
     Array(answer_count).fill(null),

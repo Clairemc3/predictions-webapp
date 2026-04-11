@@ -3,7 +3,7 @@ import { router } from '@inertiajs/react';
 
 const RELOAD_DEBOUNCE_DELAY = 1000;
 
-export const useDebounceReload = (only: string[] = ['questions', 'completedPercentage']) => {
+export const useDebounceReload = (only: string[]) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onlyRef = useRef(only);
   onlyRef.current = only;
