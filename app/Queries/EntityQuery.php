@@ -65,10 +65,6 @@ class EntityQuery
 
     public function includeEntityCount(Category $category): self
     {
-        if (! $category) {
-            throw new \InvalidArgumentException('Category not found.');
-        }
-
         $entitiesInCategorySubQuery = DB::table('category_entity')
             ->select('entity_id')
             ->where('category_id', $category->id);

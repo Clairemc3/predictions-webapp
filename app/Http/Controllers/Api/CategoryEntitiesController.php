@@ -19,7 +19,7 @@ class CategoryEntitiesController extends Controller
         }
 
         if ($request->has('count')) {
-            $countingCategory = Category::where('name', $request->input('count'))->first();
+            $countingCategory = Category::where('name', $request->input('count'))->firstOrFail();
             $entityQuery->includeEntityCount($countingCategory);
         }
 
