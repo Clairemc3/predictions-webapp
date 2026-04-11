@@ -19,7 +19,7 @@ class QuestionPointFactory extends Factory
     {
         return [
             'question_id' => Question::factory(),
-            'accuracy_level' => fake()->numberBetween(0, 3),
+            'accuracy_level' => fake()->numberBetween(0, 9),
             'value' => fake()->numberBetween(1, 20),
         ];
     }
