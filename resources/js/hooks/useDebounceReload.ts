@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useRef, useCallback } from 'react';
 import { router } from '@inertiajs/react';
 
 const RELOAD_DEBOUNCE_DELAY = 1000;
 
 export const useDebounceReload = (only: string[] = ['questions', 'completedPercentage']) => {
-  const [needsReload, setNeedsReload] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onlyRef = useRef(only);
+  onlyRef.current = only;
 
-  useEffect(() => {
-    if (!needsReload) return;
-
-    const timeoutId = setTimeout(() => {
-      router.reload({ only });
-      setNeedsReload(false);
+  const triggerReload = useCallback(() => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      router.reload({ only: onlyRef.current });
+      timeoutRef.current = null;
     }, RELOAD_DEBOUNCE_DELAY);
+  }, []);
 
-    return () => clearTimeout(timeoutId);
-  }, [needsReload]);
-
-  return { triggerReload: () => setNeedsReload(true) };
+  return { triggerReload };
 };
