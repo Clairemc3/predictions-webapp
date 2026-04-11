@@ -21,7 +21,6 @@ return new class extends Migration
 
             $table->unique(['question_id', 'position']);
             $table->unique(['question_id', 'entity_id']);
-            $table->index('question_id');
         });
     }
 
