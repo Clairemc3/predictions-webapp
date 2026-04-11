@@ -165,7 +165,7 @@ it('can chain includeEntityCount with filters', function () {
         ->filter('country', 'United Kingdom')
         ->get();
 
-    // Test that chaining works and returns a collection with entities_count
+    // Test that chaining works and returns a collection with entity_relationship_count
     expect($result)->toBeInstanceOf(Collection::class);
 
     // Each result should have the entity_relationship_count attribute
