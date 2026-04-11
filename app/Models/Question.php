@@ -89,6 +89,15 @@ class Question extends Model
         return $this->hasMany(QuestionResult::class)->orderBy('position');
     }
 
+    public function hasResult(int $position): bool
+    {
+        if ($this->relationLoaded('results')) {
+            return $this->results->contains('position', $position);
+        }
+
+        return $this->results()->where('position', $position)->exists();
+    }
+
     /**
      * Get the points for this question.
      */

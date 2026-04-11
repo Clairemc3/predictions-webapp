@@ -21,7 +21,7 @@ class PredictionsController extends Controller
 
         $questions = $season->questions;
 
-        $answers = $membership->answers()->get();
+        $answers = $membership->answers()->with('question.results')->get();
 
         $questionsResource = PredictionQuestionsResource::collection($questions);
 
@@ -61,7 +61,7 @@ class PredictionsController extends Controller
             'questions' => $groupedQuestions,
             'seasonName' => $season->name,
             'answers' => PredictionAnswerResource::collection(
-                $membership->answers()->with('entity')->get()
+                $membership->answers()->with('entity', 'question.results')->get()
             ),
         ]);
     }

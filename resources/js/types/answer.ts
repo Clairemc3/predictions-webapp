@@ -7,4 +7,7 @@ export interface Answer {
   entity_value?: string;
   entity_short_value?: string;
   entity_image_url?: string;
+  points?: number;
+  accuracy_level?: number | null;
+  has_a_result?: boolean;
 }

@@ -101,7 +101,9 @@ const ViewRanking: React.FC<ViewRankingProps> = ({
                 questionType="ranking"
                 shortDescription={answer.order.toString()}
                 value={getAnswerValue(answer)}
-                points={0}
+                points={answer.points}
+                accuracyLevel={answer.accuracy_level}
+                hasResult={answer.has_a_result}
                 icon={answer.entity_image_url}
               />
             </React.Fragment>
