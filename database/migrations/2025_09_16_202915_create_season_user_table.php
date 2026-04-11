@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('season_id')->constrained('seasons')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedInteger('number_of_answers')->default(0);
             $table->boolean('is_host')->default(false);
             $table->string('nickname')->nullable();
             $table->timestamp('joined_at')->nullable();
