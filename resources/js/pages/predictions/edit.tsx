@@ -2,12 +2,12 @@ import {
   Box,
   Typography,
   Paper,
-  LinearProgress,
 } from '@mui/material';
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Question from '../../components/Answering/Question';
 import Group from '../../components/Answering/Group';
+import ProgressBar from '../../components/Predictions/ProgressBar';
 
 interface Answer {
   id: number;
@@ -68,28 +68,7 @@ const PredictionsEdit = () => {
           </Typography>
           
           {/* Progress Bar */}
-          <Box sx={{ width: '100%', mt: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <Box sx={{ flex: 1, mr: 2 }}>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={completedPercentage} 
-                  sx={{ 
-                    height: 10, 
-                    borderRadius: 5,
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                    '& .MuiLinearProgress-bar': {
-                      borderRadius: 5,
-                      backgroundColor: completedPercentage === 100 ? 'success.main' : 'primary.main',
-                    }
-                  }}
-                />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ minWidth: 45 }}>
-                {Math.round(completedPercentage)}%
-              </Typography>
-            </Box>
-          </Box>
+          <ProgressBar completedPercentage={completedPercentage} />
         </Box>
 
         {/* Grouped Questions */}

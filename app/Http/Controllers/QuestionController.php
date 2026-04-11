@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuestionCreated;
+use App\Events\QuestionUpdated;
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
 use App\Http\Resources\SeasonResource;
@@ -49,6 +51,7 @@ class QuestionController extends Controller
             $question->fill($request->validated());
             $question->created_by = Auth::id();
             $question->answer_category_id = $questionType->answer_category_id;
+            $question->question_type_id = $questionType->id;
             $season->questions()->save($question);
 
             app(QuestionEntityPersistService::class)->syncEntities($question, $request->entities);
@@ -64,6 +67,8 @@ class QuestionController extends Controller
             return $question;
         });
 
+        QuestionCreated::dispatch($question);
+
         return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }
 
@@ -78,7 +83,7 @@ class QuestionController extends Controller
 
         return Inertia::render('seasons/questions/edit', [
             'season' => new SeasonResource($season),
-            'question' => $question->load(['entities', 'pointsValues']),
+            'question' => $question->load(['entities', 'pointsValues', 'questionType']),
             'questionTypes' => $questionTypes,
         ]);
     }
@@ -98,6 +103,7 @@ class QuestionController extends Controller
             if ($request->has('type')) {
                 $questionType = $this->questionTypeService->getModelByKey($request->input('type'));
                 $question->answer_category_id = $questionType->answer_category_id;
+                $question->question_type_id = $questionType->id;
             }
 
             $question->save();
@@ -115,6 +121,8 @@ class QuestionController extends Controller
                 );
             }
         });
+
+        QuestionUpdated::dispatch($question);
 
         return response()->redirectTo(route('seasons.manage', [$season, $question]));
     }

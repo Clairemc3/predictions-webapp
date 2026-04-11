@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\QuestionResult;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReorderQuestionResultsRequest extends FormRequest
@@ -14,6 +15,9 @@ class ReorderQuestionResultsRequest extends FormRequest
         return true; // Authorization handled in controller
     }
 
+    /** @var array<int> */
+    protected array $validResultIds = [];
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,7 +27,15 @@ class ReorderQuestionResultsRequest extends FormRequest
     {
         return [
             'updates' => ['required', 'array', 'min:1'],
-            'updates.*.result_id' => ['required', 'integer', 'exists:question_results,id'],
+            'updates.*.result_id' => [
+                'required',
+                'integer',
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    if (! in_array($value, $this->validResultIds, true)) {
+                        $fail('Result ID does not exist.');
+                    }
+                },
+            ],
             'updates.*.position' => ['required', 'integer', 'min:1'],
         ];
     }
@@ -39,9 +51,15 @@ class ReorderQuestionResultsRequest extends FormRequest
             'updates.required' => 'Updates array is required.',
             'updates.min' => 'At least one update is required.',
             'updates.*.result_id.required' => 'Each update must have a result ID.',
-            'updates.*.result_id.exists' => 'Result ID does not exist.',
             'updates.*.position.required' => 'Each update must have a position value.',
             'updates.*.position.min' => 'Position value must be at least 1.',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $submittedResultIds = collect($this->input('updates', []))->pluck('result_id')->filter()->unique();
+
+        $this->validResultIds = QuestionResult::whereIn('id', $submittedResultIds)->pluck('id')->all();
     }
 }

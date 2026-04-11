@@ -34,7 +34,7 @@ class SeasonManageController extends Controller
         // Eager load the sum to avoid an additional query
         $season->loadSum('questions', 'answer_count');
 
-        $season->load('questions');
+        $season->load('questions.questionType', 'questions.entities', 'questions.points');
 
         return Inertia::render('seasons/questions/index', [
             'season' => new SeasonResource($season),

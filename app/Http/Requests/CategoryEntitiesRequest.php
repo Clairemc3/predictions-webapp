@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -55,12 +56,7 @@ class CategoryEntitiesRequest extends FormRequest
      */
     private function isValidCategoryName(string $categoryName): bool
     {
-        $allowedCategories = ['country', 'football-league'];
-        if (! in_array($categoryName, $allowedCategories)) {
-            return false;
-        }
-
-        return true;
+        return in_array($categoryName, Category::FILTER_KEYS, strict: true);
     }
 
     public function validatedFilters(): array

@@ -6,9 +6,12 @@ use App\Enums\BaseQuestionType;
 use App\Models\Question;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreAnswerRequest extends FormRequest
 {
+    protected ?\App\Models\Question $resolvedQuestion = null;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -26,14 +29,29 @@ class StoreAnswerRequest extends FormRequest
     {
         $rules = [
             'membership_id' => 'required|integer|exists:season_user,id',
-            'question_id' => 'bail|required|integer|exists:questions,id',
-            'entity_id' => 'required|integer|exists:entities,id',
+            'question_id' => [
+                'bail',
+                'required',
+                'integer',
+                'exists:questions,id',
+                Rule::exists('question_season', 'question_id')->where(function ($query) {
+                    $member = \App\Models\SeasonMember::find($this->membership_id);
+                    $query->where('season_id', $member?->season_id);
+                }),
+            ],
+            'entity_id' => [
+                'bail',
+                'required',
+                'integer',
+                Rule::exists('category_entity', 'entity_id')->where(function ($query) {
+                    $query->where('category_id', $this->resolvedQuestion?->answer_category_id);
+                }),
+            ],
             'value' => 'required|string|max:255',
         ];
 
         // Only require order if the question base_type is 'ranking'
-        $question = Question::find($this->question_id);
-        if ($question->base_type === BaseQuestionType::Ranking->value) {
+        if ($this->resolvedQuestion?->base_type === BaseQuestionType::Ranking) {
             $rules['order'] = 'required|integer|min:1';
         } else {
             $rules['order'] = 'sometimes|integer|min:1';
@@ -53,5 +71,10 @@ class StoreAnswerRequest extends FormRequest
             'selected_entity_id' => 'entity',
             'order' => 'position',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->resolvedQuestion = Question::find($this->question_id);
     }
 }

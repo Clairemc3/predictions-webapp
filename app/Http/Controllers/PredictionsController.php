@@ -17,7 +17,7 @@ class PredictionsController extends Controller
 
         Gate::authorize('view', $membership);
 
-        $season = $membership->season()->with('questions.entities', 'questions.answerCategory')->first();
+        $season = $membership->season()->with('questions.entities', 'questions.answerCategory', 'questions.questionType')->first();
 
         $questions = $season->questions;
 
@@ -45,7 +45,7 @@ class PredictionsController extends Controller
 
         Gate::authorize('view', $membership);
 
-        $season = $membership->season()->with('questions.entities', 'questions.answerCategory')->first();
+        $season = $membership->season()->with('questions.entities', 'questions.answerCategory', 'questions.questionType')->first();
 
         $questions = $season->questions;
 

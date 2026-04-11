@@ -31,7 +31,7 @@ class SeasonQuestionResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->getTitle(),
-            'type' => $this->type,
+            'type' => $this->questionType->key,
             'answer_count' => $this->answer_count,
             'base_type' => $this->base_type,
             'points_values' => $this->points->map(fn ($point) => [
@@ -51,7 +51,7 @@ class SeasonQuestionResource extends JsonResource
         if ($this->base_type === BaseQuestionType::Ranking) {
             $entity = $this->entities->first();
             if ($entity) {
-                return $entity->value.' '.ucfirst($this->type);
+                return $entity->value.' '.ucfirst($this->questionType->key);
             }
         }
 

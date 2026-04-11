@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Answer;
 use App\Models\Entity;
 use App\Models\Question;
 use App\Models\SeasonMember;
@@ -26,6 +27,13 @@ class AnswerFactory extends Factory
             'value' => fake()->optional()->word(),
             'order' => 0,
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Answer $answer) {
+            $answer->entity->categories()->syncWithoutDetaching([$answer->question->answer_category_id]);
+        });
     }
 
     /**

@@ -28,7 +28,7 @@ class AnswerController extends Controller
             [
                 'season_user_id' => $membership->id,
                 'question_id' => $validated['question_id'],
-                'order' => $validated['order'] ?? null,
+                'order' => $validated['order'] ?? 1,
             ],
             [
                 'entity_id' => $validated['entity_id'],

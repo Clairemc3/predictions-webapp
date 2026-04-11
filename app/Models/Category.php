@@ -15,6 +15,8 @@ class Category extends Model
      *
      * @var array<int, string>
      */
+    public const FILTER_KEYS = ['country', 'football-league'];
+
     protected $fillable = [
         'name',
     ];

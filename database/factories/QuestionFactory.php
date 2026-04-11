@@ -5,9 +5,9 @@ namespace Database\Factories;
 use App\Enums\BaseQuestionType;
 use App\Models\Category;
 use App\Models\Question;
+use App\Models\QuestionType;
 use App\Models\User;
 use App\Queries\EntityQuery;
-use App\Services\QuestionTypeService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,8 +25,21 @@ class QuestionFactory extends Factory
         $footballTeamCategory = Category::where('name', 'football-team')->first()
             ?? Category::factory()->create(['name' => 'football-team']);
 
+        $questionType = QuestionType::firstOrCreate(
+            ['application_context' => 'uk_football', 'key' => 'standings'],
+            [
+                'base_type' => 'ranking',
+                'label' => 'League Standings',
+                'short_description' => 'Predict the final standings',
+                'description' => 'Predict the final league standings for the season',
+                'answer_category_id' => $footballTeamCategory->id,
+                'is_active' => true,
+                'display_order' => 0,
+            ]
+        );
+
         return [
-            'type' => 'standings',
+            'question_type_id' => $questionType->id,
             'base_type' => BaseQuestionType::Ranking,
             'title' => $this->faker->sentence(4),
             'short_title' => $this->faker->words(3, true),
@@ -43,8 +56,12 @@ class QuestionFactory extends Factory
     {
         $footballTeamCategory = Category::where('name', 'football-team')->first();
 
+        $questionType = QuestionType::where('key', 'standings')
+            ->where('application_context', 'uk_football')
+            ->first();
+
         return $this->state(fn (array $attributes) => [
-            'type' => 'standings',
+            'question_type_id' => $questionType?->id ?? $attributes['question_type_id'],
             'base_type' => BaseQuestionType::Ranking,
             'title' => $this->faker->randomElement([
                 'Premier League Final Standings',
@@ -83,9 +100,7 @@ class QuestionFactory extends Factory
 
     private function attachQuestionEntities(Question $question): void
     {
-        $questionTypeService = app(QuestionTypeService::class);
-
-        $questionType = $questionTypeService->getModelByKey($question->type);
+        $questionType = $question->questionType()->with(['answerFilters.category'])->first();
 
         if (! $questionType || $questionType->answerFilters->isEmpty()) {
             return;
