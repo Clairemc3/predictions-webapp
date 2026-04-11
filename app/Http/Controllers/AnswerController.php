@@ -38,6 +38,8 @@ class AnswerController extends Controller
         $answerEvent = $answer->wasRecentlyCreated ? AnswerCreated::class : AnswerUpdated::class;
         event(new $answerEvent($answer, $membership));
 
+        $answer->loadMissing('question.results');
+
         return response()->json([
             'success' => true,
             'answer' => new PredictionAnswerResource($answer),
