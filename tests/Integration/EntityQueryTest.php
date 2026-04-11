@@ -200,7 +200,7 @@ it('works correctly with different categories for includeEntityCount', function 
 
     expect($result)->toHaveCount(5); // 3 original + 2 new
 
-    // entity1 manages childOfEntity1 (which is in category1), so its count should be 1
+    // entity1 is the parent of childOfEntity1 (which is in category1), so its count should be 1
     $entityInCategory1 = $result->first(fn ($entity) => $entity->id === $entity1->id);
     expect($entityInCategory1->entity_relationship_count)->toBe(1);
 
