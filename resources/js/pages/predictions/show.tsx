@@ -59,12 +59,13 @@ const PredictionsShow = () => {
         {/* Grouped Questions */}
         {questions && Object.keys(questions).length > 0 ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            {Object.entries(questions).map(([groupHeading, groupQuestions]) => (
+            {Object.entries(questions).map(([groupHeading, groupQuestions], index) => (
               <Group 
                 key={groupHeading} 
                 groupHeading={groupHeading} 
                 questions={groupQuestions}
                 answers={answers}
+                isFirstGroup={index === 0}
               />
             ))}
           </Box>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Ranking from './Ranking';
+import EntitySelection from './EntitySelection';
 import { Answer } from '../../types/answer';
 
 interface Entity {
@@ -22,20 +23,29 @@ interface RankingQuestion extends BaseQuestion {
   base_type: 'ranking';
 }
 
-interface OtherQuestion extends BaseQuestion {
-  base_type: Exclude<string, 'ranking'>;
+interface EntitySelectionQuestion extends BaseQuestion {
+  base_type: 'entity_selection';
 }
 
-type QuestionData = RankingQuestion | OtherQuestion;
+interface OtherQuestion extends BaseQuestion {
+  base_type: Exclude<string, 'ranking' | 'entity_selection'>;
+}
+
+type QuestionData = RankingQuestion | EntitySelectionQuestion | OtherQuestion;
 
 interface ViewQuestionProps {
   question: QuestionData;
   answers: Answer[];
+  showPtsHeading?: boolean;
 }
 
-const ViewQuestion: React.FC<ViewQuestionProps> = ({ question, answers }) => {
+const ViewQuestion: React.FC<ViewQuestionProps> = ({ question, answers, showPtsHeading = false }) => {
   const isRankingQuestion = (q: QuestionData): q is RankingQuestion => {
     return q.base_type === 'ranking';
+  };
+
+  const isEntitySelectionQuestion = (q: QuestionData): q is EntitySelectionQuestion => {
+    return q.base_type === 'entity_selection';
   };
 
   return (
@@ -44,9 +54,17 @@ const ViewQuestion: React.FC<ViewQuestionProps> = ({ question, answers }) => {
       {isRankingQuestion(question) && (
         <Ranking 
           heading={question.type}
+          answers={answers}
+          showPtsHeading={showPtsHeading}
+        />
+      )}
+      {isEntitySelectionQuestion(question) && (
+        <EntitySelection
+          heading={question.title}
+          short_title={question.short_title}
           answer_count={question.answer_count}
           answers={answers}
-          entities={question.entities}
+          showPtsHeading={showPtsHeading}
         />
       )}
     </>

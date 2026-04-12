@@ -25,18 +25,22 @@ const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription,
           borderRadius: 1,
           display: 'flex',
           alignItems: 'center',
-          gap: { xs: 0.5, sm: 1 },
+          gap: questionType === 'entity_selection' ? { xs: 1.5, sm: 2 } : { xs: 0.5, sm: 1 },
         }}
       >
         {/* Short Description/Position */}
         <Typography
           sx={{
             fontWeight: 700,
-            fontSize: '0.875rem',
+            fontSize: questionType === 'entity_selection' ? '0.75rem' : '0.875rem',
             minWidth: { xs: 25, sm: 40 },
+            maxWidth: 60,
+            whiteSpace: 'normal',
+            lineHeight: 1.2,
+            textTransform: 'uppercase',
           }}
         >
-          {shortDescription}.
+          {shortDescription}
         </Typography>
 
         {/* Icon */}
