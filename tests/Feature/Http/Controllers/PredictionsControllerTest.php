@@ -47,7 +47,10 @@ test('show page includes entity_selection questions for active season', function
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->component('predictions/show')
-        ->has('questions')
+        ->where('questions', fn ($grouped) => collect($grouped)
+            ->flatten(1)
+            ->contains(fn ($q) => $q['id'] === $question->id && $q['base_type'] === BaseQuestionType::EntitySelection->value)
+        )
     );
 });
 
@@ -69,7 +72,10 @@ test('show page includes ranking questions for active season', function () {
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->component('predictions/show')
-        ->has('questions')
+        ->where('questions', fn ($grouped) => collect($grouped)
+            ->flatten(1)
+            ->contains(fn ($q) => $q['id'] === $question->id && $q['base_type'] === BaseQuestionType::Ranking->value)
+        )
     );
 });
 
@@ -127,7 +133,10 @@ test('edit page includes entity_selection questions for active season', function
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->component('predictions/edit')
-        ->has('questions')
+        ->where('questions', fn ($grouped) => collect($grouped)
+            ->flatten(1)
+            ->contains(fn ($q) => $q['id'] === $question->id && $q['base_type'] === BaseQuestionType::EntitySelection->value)
+        )
     );
 });
 
