@@ -18,12 +18,13 @@ import {
   VisibilityOff,
   InfoOutlined
 } from '@mui/icons-material';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import GuestLayout from '../../layouts/GuestLayout';
 import TextLink from '../../components/TextLink';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { isLocal } = usePage<{ isLocal: boolean }>().props;
   const { data, setData, post, processing, errors } = useForm({
     email: '',
     password: '',
@@ -147,6 +148,19 @@ const Login = () => {
               >
                 {processing ? 'Signing In...' : 'Sign In'}
               </Button>
+
+              {isLocal && (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="warning"
+                  disabled={processing}
+                  onClick={() => post('/dev/login-as-admin')}
+                  sx={{ mb: 2, fontSize: '0.875rem' }}
+                >
+                  Sign in as admin (local only)
+                </Button>
+              )}
 
             <Box sx={{ textAlign: 'center', mb: 2 }}>
             <Typography

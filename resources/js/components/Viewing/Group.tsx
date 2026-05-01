@@ -23,9 +23,10 @@ interface ViewGroupProps {
   groupHeading: string;
   questions: Question[];
   answers: Answer[];
+  isFirstGroup?: boolean;
 }
 
-const ViewGroup: React.FC<ViewGroupProps> = ({ groupHeading, questions, answers }) => {
+const ViewGroup: React.FC<ViewGroupProps> = ({ groupHeading, questions, answers, isFirstGroup = false }) => {
   const getAnswersByQuestionId = (questionId: number): Answer[] => {
     return answers.filter(answer => answer.question_id === questionId);
   };
@@ -50,11 +51,12 @@ const ViewGroup: React.FC<ViewGroupProps> = ({ groupHeading, questions, answers 
           }}
         >
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            {questions.map((question) => (
+            {questions.map((question, index) => (
               <Question 
                 key={question.id} 
                 question={question}
                 answers={getAnswersByQuestionId(question.id)}
+                showPtsHeading={isFirstGroup && index === 0}
               />
             ))}
           </Box>

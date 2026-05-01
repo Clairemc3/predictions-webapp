@@ -59,6 +59,7 @@ const EntityInput: React.FC<EntityInputProps> = ({
           inputValue={inputValue}
           onInputChange={(_, value) => setInputValue(value)}
           open={inputValue.length > 0}
+          forcePopupIcon={false}
           filterOptions={(options, { inputValue: query }) =>
             options.filter((o) => o.name.toLowerCase().includes(query.toLowerCase()))
           }
