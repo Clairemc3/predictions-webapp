@@ -9,7 +9,7 @@ import { Answer } from '../../types/answer';
 
 interface ViewEntitySelectionProps {
   heading: string;
-  short_title: string;
+  short_title: string | null;
   answer_count: number;
   answers?: Answer[];
   showPtsHeading?: boolean;
@@ -89,7 +89,7 @@ const ViewEntitySelection: React.FC<ViewEntitySelectionProps> = ({
             <React.Fragment key={answer.id}>
               <AnswerCard
                 questionType="entity_selection"
-                shortDescription={short_title}
+                shortDescription={short_title ?? ''}
                 value={getAnswerValue(answer)}
                 points={answer.points}
                 accuracyLevel={answer.accuracy_level}

@@ -11,7 +11,7 @@ interface Entity {
 interface BaseQuestion {
   id: number;
   title: string;
-  short_title: string;
+  short_title: string | null;
   type: string;
   answer_count: number;
   entities?: Entity[];
