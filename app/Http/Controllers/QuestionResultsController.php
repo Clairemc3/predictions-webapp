@@ -61,10 +61,14 @@ class QuestionResultsController extends Controller
         Gate::authorize('create', [QuestionResult::class, $question, $season]);
 
         $validated = $request->validate([
-            'position' => 'required|integer|min:1',
+            'position' => 'nullable|integer|min:1',
             'result' => 'nullable|string|max:255',
             'entity_id' => 'required|exists:entities,id',
         ]);
+
+        if (! isset($validated['position'])) {
+            $validated['position'] = ($question->results()->max('position') ?? 0) + 1;
+        }
 
         $question->results()->create($validated);
 

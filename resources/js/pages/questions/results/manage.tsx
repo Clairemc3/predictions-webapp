@@ -12,6 +12,7 @@ import SeasonManageLayout from '../../../layouts/SeasonManageLayout';
 import { QuestionRow, Season } from '../../../types/season';
 import { route } from '../../../lib/routes';
 import RankingResultsManager from '../../../components/Results/RankingResultsManager';
+import EntitySelectionResultsManager from '../../../components/Results/EntitySelectionResultsManager';
 import ScoringChips from '../../../components/Results/ScoringChips';
 import ConfirmationDialog from '../../../components/ConfirmationDialog';
 
@@ -99,7 +100,7 @@ const ManageQuestionResults = () => {
             Back to Questions
           </Button>
           
-          {isRankingType && results.length > 0 && (
+          {results.length > 0 && (
             <Button
               variant="contained"
               color="primary"
@@ -123,49 +124,61 @@ const ManageQuestionResults = () => {
             />
           </Box>
 
-          {/* Scoring Chips */}
+          {/* Scoring Chips — proximity scoring only applies to ranking questions */}
           {isRankingType && question.points_values && (
             <ScoringChips pointsValues={question.points_values} />
           )}
 
           <Typography variant="body2" color="text.secondary">
-            {isRankingType ? 'Drag and drop to reorder the results' : 'Results management'}
+            {isRankingType ? 'Drag and drop to reorder the standings' : 'Search and add the correct results'}
           </Typography>
         </Box>
 
-        {!isRankingType ? (
-          <Alert severity="info">
-            Results management is only available for ranking questions.
-          </Alert>
-        ) : availableOptions.length === 0 ? (
+        {availableOptions.length === 0 ? (
           <Alert severity="info">
             No options available for this question.
           </Alert>
-        ) : (
+        ) : isRankingType ? (
           <RankingResultsManager
             questionId={question.id}
             seasonId={season.id}
             answerCount={count_of_results}
             results={results}
             availableOptions={availableOptions}
-            resultsStoreRoute={route('seasons.questions.results.store', { 
-              season: season.id, 
-              question: question.id 
-            })}
-            resultsUpdateRoute={route('seasons.questions.results.update', { 
-              season: season.id, 
+            resultsStoreRoute={route('seasons.questions.results.store', {
+              season: season.id,
               question: question.id,
-              result: '{result}'
+            })}
+            resultsUpdateRoute={route('seasons.questions.results.update', {
+              season: season.id,
+              question: question.id,
+              result: '{result}',
             })}
             resultsReorderRoute={route('seasons.questions.results.reorder', {
               season: season.id,
-              question: question.id
+              question: question.id,
             })}
-            resultsDestroyRoute={(resultId: number) => 
-              route('seasons.questions.results.destroy', { 
-                season: season.id, 
-                question: question.id, 
-                result: resultId 
+            resultsDestroyRoute={(resultId: number) =>
+              route('seasons.questions.results.destroy', {
+                season: season.id,
+                question: question.id,
+                result: resultId,
+              })
+            }
+          />
+        ) : (
+          <EntitySelectionResultsManager
+            results={results}
+            availableOptions={availableOptions}
+            resultsStoreRoute={route('seasons.questions.results.store', {
+              season: season.id,
+              question: question.id,
+            })}
+            resultsDestroyRoute={(resultId: number) =>
+              route('seasons.questions.results.destroy', {
+                season: season.id,
+                question: question.id,
+                result: resultId,
               })
             }
           />
