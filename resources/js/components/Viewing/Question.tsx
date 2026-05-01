@@ -53,7 +53,7 @@ const ViewQuestion: React.FC<ViewQuestionProps> = ({ question, answers, showPtsH
       {/* Display component based on base_type */}
       {isRankingQuestion(question) && (
         <Ranking 
-          heading={question.type}
+          heading={question.title}
           answers={answers}
           showPtsHeading={showPtsHeading}
         />
