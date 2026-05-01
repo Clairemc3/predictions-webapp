@@ -129,7 +129,7 @@ const ManageQuestionResults = () => {
           )}
 
           <Typography variant="body2" color="text.secondary">
-            {isRankingType ? 'Drag and drop to reorder the standings' : 'Results management'}
+            {isRankingType ? 'Drag and drop to reorder the results' : 'Results management'}
           </Typography>
         </Box>
 
