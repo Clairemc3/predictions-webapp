@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Enums\Role;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +23,7 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('auth/login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => $request->session()->get('status'),
+            'isLocal' => app()->isLocal(),
         ]);
     }
 
@@ -30,6 +33,22 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('profile', absolute: false));
+    }
+
+    /**
+     * Sign in as the first superadmin user (local environment only).
+     */
+    public function loginAsAdmin(Request $request): RedirectResponse
+    {
+        abort_unless(app()->isLocal(), 403);
+
+        $admin = User::role(Role::SuperAdmin->value)->firstOrFail();
+
+        Auth::login($admin);
 
         $request->session()->regenerate();
 

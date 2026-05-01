@@ -17,6 +17,11 @@ Route::middleware('guest')->withoutMiddleware('verified')->group(function () {
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    if (app()->isLocal()) {
+        Route::post('dev/login-as-admin', [AuthenticatedSessionController::class, 'loginAsAdmin'])
+            ->name('dev.login-as-admin');
+    }
 });
 
 // Email Verification Routes
