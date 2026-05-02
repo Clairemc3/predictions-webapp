@@ -14,6 +14,7 @@ use App\Services\PositionReorderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -66,11 +67,17 @@ class QuestionResultsController extends Controller
             'entity_id' => 'required|exists:entities,id',
         ]);
 
-        if (! isset($validated['position'])) {
-            $validated['position'] = ($question->results()->max('position') ?? 0) + 1;
-        }
+        DB::transaction(function () use ($question, $validated) {
+            if (! isset($validated['position'])) {
+                // Lock rows to prevent race condition on position calculation
+                $validated['position'] = $question->results()
+                    ->lockForUpdate()
+                    ->max('position') ?? 0;
+                $validated['position']++;
+            }
 
-        $question->results()->create($validated);
+            $question->results()->create($validated);
+        });
 
         return redirect()->back()->with('success', 'Result added successfully');
     }
