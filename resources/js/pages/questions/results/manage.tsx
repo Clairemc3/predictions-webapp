@@ -167,6 +167,8 @@ const ManageQuestionResults = () => {
             }
           />
         ) : (
+          // All non-ranking questions are entity_selection type
+          // If new base types are added, this branch will need updating
           <EntitySelectionResultsManager
             results={results}
             availableOptions={availableOptions}
