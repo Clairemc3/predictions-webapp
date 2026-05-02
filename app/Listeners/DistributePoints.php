@@ -29,7 +29,10 @@ class DistributePoints
      */
     private function distributeExactMatchPoints(Question $question, Season $season): void
     {
-        $resultEntityIds = $question->results()->pluck('entity_id');
+        // All question results have entity_id (required for all question types)
+        $resultEntityIds = $question->results()
+            ->whereNotNull('entity_id')
+            ->pluck('entity_id');
         $pointsScheme = $question->points()->where('accuracy_level', 0)->first();
 
         if (! $pointsScheme || $resultEntityIds->isEmpty()) {
