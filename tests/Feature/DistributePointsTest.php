@@ -4,6 +4,7 @@ use App\Enums\BaseQuestionType;
 use App\Enums\ScoringTypes;
 use App\Events\QuestionLocked;
 use App\Models\Answer;
+use App\Models\Entity;
 use App\Models\Question;
 use App\Models\QuestionPoint;
 use App\Models\QuestionResult;
@@ -109,12 +110,14 @@ it('does not award points to incorrect entity selections for exact_match questio
 
     QuestionPoint::factory()->for($question)->create(['accuracy_level' => 0, 'value' => 5]);
 
-    QuestionResult::factory()->atPosition(1)->for($question)->create();
+    $result = QuestionResult::factory()->atPosition(1)->for($question)->create();
 
-    // Answer for a different entity (not in results)
+    // Create a different entity (not in results) and explicitly set it
+    $wrongEntity = Entity::factory()->create();
     $wrongAnswer = Answer::factory()->create([
         'question_id' => $question->id,
         'season_user_id' => $member->id,
+        'entity_id' => $wrongEntity->id,
         'order' => 1,
     ]);
 
