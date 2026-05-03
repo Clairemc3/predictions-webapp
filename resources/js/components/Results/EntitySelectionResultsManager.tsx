@@ -39,8 +39,8 @@ const EntitySelectionResultsManager: React.FC<EntitySelectionResultsManagerProps
   resultsStoreRoute,
   resultsDestroyRoute,
 }) => {
-  const addedEntityIds = results.map((r) => r.entity_id);
-  const remainingOptions = availableOptions.filter((e) => !addedEntityIds.includes(e.id));
+  const addedEntityIds = new Set(results.map((r) => r.entity_id));
+  const remainingOptions = availableOptions.filter((e) => !addedEntityIds.has(e.id));
 
   const handleAdd = (entity: Entity | null) => {
     if (!entity) {
