@@ -67,28 +67,27 @@ const PredictionsShow = () => {
         }}
       >
         {/* Header with Profile Picture */}
-        <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <Avatar
             src={user.image_url || undefined}
             alt={user.name}
             sx={{
-              width: 80,
-              height: 80,
+              width: 100,
+              height: 100,
               bgcolor: 'primary.main',
-              fontSize: '1.5rem',
+              fontSize: '2rem',
               fontWeight: 'bold',
+              mb: 2,
             }}
           >
             {!user.image_url && getInitials(user.name)}
           </Avatar>
-          <Box>
-            <Typography variant="h4" component="h1" gutterBottom>
-              {user.name}'s Predictions
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              {seasonName}
-            </Typography>
-          </Box>
+          <Typography variant="h5" component="h1" color="text.secondary" gutterBottom>
+            {user.name}
+          </Typography>
+          <Typography variant="h4" component="h2" color="primary">
+            {seasonName}
+          </Typography>
         </Box>
 
         {/* Grouped Questions */}

@@ -118,9 +118,9 @@ class ImageService
     {
         $modelName = Str::snake(class_basename($model));
         $extension = $file->getClientOriginalExtension();
-        $timestamp = now()->timestamp;
+        $uniqueId = uniqid('', true);
 
-        return "{$modelName}_{$model->id}_{$timestamp}.{$extension}";
+        return "{$modelName}_{$model->id}_{$uniqueId}.{$extension}";
     }
 
     /**

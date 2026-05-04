@@ -13,6 +13,8 @@ require __DIR__.'/answers.php';
 // Profile route with authentication and email verification middleware
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::post('/profile/picture', [ProfileController::class, 'uploadProfilePicture'])->name('profile.picture.upload');
+    Route::delete('/profile/picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.picture.delete');
 });
 
 // Home route - redirect guests to login, authenticated users to profile

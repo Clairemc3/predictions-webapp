@@ -1,5 +1,6 @@
-import React from 'react';
-import { Head, usePage } from '@inertiajs/react';
+import React, { useRef, useState } from 'react';
+import { Head, usePage, router } from '@inertiajs/react';
+import { route } from '../lib/routes';
 import {
   Box,
   Card,
@@ -7,7 +8,18 @@ import {
   Typography,
   Avatar,
   Divider,
+  IconButton,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from '@mui/material';
+import { PhotoCamera, Delete, Close } from '@mui/icons-material';
 import AuthLayout from '../layouts/AuthLayout';
 
 interface User {
@@ -17,15 +29,22 @@ interface User {
   email_verified_at?: string;
   created_at: string;
   updated_at: string;
+  image_url: string | null;
 }
 
 interface ProfileProps {
   user: User;
+  message?: string;
   [key: string]: any;
 }
 
 const Profile = () => {
-  const { user } = usePage<ProfileProps>().props;
+  const { user, message } = usePage<ProfileProps>().props;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(!!message);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -44,6 +63,75 @@ const Profile = () => {
       .slice(0, 2);
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      alert('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    setUploading(true);
+
+    // Upload using Inertia
+    router.post(
+      route('profile.picture.upload'),
+      { profile_picture: file },
+      {
+        onSuccess: () => {
+          setUploading(false);
+          setShowSuccess(true);
+        },
+        onError: (errors) => {
+          setUploading(false);
+          alert(errors.profile_picture || 'Failed to upload profile picture');
+        },
+        preserveScroll: true,
+      }
+    );
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setDeleteDialogOpen(false);
+    setDeleting(true);
+
+    router.delete(
+      route('profile.picture.delete'),
+      {
+        onSuccess: () => {
+          setDeleting(false);
+          setShowSuccess(true);
+        },
+        onError: () => {
+          setDeleting(false);
+          alert('Failed to delete profile picture');
+        },
+        preserveScroll: true,
+      }
+    );
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+  };
+
   return (
     <AuthLayout>
       <Head title="Profile" />
@@ -57,18 +145,86 @@ const Profile = () => {
           </Box>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
-            <Avatar
-              sx={{
-                width: 80,
-                height: 80,
-                mb: 2,
-                bgcolor: 'primary.main',
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-              }}
-            >
-              {getInitials(user.name)}
-            </Avatar>
+            <Box sx={{ position: 'relative' }}>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                onChange={handleFileChange}
+              />
+              <Avatar
+                src={user.image_url || undefined}
+                alt={user.name}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  mb: 2,
+                  bgcolor: 'primary.main',
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    opacity: 0.8,
+                  },
+                }}
+                onClick={handleAvatarClick}
+              >
+                {!user.image_url && getInitials(user.name)}
+              </Avatar>
+              <IconButton
+                onClick={handleAvatarClick}
+                disabled={uploading}
+                sx={{
+                  position: 'absolute',
+                  bottom: 10,
+                  right: -5,
+                  bgcolor: 'primary.main',
+                  color: 'white',
+                  width: 32,
+                  height: 32,
+                  '&:hover': {
+                    bgcolor: 'primary.dark',
+                  },
+                  '&.Mui-disabled': {
+                    bgcolor: 'grey.400',
+                  },
+                }}
+              >
+                {uploading ? (
+                  <CircularProgress size={16} sx={{ color: 'white' }} />
+                ) : (
+                  <PhotoCamera sx={{ fontSize: 16 }} />
+                )}
+              </IconButton>
+              {user.image_url && (
+                <IconButton
+                  onClick={handleDeleteClick}
+                  disabled={deleting || uploading}
+                  sx={{
+                    position: 'absolute',
+                    bottom: 10,
+                    left: -5,
+                    bgcolor: 'error.main',
+                    color: 'white',
+                    width: 32,
+                    height: 32,
+                    '&:hover': {
+                      bgcolor: 'error.dark',
+                    },
+                    '&.Mui-disabled': {
+                      bgcolor: 'grey.400',
+                    },
+                  }}
+                >
+                  {deleting ? (
+                    <CircularProgress size={16} sx={{ color: 'white' }} />
+                  ) : (
+                    <Delete sx={{ fontSize: 16 }} />
+                  )}
+                </IconButton>
+              )}
+            </Box>
             <Typography variant="h5" gutterBottom>
               {user.name}
             </Typography>
@@ -114,6 +270,41 @@ const Profile = () => {
           </Box>
         </CardContent>
       </Card>
+
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={4000}
+        onClose={() => setShowSuccess(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setShowSuccess(false)} severity="success" sx={{ width: '100%' }}>
+          {message || 'Profile picture updated successfully!'}
+        </Alert>
+      </Snackbar>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">
+          Delete Profile Picture?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            Are you sure you want to delete your profile picture? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AuthLayout>
   );
 };
