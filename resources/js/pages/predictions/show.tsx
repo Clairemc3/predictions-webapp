@@ -3,6 +3,7 @@ import {
   Box,
   Typography,
   Paper,
+  Avatar,
 } from '@mui/material';
 import { Head, usePage } from '@inertiajs/react';
 import AuthLayout from '../../layouts/AuthLayout';
@@ -11,6 +12,11 @@ import { Answer } from '../../types/answer';
 
 interface PageProps extends Record<string, any> {
   membershipId: number;
+  user: {
+    id: number;
+    name: string;
+    image_url: string | null;
+  };
   questions: Record<string, Question[]>; // Grouped questions by key (e.g., "Championship", "Premier League")
   answers: Answer[];
   completedPercentage: number;
@@ -33,7 +39,16 @@ interface Question {
 }
 
 const PredictionsShow = () => {
-  const { questions, answers, seasonName } = usePage<PageProps>().props;
+  const { questions, answers, seasonName, user } = usePage<PageProps>().props;
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <AuthLayout>
@@ -51,9 +66,29 @@ const PredictionsShow = () => {
           WebkitOverflowScrolling: 'touch',
         }}
       >
-        {/* Header */}
-        <Box sx={{ mb: 4 }}>
-          Profile picture will go here
+        {/* Header with Profile Picture */}
+        <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Avatar
+            src={user.image_url || undefined}
+            alt={user.name}
+            sx={{
+              width: 80,
+              height: 80,
+              bgcolor: 'primary.main',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+            }}
+          >
+            {!user.image_url && getInitials(user.name)}
+          </Avatar>
+          <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+              {user.name}'s Predictions
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              {seasonName}
+            </Typography>
+          </Box>
         </Box>
 
         {/* Grouped Questions */}

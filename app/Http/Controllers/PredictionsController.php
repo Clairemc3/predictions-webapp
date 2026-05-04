@@ -41,7 +41,7 @@ class PredictionsController extends Controller
     // Show predictions for a given membership
     public function show($membershipId)
     {
-        $membership = SeasonMember::findOrFail($membershipId);
+        $membership = SeasonMember::with('user.image')->findOrFail($membershipId);
 
         Gate::authorize('view', $membership);
 
@@ -58,6 +58,11 @@ class PredictionsController extends Controller
 
         return Inertia::render('predictions/show', [
             'membershipId' => $membershipId,
+            'user' => [
+                'id' => $membership->user->id,
+                'name' => $membership->user->name,
+                'image_url' => $membership->user->getImageUrl(),
+            ],
             'questions' => $groupedQuestions,
             'seasonName' => $season->name,
             'answers' => PredictionAnswerResource::collection(
