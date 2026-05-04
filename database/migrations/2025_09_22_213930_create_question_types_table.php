@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('answer_category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->string('answer_count_label')->nullable();
             $table->text('answer_count_helper_text')->nullable();
+            $table->unsignedInteger('fixed_answer_count')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('display_order')->default(0);
             $table->timestamps();

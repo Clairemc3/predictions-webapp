@@ -21,6 +21,7 @@ class QuestionType extends Model
         'answer_category_id',
         'answer_count_label',
         'answer_count_helper_text',
+        'fixed_answer_count',
         'is_active',
         'display_order',
     ];
@@ -28,6 +29,7 @@ class QuestionType extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'display_order' => 'integer',
+        'fixed_answer_count' => 'integer',
     ];
 
     public function answerCategory(): BelongsTo

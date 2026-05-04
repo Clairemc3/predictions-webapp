@@ -72,6 +72,16 @@ abstract class QuestionRequest extends FormRequest
             ]);
         }
 
+        // Auto-set answer_count if question type has a fixed answer count
+        if ($this->has('type') && ! $this->filled('answer_count')) {
+            $questionType = $this->questionTypeService->getModelByKey($this->input('type'));
+            if ($questionType && $questionType->fixed_answer_count) {
+                $this->merge([
+                    'answer_count' => $questionType->fixed_answer_count,
+                ]);
+            }
+        }
+
         if ($this->has('entities')) {
             $entities = array_filter($this->input('entities'), function ($entity) {
                 return ! empty($entity['entity_id']) && ! empty($entity['category_id']);

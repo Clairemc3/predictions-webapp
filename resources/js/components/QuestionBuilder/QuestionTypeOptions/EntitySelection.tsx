@@ -29,8 +29,9 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
 }) => {
   const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
 
-  const hasAnswerCount = Boolean(currentAnswerCount);
+  const hasAnswerCount = Boolean(currentAnswerCount) || Boolean(selectedQuestionType?.fixedAnswerCount);
   const hasScoringType = Boolean(currentScoringType);
+  const shouldShowAnswerCountField = maxAnswerCount !== undefined && !selectedQuestionType?.fixedAnswerCount;
 
   const handleEntityChange = (count: number) => {
     setMaxAnswerCount(count);
@@ -76,10 +77,9 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
         </Box>
       )}
 
-      {/* Number to predict field - only show once an entity has been selected */}
-      {maxAnswerCount !== undefined && (
-        <>
-          <AnswerCount
+      {/* Number to predict field - only show once an entity has been selected AND no fixedAnswerCount */}
+      {shouldShowAnswerCountField && (
+        <AnswerCount
             label={selectedQuestionType?.answerCountLabel || undefined}
             helperText={selectedQuestionType?.answerCountHelperText || undefined}
             required={true}
@@ -89,9 +89,13 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
             currentAnswerCount={currentAnswerCount}
             maxValue={maxAnswerCount}
             showAll={false}
+            fixedAnswerCount={selectedQuestionType?.fixedAnswerCount}
           />
-          {hasAnswerCount && (
-            <>
+      )}
+
+      {/* Scoring and points - show when answer count exists (including fixed) */}
+      {hasAnswerCount && (
+        <>
               <ScoringOption
                 options={selectedQuestionType?.scoringTypes || []}
                 required={true}
@@ -109,8 +113,6 @@ const EntitySelection: React.FC<EntitySelectionExtendedProps> = ({
                   errors={errors}
                 />
               )}
-            </>
-          )}
         </>
       )}
     </Box>

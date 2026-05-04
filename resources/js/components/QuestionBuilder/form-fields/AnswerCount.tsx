@@ -21,6 +21,7 @@ interface AnswerCountProps {
   setData?: (callback: (prevData: QuestionFormData) => QuestionFormData) => void;
   currentAnswerCount?: number | string;
   showAll?: boolean;
+  fixedAnswerCount?: number | null;
 }
 
 const AnswerCount: React.FC<AnswerCountProps> = ({
@@ -33,6 +34,7 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
   setData,
   currentAnswerCount,
   showAll = true,
+  fixedAnswerCount,
 }) => {
   // Determine current values based on currentAnswerCount
   const currentIsAll = currentAnswerCount === maxValue;
@@ -72,11 +74,13 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
           {label}
         </FormLabel>
         <FormHelperText sx={{ mb: 2 }}>
-          {errorText || helperText}
+          {fixedAnswerCount 
+            ? `This question type has a fixed answer count of ${fixedAnswerCount}` 
+            : (errorText || helperText)}
         </FormHelperText>
         
         <FormGroup>
-          {showAll && (
+          {showAll && !fixedAnswerCount && (
             <FormControlLabel
               control={
                 <Checkbox
@@ -96,7 +100,7 @@ const AnswerCount: React.FC<AnswerCountProps> = ({
             type="number"
             value={currentNumberValue}
             onChange={handleNumberChange}
-            disabled={(showAll && currentIsAll) || !maxValue}
+            disabled={!!fixedAnswerCount || (showAll && currentIsAll) || !maxValue}
             required={required && !(showAll && currentIsAll)}
             error={error && !(showAll && currentIsAll) && !currentNumberValue}
             slotProps={{

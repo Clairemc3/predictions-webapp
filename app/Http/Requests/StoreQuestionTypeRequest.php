@@ -34,6 +34,7 @@ class StoreQuestionTypeRequest extends FormRequest
             'answer_category_id' => 'required|exists:categories,id',
             'answer_count_label' => 'required_if:base_type,'.BaseQuestionType::Ranking->value.'|nullable|string|max:255',
             'answer_count_helper_text' => 'required_if:base_type,'.BaseQuestionType::Ranking->value.'|nullable|string',
+            'fixed_answer_count' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'display_order' => 'integer',
             'answer_filters' => 'array',

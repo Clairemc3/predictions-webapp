@@ -26,8 +26,9 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
   currentScoringPoints
 }) => {
   const [maxAnswerCount, setMaxAnswerCount] = React.useState<number | undefined>(undefined);
-  const hasAnswerCount = Boolean(currentAnswerCount);
+  const hasAnswerCount = Boolean(currentAnswerCount) || Boolean(selectedQuestionType?.fixedAnswerCount);
   const hasScoringType = Boolean(currentScoringType);
+  const shouldShowAnswerCountField = maxAnswerCount !== undefined && !selectedQuestionType?.fixedAnswerCount;
 
   const handleEntityChange = (count: number) => {
     setMaxAnswerCount(count);
@@ -63,10 +64,9 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
         </Box>
       )}
 
-      {/* Number to predict field - Only show when entity has been selected */}
-      {maxAnswerCount !== undefined && (
-        <>
-          <AnswerCount 
+      {/* Number to predict field - Only show when entity has been selected AND no fixedAnswerCount */}
+      {shouldShowAnswerCountField && (
+        <AnswerCount 
             label={selectedQuestionType?.answerCountLabel || undefined}
             helperText={selectedQuestionType?.answerCountHelperText || undefined}
             required={true}
@@ -75,9 +75,13 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
             setData={setData}
             currentAnswerCount={currentAnswerCount}
             maxValue={maxAnswerCount}
+            fixedAnswerCount={selectedQuestionType?.fixedAnswerCount}
           />
-          {hasAnswerCount && (
-            <>
+      )}
+
+      {/* Scoring and points - show when answer count exists (including fixed) */}
+      {hasAnswerCount && (
+        <>
               <ScoringOption
                 options={selectedQuestionType?.scoringTypes || []}
                 required={true}
@@ -95,8 +99,6 @@ const Rankings: React.FC<RankingsExtendedProps> = ({
                   errors={errors}
                 />
               )}
-            </>
-          )}
         </>
       )}
     </Box>
