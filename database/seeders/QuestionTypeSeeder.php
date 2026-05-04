@@ -81,13 +81,17 @@ class QuestionTypeSeeder extends Seeder
                 $scoringOrder = 0;
                 foreach ($typeData['scoring_types'] as $scoringType) {
                     $scoringOrder++;
-                    QuestionTypeScoringType::create([
-                        'question_type_id' => $questionType->id,
-                        'value' => $scoringType['value'],
-                        'label' => $scoringType['label'],
-                        'description' => $scoringType['description'] ?? null,
-                        'display_order' => $scoringOrder,
-                    ]);
+                    QuestionTypeScoringType::updateOrCreate(
+                        [
+                            'question_type_id' => $questionType->id,
+                            'value' => $scoringType['value'],
+                        ],
+                        [
+                            'label' => $scoringType['label'],
+                            'description' => $scoringType['description'] ?? null,
+                            'display_order' => $scoringOrder,
+                        ]
+                    );
                 }
             }
         }

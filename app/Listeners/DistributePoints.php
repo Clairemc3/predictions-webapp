@@ -2,18 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Enums\ScoringTypes;
 use App\Events\QuestionLocked;
+use App\Models\Question;
+use App\Models\Season;
 
 class DistributePoints
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      */
@@ -22,38 +17,62 @@ class DistributePoints
         $question = $event->question;
         $season = $event->season;
 
-        // Load the question results ordered by position
-        $results = $question->results()->orderBy('position')->get();
+        if ($question->scoring_type === ScoringTypes::ExactMatch->value) {
+            $this->distributeExactMatchPoints($question, $season);
+        } else {
+            $this->distributeProximityPoints($question, $season);
+        }
+    }
 
-        // Load the scoring scheme ordered by accuracy_level
-        // Accuracy Level 0 = exact match, Level 1 = +/-1, Level 2 = +/-2, etc.
+    /**
+     * Award points for entity_selection questions where each correctly selected entity earns points.
+     */
+    private function distributeExactMatchPoints(Question $question, Season $season): void
+    {
+        // All question results have entity_id (required for all question types)
+        $resultEntityIds = $question->results()
+            ->whereNotNull('entity_id')
+            ->pluck('entity_id');
+        $pointsScheme = $question->points()->where('accuracy_level', 0)->first();
+
+        if (! $pointsScheme || $resultEntityIds->isEmpty()) {
+            return;
+        }
+
+        $question->answers()
+            ->whereHas('member', function ($query) use ($season) {
+                $query->where('season_id', $season->id);
+            })
+            ->whereIn('entity_id', $resultEntityIds)
+            ->update(['points' => $pointsScheme->value, 'accuracy_level' => 0]);
+    }
+
+    /**
+     * Award points for ranking questions based on how close the predicted position is to the actual.
+     *
+     * Accuracy Level 0 = exact match, Level 1 = +/-1, Level 2 = +/-2, etc.
+     */
+    private function distributeProximityPoints(Question $question, Season $season): void
+    {
+        $results = $question->results()->orderBy('position')->get();
         $pointsScheme = $question->points()->orderBy('accuracy_level')->get();
 
-        // Loop through each result (actual entity position)
         foreach ($results as $result) {
             $actualPosition = $result->position;
             $entityId = $result->entity_id;
 
-            // Loop through each points scheme accuracy level
             foreach ($pointsScheme as $pointScheme) {
                 $accuracyLevel = $pointScheme->accuracy_level;
                 $points = $pointScheme->value;
 
-                // Calculate the predicted positions that match this difference
-                // Level 0 (exact match) = difference 0
-                // Level 1 (+/-1) = difference 1
-                // Level 2 (+/-2) = difference 2, etc.
                 $predictedPositions = [];
                 if ($accuracyLevel === 0) {
-                    // Exact match only
                     $predictedPositions[] = $actualPosition;
                 } else {
-                    // +/- difference
                     $predictedPositions[] = $actualPosition - $accuracyLevel;
                     $predictedPositions[] = $actualPosition + $accuracyLevel;
                 }
 
-                // Batch update all answers for this entity with the predicted positions
                 $question->answers()
                     ->whereHas('member', function ($query) use ($season) {
                         $query->where('season_id', $season->id);

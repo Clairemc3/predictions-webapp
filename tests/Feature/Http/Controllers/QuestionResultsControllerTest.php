@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\BaseQuestionType;
+use App\Enums\ScoringTypes;
 use App\Enums\SeasonStatus;
 use App\Models\Entity;
 use App\Models\Question;
@@ -419,4 +421,109 @@ test('non-host cannot delete a question result', function () {
 
     $response->assertForbidden();
     $this->assertDatabaseHas('question_results', ['id' => $result->id]);
+});
+
+// ===== ENTITY SELECTION TESTS =====
+
+test('host can add a result to an entity_selection question without providing a position', function () {
+    $host = User::factory()->create();
+    $season = Season::factory()->create(['status' => SeasonStatus::Active]);
+    SeasonMember::factory()->host()->create([
+        'season_id' => $season->id,
+        'user_id' => $host->id,
+    ]);
+    $question = Question::factory()->create([
+        'base_type' => BaseQuestionType::EntitySelection,
+        'scoring_type' => ScoringTypes::ExactMatch->value,
+    ]);
+    $season->questions()->attach($question);
+    $entity = Entity::factory()->create();
+
+    $response = $this->actingAs($host)->post("/seasons/{$season->id}/questions/{$question->id}/results", [
+        'entity_id' => $entity->id,
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success', 'Result added successfully');
+    $this->assertDatabaseHas('question_results', [
+        'question_id' => $question->id,
+        'entity_id' => $entity->id,
+        'position' => 1,
+    ]);
+});
+
+test('auto-assigned positions increment for each new entity_selection result', function () {
+    $host = User::factory()->create();
+    $season = Season::factory()->create(['status' => SeasonStatus::Active]);
+    SeasonMember::factory()->host()->create([
+        'season_id' => $season->id,
+        'user_id' => $host->id,
+    ]);
+    $question = Question::factory()->create([
+        'base_type' => BaseQuestionType::EntitySelection,
+        'scoring_type' => ScoringTypes::ExactMatch->value,
+    ]);
+    $season->questions()->attach($question);
+    $entity1 = Entity::factory()->create();
+    $entity2 = Entity::factory()->create();
+
+    $this->actingAs($host)->post("/seasons/{$season->id}/questions/{$question->id}/results", [
+        'entity_id' => $entity1->id,
+    ]);
+    $this->actingAs($host)->post("/seasons/{$season->id}/questions/{$question->id}/results", [
+        'entity_id' => $entity2->id,
+    ]);
+
+    $this->assertDatabaseHas('question_results', ['question_id' => $question->id, 'entity_id' => $entity1->id, 'position' => 1]);
+    $this->assertDatabaseHas('question_results', ['question_id' => $question->id, 'entity_id' => $entity2->id, 'position' => 2]);
+});
+
+test('host can delete an entity_selection result', function () {
+    $host = User::factory()->create();
+    $season = Season::factory()->create(['status' => SeasonStatus::Active]);
+    SeasonMember::factory()->host()->create([
+        'season_id' => $season->id,
+        'user_id' => $host->id,
+    ]);
+    $question = Question::factory()->create([
+        'base_type' => BaseQuestionType::EntitySelection,
+        'scoring_type' => ScoringTypes::ExactMatch->value,
+    ]);
+    $season->questions()->attach($question);
+    $entity = Entity::factory()->create();
+
+    $result = QuestionResult::factory()->create([
+        'question_id' => $question->id,
+        'position' => 1,
+        'entity_id' => $entity->id,
+    ]);
+
+    $response = $this->actingAs($host)->delete(
+        "/seasons/{$season->id}/questions/{$question->id}/results/{$result->id}"
+    );
+
+    $response->assertRedirect();
+    $this->assertDatabaseMissing('question_results', ['id' => $result->id]);
+});
+
+test('host can complete an entity_selection question to lock results', function () {
+    $host = User::factory()->create();
+    $season = Season::factory()->create(['status' => SeasonStatus::Active]);
+    SeasonMember::factory()->host()->create([
+        'season_id' => $season->id,
+        'user_id' => $host->id,
+    ]);
+    $question = Question::factory()->create([
+        'base_type' => BaseQuestionType::EntitySelection,
+        'scoring_type' => ScoringTypes::ExactMatch->value,
+    ]);
+    $season->questions()->attach($question);
+
+    $response = $this->actingAs($host)->post(
+        "/seasons/{$season->id}/questions/{$question->id}/results/complete"
+    );
+
+    $response->assertRedirect();
+    $response->assertSessionHas('success', 'Results set successfully');
+    $this->assertDatabaseHas('questions', ['id' => $question->id, 'complete' => true]);
 });

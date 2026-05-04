@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import PointsBadge from './PointsBadge';
 
 interface AnswerCardProps {
   questionType: string;
@@ -72,23 +73,7 @@ const AnswerCard: React.FC<AnswerCardProps> = ({ questionType, shortDescription,
 
       {/* Points Circle - Second Grid Column */}
       {points !== undefined && (
-        <Box
-          sx={{
-            width: 35,
-            height: 35,
-            borderRadius: '50%',
-            bgcolor: hasResult === false ? 'white' : accuracyLevel === 0 ? 'error.main' : accuracyLevel != null ? 'warning.main' : 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            justifySelf: { xs: 'end', sm: 'center' },
-            color: hasResult === false ? 'text.disabled' : accuracyLevel != null ? 'white' : 'primary.main',
-            fontWeight: 700,
-            fontSize: '0.875rem',
-          }}
-        >
-          {hasResult === false ? '—' : points}
-        </Box>
+        <PointsBadge points={points} accuracyLevel={accuracyLevel} hasResult={hasResult} />
       )}
     </>
   );
