@@ -69,11 +69,12 @@ class QuestionResultsController extends Controller
 
         DB::transaction(function () use ($question, $validated) {
             if (! isset($validated['position'])) {
-                // Lock rows to prevent race condition on position calculation
-                $validated['position'] = $question->results()
+                // Lock the highest position row to prevent race condition
+                $maxPosition = $question->results()
+                    ->orderByDesc('position')
                     ->lockForUpdate()
-                    ->max('position') ?? 0;
-                $validated['position']++;
+                    ->value('position') ?? 0;
+                $validated['position'] = $maxPosition + 1;
             }
 
             $question->results()->create($validated);
