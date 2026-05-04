@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('display_order')->default(0);
             $table->timestamps();
+            $table->unique(['question_type_id', 'value']);
         });
     }
 
