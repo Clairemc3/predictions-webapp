@@ -51,6 +51,29 @@ abstract class QuestionRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
+    protected function answerCountRules(): array
+    {
+        return [
+            'required',
+            'integer',
+            'min:1',
+            'max:20',
+            function (string $attribute, mixed $value, \Closure $fail) {
+                if (! $this->has('type')) {
+                    return;
+                }
+
+                $questionType = $this->questionTypeService->getModelByKey($this->input('type'));
+                if ($questionType && $questionType->fixed_answer_count) {
+                    $fail('The answer count cannot be specified for this question type as it has a fixed answer count.');
+                }
+            },
+        ];
+    }
+
     public function messages(): array
     {
         return [
@@ -72,8 +95,8 @@ abstract class QuestionRequest extends FormRequest
             ]);
         }
 
-        // Auto-set answer_count if question type has a fixed answer count
-        if ($this->has('type') && ! $this->filled('answer_count')) {
+        // Always use fixed_answer_count from question type if it exists
+        if ($this->has('type')) {
             $questionType = $this->questionTypeService->getModelByKey($this->input('type'));
             if ($questionType && $questionType->fixed_answer_count) {
                 $this->merge([

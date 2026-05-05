@@ -29,7 +29,7 @@ class UpdateQuestionRequest extends QuestionRequest
             'entities' => ['nullable', 'array'],
             'entities.*.entity_id' => $this->entityIdRules(),
             'entities.*.category_id' => $this->categoryIdRules(),
-            'answer_count' => ['required', 'integer', 'min:1', 'max:20'],
+            'answer_count' => $this->answerCountRules(),
             'question_points' => ['required', 'array', 'min:1'],
             'question_points.*' => ['required', 'integer', 'min:0'],
             'scoring_type' => ['required', 'string', Rule::in($this->questionTypeService->getScoringTypesForKey($this->input('type')))],
