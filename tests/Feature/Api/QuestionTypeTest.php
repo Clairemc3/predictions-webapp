@@ -23,6 +23,7 @@ it('returns question type details for valid key', function () {
             'answerCategoryId',
             'answerCountLabel',
             'answerCountHelperText',
+            'fixedAnswerCount',
             'scoringTypes',
         ])
         ->assertJson([
@@ -49,4 +50,36 @@ it('only returns active question types', function () {
     $response = $this->getJson("/api/question-types/{$inactiveQuestionType->key}");
 
     $response->assertNotFound();
+});
+
+it('returns fixed answer count when set', function () {
+    $questionType = QuestionType::factory()->create([
+        'key' => 'fixed-count-type',
+        'is_active' => true,
+        'fixed_answer_count' => 10,
+    ]);
+
+    $response = $this->getJson("/api/question-types/{$questionType->key}");
+
+    $response->assertSuccessful()
+        ->assertJson([
+            'key' => $questionType->key,
+            'fixedAnswerCount' => 10,
+        ]);
+});
+
+it('returns null for fixed answer count when not set', function () {
+    $questionType = QuestionType::factory()->create([
+        'key' => 'no-fixed-count-type',
+        'is_active' => true,
+        'fixed_answer_count' => null,
+    ]);
+
+    $response = $this->getJson("/api/question-types/{$questionType->key}");
+
+    $response->assertSuccessful()
+        ->assertJson([
+            'key' => $questionType->key,
+            'fixedAnswerCount' => null,
+        ]);
 });
