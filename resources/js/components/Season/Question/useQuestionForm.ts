@@ -81,10 +81,10 @@ export const useQuestionForm = ({
         ...prevData,
         type: selectedQuestionType.type,
         base_type: selectedQuestionType.base,
-        // Auto-populate answer_count if the question type has a fixed answer count
+        // Auto-populate answer_count if the question type has a fixed answer count, otherwise clear it
         answer_count: selectedQuestionType.fixedAnswerCount 
           ? selectedQuestionType.fixedAnswerCount.toString() 
-          : prevData.answer_count
+          : ''
       }));
     }
   }, [selectedQuestionType, setData]);
