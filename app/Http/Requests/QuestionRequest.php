@@ -56,21 +56,20 @@ abstract class QuestionRequest extends FormRequest
      */
     protected function answerCountRules(): array
     {
+        $questionType = $this->has('type') 
+            ? $this->questionTypeService->getModelByKey($this->input('type'))
+            : null;
+
+        // If question type has a fixed answer count, answer_count is not required/validated
+        if ($questionType && $questionType->fixed_answer_count) {
+            return ['nullable'];
+        }
+
         return [
             'required',
             'integer',
             'min:1',
             'max:20',
-            function (string $attribute, mixed $value, \Closure $fail) {
-                if (! $this->has('type')) {
-                    return;
-                }
-
-                $questionType = $this->questionTypeService->getModelByKey($this->input('type'));
-                if ($questionType && $questionType->fixed_answer_count) {
-                    $fail('The answer count cannot be specified for this question type as it has a fixed answer count.');
-                }
-            },
         ];
     }
 
@@ -93,16 +92,6 @@ abstract class QuestionRequest extends FormRequest
             $this->merge([
                 'answer_count' => 20,
             ]);
-        }
-
-        // Always use fixed_answer_count from question type if it exists
-        if ($this->has('type')) {
-            $questionType = $this->questionTypeService->getModelByKey($this->input('type'));
-            if ($questionType && $questionType->fixed_answer_count) {
-                $this->merge([
-                    'answer_count' => $questionType->fixed_answer_count,
-                ]);
-            }
         }
 
         if ($this->has('entities')) {
