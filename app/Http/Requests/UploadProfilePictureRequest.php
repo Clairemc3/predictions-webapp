@@ -22,7 +22,7 @@ class UploadProfilePictureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'profile_picture' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,webp', 'max:5120'],
+            'profile_picture' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,webp,avif', 'max:2048'],
         ];
     }
 
@@ -36,8 +36,8 @@ class UploadProfilePictureRequest extends FormRequest
         return [
             'profile_picture.required' => 'Please select an image to upload.',
             'profile_picture.image' => 'The file must be an image.',
-            'profile_picture.mimes' => 'The image must be a JPEG, PNG, GIF, or WebP file.',
-            'profile_picture.max' => 'The image must not exceed 5MB in size.',
+            'profile_picture.mimes' => 'The image must be a JPEG, PNG, GIF, WebP, or AVIF file.',
+            'profile_picture.max' => 'The image must not exceed 2MB in size.',
         ];
     }
 }

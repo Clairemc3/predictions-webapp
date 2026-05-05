@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { PhotoCamera, Delete, Close } from '@mui/icons-material';
 import AuthLayout from '../layouts/AuthLayout';
+import ImageCropDialog from '../components/ImageCropDialog';
 
 interface User {
   id: number;
@@ -45,6 +46,8 @@ const Profile = () => {
   const [deleting, setDeleting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(!!message);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [cropDialogOpen, setCropDialogOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -72,24 +75,46 @@ const Profile = () => {
     if (!file) return;
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
     if (!validTypes.includes(file.type)) {
-      alert('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+      alert('Please select a valid image file (JPEG, PNG, GIF, WebP, or AVIF)');
       return;
     }
 
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
+    // Validate file size (2MB max)
+    if (file.size > 2 * 1024 * 1024) {
+      alert('File size must be less than 2MB');
       return;
     }
 
+    // Read file and show crop dialog
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageToCrop(reader.result as string);
+      setCropDialogOpen(true);
+    };
+    reader.readAsDataURL(file);
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleCropComplete = (croppedImageBlob: Blob) => {
+    setCropDialogOpen(false);
+    setImageToCrop(null);
     setUploading(true);
+
+    // Convert blob to file
+    const croppedFile = new File([croppedImageBlob], 'profile-picture.jpg', {
+      type: 'image/jpeg',
+    });
 
     // Upload using Inertia
     router.post(
       route('profile.picture.upload'),
-      { profile_picture: file },
+      { profile_picture: croppedFile },
       {
         onSuccess: () => {
           setUploading(false);
@@ -102,6 +127,11 @@ const Profile = () => {
         preserveScroll: true,
       }
     );
+  };
+
+  const handleCropCancel = () => {
+    setCropDialogOpen(false);
+    setImageToCrop(null);
   };
 
   const handleDeleteClick = () => {
@@ -150,7 +180,7 @@ const Profile = () => {
                 type="file"
                 ref={fileInputRef}
                 style={{ display: 'none' }}
-                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/avif"
                 onChange={handleFileChange}
               />
               <Avatar
@@ -305,6 +335,16 @@ const Profile = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {imageToCrop && (
+        <ImageCropDialog
+          open={cropDialogOpen}
+          imageSrc={imageToCrop}
+          onClose={handleCropCancel}
+          onCropComplete={handleCropComplete}
+          aspectRatio={1}
+        />
+      )}
     </AuthLayout>
   );
 };
