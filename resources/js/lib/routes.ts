@@ -66,6 +66,12 @@ export const buildRoute = (name: string, params: RouteParams = {}): string => {
     case 'admin.question-types.destroy':
       return `/admin/question-types/${params.id}`;
     
+    case 'profile.picture.upload':
+      return '/profile/picture';
+    
+    case 'profile.picture.delete':
+      return '/profile/picture';
+    
     default:
       console.warn(`Unknown route name: ${name}`);
       return '';
@@ -94,7 +100,9 @@ export type RouteName =
   | 'admin.question-types.store'
   | 'admin.question-types.edit'
   | 'admin.question-types.update'
-  | 'admin.question-types.destroy';
+  | 'admin.question-types.destroy'
+  | 'profile.picture.upload'
+  | 'profile.picture.delete';
 
 /**
  * Type-safe version of buildRoute
