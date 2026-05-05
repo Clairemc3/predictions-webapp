@@ -74,13 +74,17 @@ export const useQuestionForm = ({
     };
   }, [data.type]);
 
-  // Update base_type when question type changes
+  // Update base_type and answer_count when question type changes
   React.useEffect(() => {
     if (selectedQuestionType) {
       setData(prevData => ({
         ...prevData,
         type: selectedQuestionType.type,
-        base_type: selectedQuestionType.base
+        base_type: selectedQuestionType.base,
+        // Auto-populate answer_count if the question type has a fixed answer count, otherwise clear it
+        answer_count: selectedQuestionType.fixedAnswerCount 
+          ? selectedQuestionType.fixedAnswerCount.toString() 
+          : ''
       }));
     }
   }, [selectedQuestionType, setData]);

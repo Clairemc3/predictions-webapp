@@ -22,6 +22,7 @@ interface QuestionTypeBasicFieldsProps {
     answer_category_id: string;
     answer_count_label: string;
     answer_count_helper_text: string;
+    fixed_answer_count: string;
     is_active: boolean;
     display_order: number;
   };
@@ -174,6 +175,19 @@ const QuestionTypeBasicFields: React.FC<QuestionTypeBasicFieldsProps> = ({
         margin="normal"
         multiline
         rows={2}
+      />
+
+      <TextField
+        fullWidth
+        label="Fixed Answer Count"
+        type="number"
+        variant="filled"
+        value={data.fixed_answer_count}
+        onChange={(e) => onChange('fixed_answer_count', e.target.value)}
+        error={!!errors.fixed_answer_count}
+        helperText={errors.fixed_answer_count || 'Optional: Set a fixed number of answers for all questions of this type'}
+        margin="normal"
+        inputProps={{ min: 1 }}
       />
 
       <TextField

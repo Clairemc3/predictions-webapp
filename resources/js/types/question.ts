@@ -20,6 +20,7 @@ export interface QuestionType {
   answerCategoryId: number | null;
   answerCountLabel: string | null;
   answerCountHelperText: string | null;
+  fixedAnswerCount: number | null;
   scoringTypes?: Array<{
     value: string;
     label: string;

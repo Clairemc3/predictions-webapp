@@ -52,6 +52,12 @@ class QuestionController extends Controller
             $question->created_by = Auth::id();
             $question->answer_category_id = $questionType->answer_category_id;
             $question->question_type_id = $questionType->id;
+            
+            // Use fixed_answer_count from question type if it exists
+            if ($questionType->fixed_answer_count) {
+                $question->answer_count = $questionType->fixed_answer_count;
+            }
+            
             $season->questions()->save($question);
 
             app(QuestionEntityPersistService::class)->syncEntities($question, $request->entities);
@@ -104,6 +110,11 @@ class QuestionController extends Controller
                 $questionType = $this->questionTypeService->getModelByKey($request->input('type'));
                 $question->answer_category_id = $questionType->answer_category_id;
                 $question->question_type_id = $questionType->id;
+                
+                // Use fixed_answer_count from question type if it exists
+                if ($questionType->fixed_answer_count) {
+                    $question->answer_count = $questionType->fixed_answer_count;
+                }
             }
 
             $question->save();

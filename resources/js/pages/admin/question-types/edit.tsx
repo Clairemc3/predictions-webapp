@@ -29,6 +29,7 @@ interface QuestionType {
   answer_category_id: number | null;
   answer_count_label: string | null;
   answer_count_helper_text: string | null;
+  fixed_answer_count: number | null;
   is_active: boolean;
   display_order: number;
   answer_filters: Array<{
@@ -36,8 +37,7 @@ interface QuestionType {
     label: string;
     description: string | null;
     filters: Record<string, string>;
-  }>;
-  scoring_types: Array<{
+  }>;  scoring_types: Array<{
     value: string;
     description: string | null;
   }>;
@@ -67,6 +67,7 @@ const Edit = ({ questionType, categories, applicationContexts, baseTypes, availa
     answer_category_id: questionType.answer_category_id?.toString() || '',
     answer_count_label: questionType.answer_count_label || '',
     answer_count_helper_text: questionType.answer_count_helper_text || '',
+    fixed_answer_count: questionType.fixed_answer_count?.toString() || '',
     is_active: questionType.is_active,
     display_order: questionType.display_order,
     answer_filters: questionType.answer_filters.map(f => ({

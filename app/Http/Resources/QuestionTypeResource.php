@@ -32,6 +32,7 @@ class QuestionTypeResource extends JsonResource
             'answerCategoryId' => $this->answer_category_id,
             'answerCountLabel' => $this->answer_count_label,
             'answerCountHelperText' => $this->answer_count_helper_text,
+            'fixedAnswerCount' => $this->fixed_answer_count,
             'scoringTypes' => $this->scoringTypes->map(fn ($scoringType) => [
                 'value' => $scoringType->value,
                 'label' => $scoringType->label,

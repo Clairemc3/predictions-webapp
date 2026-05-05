@@ -51,6 +51,28 @@ abstract class QuestionRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
+    protected function answerCountRules(): array
+    {
+        $questionType = $this->has('type') 
+            ? $this->questionTypeService->getModelByKey($this->input('type'))
+            : null;
+
+        // If question type has a fixed answer count, answer_count is not required/validated
+        if ($questionType && $questionType->fixed_answer_count) {
+            return ['nullable'];
+        }
+
+        return [
+            'required',
+            'integer',
+            'min:1',
+            'max:20',
+        ];
+    }
+
     public function messages(): array
     {
         return [

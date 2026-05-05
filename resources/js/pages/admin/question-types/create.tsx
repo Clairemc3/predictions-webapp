@@ -38,6 +38,7 @@ const Create = ({ categories, applicationContexts, baseTypes, availableScoringTy
     answer_category_id: '',
     answer_count_label: '',
     answer_count_helper_text: '',
+    fixed_answer_count: '',
     is_active: true,
     display_order: 0,
     answer_filters: [] as Array<{
